@@ -1,0 +1,134 @@
+{
+  "boards": [
+    {
+      "name": "Board 1",
+      "categories": [
+        {
+          "name": "Science",
+          "clues": [
+            { "value": 100, "question": "This planet is known as the Red Planet.", "answer": "Mars" },
+            { "value": 200, "question": "The powerhouse of the cell.", "answer": "The mitochondria" },
+            { "value": 300, "question": "This element has the chemical symbol Au.", "answer": "Gold" },
+            { "value": 400, "question": "The speed of light in a vacuum is approximately this many kilometers per second.", "answer": "300,000 km/s (299,792)" },
+            { "value": 500, "question": "This scientist proposed the theory of general relativity in 1915.", "answer": "Albert Einstein" }
+          ]
+        },
+        {
+          "name": "History",
+          "clues": [
+            { "value": 100, "question": "This ancient wonder was located in Alexandria, Egypt.", "answer": "The Lighthouse of Alexandria" },
+            { "value": 200, "question": "The year World War II ended.", "answer": "1945" },
+            { "value": 300, "question": "This empire was ruled by Julius Caesar before his assassination in 44 BC.", "answer": "The Roman Empire" },
+            { "value": 400, "question": "The first country to grant women the right to vote (1893).", "answer": "New Zealand" },
+            { "value": 500, "question": "This 1215 document limited the power of the English king and laid groundwork for constitutional law.", "answer": "The Magna Carta" }
+          ]
+        },
+        {
+          "name": "Pop Culture",
+          "clues": [
+            { "value": 100, "question": "This Disney movie features a girl named Elsa with ice powers.", "answer": "Frozen" },
+            { "value": 200, "question": "The Beatles are from this English city.", "answer": "Liverpool" },
+            { "value": 300, "question": "This TV show features a chemistry teacher named Walter White who turns to a life of crime.", "answer": "Breaking Bad" },
+            { "value": 400, "question": "This artist holds the record for the most Grammy Awards won by any artist.", "answer": "Beyoncé" },
+            { "value": 500, "question": "This 1994 Quentin Tarantino film features John Travolta and Samuel L. Jackson as hitmen.", "answer": "Pulp Fiction" }
+          ]
+        },
+        {
+          "name": "Sports",
+          "clues": [
+            { "value": 100, "question": "How many players are on a standard soccer (football) team on the field?", "answer": "11" },
+            { "value": 200, "question": "This country has won the most FIFA World Cup titles.", "answer": "Brazil (5 times)" },
+            { "value": 300, "question": "In basketball, this player was nicknamed 'The Mailman.'", "answer": "Karl Malone" },
+            { "value": 400, "question": "The Olympic Games originated in this ancient country.", "answer": "Greece" },
+            { "value": 500, "question": "This tennis player holds the record for the most Grand Slam singles titles in men's tennis.", "answer": "Novak Djokovic (24)" }
+          ]
+        },
+        {
+          "name": "Geography",
+          "clues": [
+            { "value": 100, "question": "The capital city of Australia.", "answer": "Canberra" },
+            { "value": 200, "question": "This is the longest river in the world.", "answer": "The Nile River" },
+            { "value": 300, "question": "This country contains the most natural freshwater in the world.", "answer": "Brazil" },
+            { "value": 400, "question": "The Sahara Desert spans this many countries in Africa.", "answer": "11 countries" },
+            { "value": 500, "question": "This tiny European nation is completely surrounded by Italy and is the world's oldest republic.", "answer": "San Marino" }
+          ]
+        },
+        {
+          "name": "Literature",
+          "clues": [
+            { "value": 100, "question": "This author wrote 'Harry Potter and the Sorcerer's Stone.'", "answer": "J.K. Rowling" },
+            { "value": 200, "question": "George Orwell wrote this dystopian novel set in the year referenced in its title.", "answer": "1984" },
+            { "value": 300, "question": "This Shakespeare play features the line 'To be, or not to be.'", "answer": "Hamlet" },
+            { "value": 400, "question": "The Great Gatsby was written by this American author.", "answer": "F. Scott Fitzgerald" },
+            { "value": 500, "question": "This Colombian author wrote 'One Hundred Years of Solitude' and won the Nobel Prize in Literature in 1982.", "answer": "Gabriel García Márquez" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Board 2",
+      "categories": [
+        {
+          "name": "Technology",
+          "clues": [
+            { "value": 100, "question": "This company created the iPhone.", "answer": "Apple" },
+            { "value": 200, "question": "HTML stands for this.", "answer": "HyperText Markup Language" },
+            { "value": 300, "question": "This programming language is known for its use in data science and machine learning.", "answer": "Python" },
+            { "value": 400, "question": "This tech giant's search engine processes over 8.5 billion searches per day.", "answer": "Google" },
+            { "value": 500, "question": "This cryptographic concept underpins Bitcoin and most other cryptocurrencies.", "answer": "Blockchain" }
+          ]
+        },
+        {
+          "name": "Food & Drink",
+          "clues": [
+            { "value": 100, "question": "This Italian dish consists of raw fish or seafood.", "answer": "Crudo (or carpaccio)" },
+            { "value": 200, "question": "This country is the largest producer of coffee in the world.", "answer": "Brazil" },
+            { "value": 300, "question": "Sushi originated in this country.", "answer": "Japan" },
+            { "value": 400, "question": "This French cooking technique involves slow-cooking food in vacuum-sealed bags in a water bath.", "answer": "Sous vide" },
+            { "value": 500, "question": "This spice, derived from the Crocus sativus flower, is the most expensive by weight in the world.", "answer": "Saffron" }
+          ]
+        },
+        {
+          "name": "Movies",
+          "clues": [
+            { "value": 100, "question": "This 1994 film features a man who says 'Life is like a box of chocolates.'", "answer": "Forrest Gump" },
+            { "value": 200, "question": "The highest-grossing film of all time (unadjusted for inflation).", "answer": "Avatar (2009)" },
+            { "value": 300, "question": "This director made Schindler's List, Jaws, and E.T.", "answer": "Steven Spielberg" },
+            { "value": 400, "question": "In this 1980 film, Jack Nicholson says 'Here's Johnny!'", "answer": "The Shining" },
+            { "value": 500, "question": "This 1927 film by Fritz Lang is often cited as the first feature-length science fiction film.", "answer": "Metropolis" }
+          ]
+        },
+        {
+          "name": "Music",
+          "clues": [
+            { "value": 100, "question": "This pop star is known as the 'Queen of Pop.'", "answer": "Madonna" },
+            { "value": 200, "question": "A standard guitar has this many strings.", "answer": "6" },
+            { "value": 300, "question": "This band wrote 'Bohemian Rhapsody.'", "answer": "Queen" },
+            { "value": 400, "question": "This composer was almost entirely deaf when he wrote his Ninth Symphony.", "answer": "Ludwig van Beethoven" },
+            { "value": 500, "question": "This jazz trumpeter's 1959 album 'Kind of Blue' is the best-selling jazz album of all time.", "answer": "Miles Davis" }
+          ]
+        },
+        {
+          "name": "Animals",
+          "clues": [
+            { "value": 100, "question": "The largest land animal on Earth.", "answer": "The African elephant" },
+            { "value": 200, "question": "This is the only mammal capable of true flight.", "answer": "A bat" },
+            { "value": 300, "question": "A group of flamingos is called this.", "answer": "A flamboyance" },
+            { "value": 400, "question": "This animal has the longest gestation period of any mammal at 22 months.", "answer": "The elephant" },
+            { "value": 500, "question": "This deep-sea creature has three hearts, blue blood, and is considered one of the most intelligent invertebrates.", "answer": "The octopus" }
+          ]
+        },
+        {
+          "name": "U.S. History",
+          "clues": [
+            { "value": 100, "question": "The first President of the United States.", "answer": "George Washington" },
+            { "value": 200, "question": "This document, signed in 1776, declared American independence from Britain.", "answer": "The Declaration of Independence" },
+            { "value": 300, "question": "The Civil War began with the Confederate attack on this South Carolina fort.", "answer": "Fort Sumter" },
+            { "value": 400, "question": "This New Deal program, created in 1935, provides retirement benefits to Americans.", "answer": "Social Security" },
+            { "value": 500, "question": "This 1803 purchase from France roughly doubled the size of the United States.", "answer": "The Louisiana Purchase" }
+          ]
+        }
+      ]
+    }
+  ]
+}
