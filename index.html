@@ -24,19 +24,50 @@
       text-align: center;
       padding: 2.5rem 1rem 2rem;
     }
+    header h1 { font-size: 2.8rem; letter-spacing: 0.04em; }
+    header p  { margin-top: 0.6rem; font-size: 1.1rem; color: #c0b8f0; font-style: italic; }
 
-    header h1 {
-      font-size: 2.8rem;
-      letter-spacing: 0.04em;
+    /* ── Runner game ───────────────────────────────────────────── */
+    .game-section {
+      width: 100%;
+      max-width: 780px;
+      padding: 2.5rem 1.5rem 0;
     }
-
-    header p {
-      margin-top: 0.6rem;
-      font-size: 1.1rem;
-      color: #c0b8f0;
-      font-style: italic;
+    .game-section h2 {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #1a1a2e;
+      margin-bottom: 0.8rem;
     }
+    #game-wrap {
+      position: relative;
+      width: 100%;
+      background: #fff;
+      border: 3px solid #1a1a2e;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+    }
+    #runner {
+      display: block;
+      width: 100%;
+    }
+    #overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.88);
+      font-family: 'Georgia', serif;
+    }
+    #overlay h3 { font-size: 1.6rem; color: #1a1a2e; }
+    #overlay p  { margin-top: 0.4rem; color: #555; font-size: 0.95rem; }
+    #overlay .hint { margin-top: 1rem; font-size: 0.85rem; color: #999; }
 
+    /* ── Dogs ──────────────────────────────────────────────────── */
     .dogs {
       width: 100%;
       max-width: 780px;
@@ -45,7 +76,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
-
     .dogs img {
       width: 100%;
       aspect-ratio: 1;
@@ -54,6 +84,7 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.12);
     }
 
+    /* ── Blurb ─────────────────────────────────────────────────── */
     .blurb {
       max-width: 680px;
       margin: 2.5rem auto 0;
@@ -63,16 +94,12 @@
       font-size: 1.05rem;
       color: #3d3d3d;
     }
-
-    .blurb strong {
-      color: #1a1a2e;
-    }
+    .blurb strong { color: #1a1a2e; }
 
     .cta {
       margin: 2.5rem auto 3.5rem;
       text-align: center;
     }
-
     .cta a {
       display: inline-block;
       background: #1a1a2e;
@@ -84,7 +111,6 @@
       letter-spacing: 0.03em;
       transition: background 0.2s;
     }
-
     .cta a:hover { background: #2e2e5e; }
 
     footer {
@@ -98,32 +124,263 @@
 </head>
 <body>
 
-  <header>
-    <h1>What Is James Doing?</h1>
-    <p>A corner of the internet dedicated to whatever James is up to lately.</p>
-  </header>
+<header>
+  <h1>What Is James Doing?</h1>
+  <p>A corner of the internet dedicated to whatever James is up to lately.</p>
+</header>
 
-  <div class="dogs">
-    <img src="https://placedog.net/400/400?r=1"  alt="A very good dog" />
-    <img src="https://placedog.net/400/400?r=2"  alt="Another very good dog" />
-    <img src="https://placedog.net/400/400?r=3"  alt="Yet another very good dog" />
+<!-- ── Runner Game ──────────────────────────────────────────────────── -->
+<div class="game-section">
+  <h2>🦕 While you wait… play a game!</h2>
+  <div id="game-wrap">
+    <canvas id="runner" height="160"></canvas>
+    <div id="overlay">
+      <h3>🦕 Runner!</h3>
+      <p>Press <strong>Space</strong>, tap, or click to jump</p>
+      <div class="hint">Double-jump supported!</div>
+    </div>
   </div>
+</div>
 
-  <div class="blurb">
-    <p>
-      Welcome to <strong>whatisjamesdoing.com</strong> — James Hoffman's little slice of the web.
-      This site is a living record of what James has been building, exploring, and tinkering with recently.
-      Check back often; things are always changing. For now, enjoy some dogs and try the game below. 🐶
-    </p>
-  </div>
+<!-- ── Dogs ────────────────────────────────────────────────────────── -->
+<div class="dogs">
+  <img src="https://placedog.net/400/400?r=1" alt="A very good dog" />
+  <img src="https://placedog.net/400/400?r=2" alt="Another very good dog" />
+  <img src="https://placedog.net/400/400?r=3" alt="Yet another very good dog" />
+</div>
 
-  <div class="cta">
-    <a href="/game/">🎮 Play Jeopardy!</a>
-  </div>
+<!-- ── Blurb ────────────────────────────────────────────────────────── -->
+<div class="blurb">
+  <p>
+    Welcome to <strong>whatisjamesdoing.com</strong> — James Hoffman's little slice of the web.
+    This site is a living record of what James has been building, exploring, and tinkering with recently.
+    Check back often; things are always changing. 🐶
+  </p>
+</div>
 
-  <footer>
-    Made with care (and dogs) · whatisjamesdoing.com
-  </footer>
+<div class="cta">
+  <a href="/game/">🎮 Play Jeopardy!</a>
+</div>
+
+<footer>Made with care (and dogs) · whatisjamesdoing.com</footer>
+
+<!-- ── Game Script ───────────────────────────────────────────────────── -->
+<script>
+(function () {
+  const canvas  = document.getElementById('runner');
+  const ctx     = canvas.getContext('2d');
+  const wrap    = document.getElementById('game-wrap');
+  const overlay = document.getElementById('overlay');
+
+  // Responsive width
+  function resize() {
+    canvas.width = wrap.clientWidth;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const H = canvas.height;
+  const GROUND = H - 30;
+
+  // ── Dino ──────────────────────────────────────────────
+  const dino = {
+    x: 60, y: GROUND, w: 40, h: 50,
+    vy: 0, jumps: 0, maxJumps: 2,
+    color: '#1a1a2e',
+    jump() {
+      if (this.jumps < this.maxJumps) {
+        this.vy = -13;
+        this.jumps++;
+      }
+    },
+    update() {
+      this.vy += 0.6;           // gravity
+      this.y  += this.vy;
+      if (this.y >= GROUND) {
+        this.y  = GROUND;
+        this.vy = 0;
+        this.jumps = 0;
+      }
+    },
+    draw() {
+      const c = ctx;
+      const x = this.x, y = this.y - this.h, w = this.w, h = this.h;
+      c.fillStyle = this.color;
+      // Body
+      c.beginPath();
+      c.roundRect(x, y + 10, w, h - 10, 6);
+      c.fill();
+      // Head
+      c.beginPath();
+      c.roundRect(x + w * 0.35, y, w * 0.65, h * 0.45, 5);
+      c.fill();
+      // Eye
+      c.fillStyle = '#fff';
+      c.beginPath();
+      c.arc(x + w * 0.85, y + 10, 4, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = '#000';
+      c.beginPath();
+      c.arc(x + w * 0.87, y + 10, 2, 0, Math.PI * 2);
+      c.fill();
+      // Legs (animated)
+      c.fillStyle = this.color;
+      const legOffset = this.y === GROUND ? Math.sin(Date.now() / 80) * 6 : 0;
+      c.fillRect(x + 4,  y + h - 10 + legOffset, 10, 10);
+      c.fillRect(x + 20, y + h - 10 - legOffset, 10, 10);
+    },
+    get rect() {
+      return { x: this.x + 4, y: this.y - this.h + 10, w: this.w - 8, h: this.h - 10 };
+    }
+  };
+
+  // ── Obstacles ─────────────────────────────────────────
+  let obstacles = [];
+  let spawnTimer = 0;
+
+  function spawnObstacle(speed) {
+    const w = 18 + Math.random() * 16;
+    const h = 30 + Math.random() * 30;
+    obstacles.push({ x: canvas.width + 10, y: GROUND, w, h, speed });
+  }
+
+  function drawObstacle(o) {
+    ctx.fillStyle = '#2d6a4f';
+    // Trunk
+    ctx.beginPath();
+    ctx.roundRect(o.x, o.y - o.h, o.w, o.h, [3, 3, 0, 0]);
+    ctx.fill();
+    // Arms
+    ctx.fillRect(o.x - 8, o.y - o.h * 0.65, 8, 10);
+    ctx.fillRect(o.x + o.w, o.y - o.h * 0.55, 8, 10);
+    // Top bulge
+    ctx.beginPath();
+    ctx.ellipse(o.x + o.w / 2, o.y - o.h, o.w * 0.7, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function rectOverlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x &&
+           a.y < b.y       && a.y + a.h > b.y - b.h;
+  }
+
+  // ── Clouds ────────────────────────────────────────────
+  let clouds = [
+    { x: 200, y: 30, r: 18 },
+    { x: 450, y: 45, r: 14 },
+    { x: 650, y: 25, r: 20 },
+  ];
+
+  function drawClouds() {
+    ctx.fillStyle = '#e8e8e8';
+    clouds.forEach(c => {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.arc(c.x + c.r, c.y - 5, c.r * 0.7, 0, Math.PI * 2);
+      ctx.arc(c.x - c.r, c.y - 3, c.r * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+      c.x -= 0.4;
+      if (c.x + c.r * 2 < 0) c.x = canvas.width + c.r * 2;
+    });
+  }
+
+  // ── Game state ────────────────────────────────────────
+  let state   = 'idle';   // idle | playing | dead
+  let score   = 0;
+  let hiScore = 0;
+  let speed   = 5;
+  let raf;
+
+  function startGame() {
+    obstacles   = [];
+    spawnTimer  = 0;
+    score       = 0;
+    speed       = 5;
+    dino.y      = GROUND;
+    dino.vy     = 0;
+    dino.jumps  = 0;
+    state       = 'playing';
+    overlay.style.display = 'none';
+    loop();
+  }
+
+  function endGame() {
+    state = 'dead';
+    if (score > hiScore) hiScore = score;
+    cancelAnimationFrame(raf);
+    overlay.innerHTML = `
+      <h3>💀 Game Over</h3>
+      <p>Score: <strong>${Math.floor(score)}</strong> &nbsp;|&nbsp; Best: <strong>${Math.floor(hiScore)}</strong></p>
+      <div class="hint">Press Space, tap, or click to restart</div>`;
+    overlay.style.display = 'flex';
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, H);
+
+    // Ground
+    ctx.fillStyle = '#ddd';
+    ctx.fillRect(0, GROUND, canvas.width, 2);
+
+    drawClouds();
+
+    // Spawn
+    spawnTimer--;
+    if (spawnTimer <= 0) {
+      spawnObstacle(speed);
+      spawnTimer = 60 + Math.random() * 60;
+    }
+
+    // Update + draw obstacles
+    const dr = dino.rect;
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      const o = obstacles[i];
+      o.x -= o.speed;
+      drawObstacle(o);
+      if (rectOverlap(dr, o)) { endGame(); return; }
+      if (o.x + o.w < 0) obstacles.splice(i, 1);
+    }
+
+    dino.update();
+    dino.draw();
+
+    score += 0.1;
+    speed  = 5 + score / 80;
+
+    // Score
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = 'bold 14px monospace';
+    ctx.fillText(`Score: ${Math.floor(score)}`, 12, 22);
+    if (hiScore > 0) ctx.fillText(`Best: ${Math.floor(hiScore)}`, 12, 40);
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  // ── Input ──────────────────────────────────────────────
+  function handleInput() {
+    if (state === 'idle' || state === 'dead') {
+      startGame();
+    } else if (state === 'playing') {
+      dino.jump();
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' || e.code === 'ArrowUp') {
+      e.preventDefault();
+      handleInput();
+    }
+  });
+  wrap.addEventListener('click',      handleInput);
+  wrap.addEventListener('touchstart', e => { e.preventDefault(); handleInput(); }, { passive: false });
+
+  // Initial draw
+  ctx.fillStyle = '#ddd';
+  ctx.fillRect(0, GROUND, canvas.width, 2);
+  drawClouds();
+  dino.draw();
+})();
+</script>
 
 </body>
 </html>
