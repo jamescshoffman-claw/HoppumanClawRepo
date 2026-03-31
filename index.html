@@ -3,100 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jeopardy!</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>What Is James Doing?</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f0e8;
+      color: #2c2c2c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: #1a1a2e;
+      color: #fff;
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    header p {
+      margin-top: 0.6rem;
+      font-size: 1.1rem;
+      color: #c0b8f0;
+      font-style: italic;
+    }
+
+    .dogs {
+      width: 100%;
+      max-width: 780px;
+      padding: 2.5rem 1.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .dogs img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+
+    .blurb {
+      max-width: 680px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+      line-height: 1.75;
+      font-size: 1.05rem;
+      color: #3d3d3d;
+    }
+
+    .blurb strong {
+      color: #1a1a2e;
+    }
+
+    .cta {
+      margin: 2.5rem auto 3.5rem;
+      text-align: center;
+    }
+
+    .cta a {
+      display: inline-block;
+      background: #1a1a2e;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+      transition: background 0.2s;
+    }
+
+    .cta a:hover { background: #2e2e5e; }
+
+    footer {
+      margin-top: auto;
+      padding: 1.2rem;
+      font-size: 0.8rem;
+      color: #999;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ── Header ─────────────────────────────────────────────────────────── -->
-  <div id="header">
-    <div id="title">Jeopardy!</div>
-    <div id="subtitle">The Greatest Quiz Game on Earth</div>
-    <div id="board-tabs"></div>
+  <header>
+    <h1>What Is James Doing?</h1>
+    <p>A corner of the internet dedicated to whatever James is up to lately.</p>
+  </header>
+
+  <div class="dogs">
+    <img src="https://placedog.net/400/400?r=1"  alt="A very good dog" />
+    <img src="https://placedog.net/400/400?r=2"  alt="Another very good dog" />
+    <img src="https://placedog.net/400/400?r=3"  alt="Yet another very good dog" />
   </div>
 
-  <!-- ── Loading / Error ────────────────────────────────────────────────── -->
-  <div id="loading-screen">
-    <div class="spinner"></div>
-    <span>Loading questions&hellip;</span>
-  </div>
-
-  <div id="error-screen">
-    <h2>Failed to Load Game</h2>
-    <p id="error-msg"></p>
-    <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">
-      Tip: Some browsers block <code>fetch()</code> for local files.<br>
-      Try opening with VS Code Live Server, or run:<br>
-      <code>python3 -m http.server 8080</code> then visit <code>localhost:8080</code>
+  <div class="blurb">
+    <p>
+      Welcome to <strong>whatisjamesdoing.com</strong> — James Hoffman's little slice of the web.
+      This site is a living record of what James has been building, exploring, and tinkering with recently.
+      Check back often; things are always changing. For now, enjoy some dogs and try the game below. 🐶
     </p>
   </div>
 
-  <!-- ── Game Area ───────────────────────────────────────────────────────── -->
-  <div id="game-area" style="display:none;">
-
-    <!-- Teams -->
-    <div id="teams-bar"></div>
-
-    <!-- Controls -->
-    <div id="controls-bar">
-      <button class="btn btn-danger" id="reset-btn">Reset Game</button>
-      <button class="btn btn-edit" id="edit-scores-btn">✏️ Edit Scores</button>
-    </div>
-
-    <!-- Board -->
-    <div id="board-wrapper">
-      <div id="board"></div>
-    </div>
-
-    <!-- Scores Footer -->
-    <div id="scores-footer">
-      <h3>Scoreboard</h3>
-      <div id="final-scores"></div>
-    </div>
-
+  <div class="cta">
+    <a href="/game/">🎮 Play Jeopardy!</a>
   </div>
 
-  <!-- ── Clue Modal ──────────────────────────────────────────────────────── -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-question">
-    <div id="modal">
+  <footer>
+    Made with care (and dogs) · whatisjamesdoing.com
+  </footer>
 
-      <div id="modal-category"></div>
-      <div id="modal-value"></div>
-      <div id="modal-question"></div>
-
-      <!-- Answer (hidden until revealed) -->
-      <div id="modal-answer-section">
-        <div id="modal-answer-label">Answer</div>
-        <div id="modal-answer"></div>
-      </div>
-
-      <div id="modal-actions">
-        <!-- Reveal button -->
-        <button id="reveal-btn">Reveal Answer &nbsp;↵</button>
-
-        <!-- Award / Deduct buttons (one pair per team) -->
-        <div class="score-btns-row" id="score-btns-row"></div>
-
-        <!-- Close -->
-        <button id="close-modal-btn">Close (Esc)</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── Edit Scores Modal ──────────────────────────────────────────────── -->
-  <div id="edit-scores-overlay" role="dialog" aria-modal="true" aria-label="Edit Scores">
-    <div id="edit-scores-modal">
-      <div id="edit-scores-title">✏️ Edit Scores</div>
-      <p class="edit-scores-hint">Set any team's score manually</p>
-      <div id="edit-scores-form"></div>
-      <button id="edit-scores-close">Cancel</button>
-    </div>
-  </div>
-
-  <!-- ── Toast ───────────────────────────────────────────────────────────── -->
-  <div id="toast"></div>
-
-  <script src="game.js"></script>
 </body>
 </html>
