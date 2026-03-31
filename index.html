@@ -144,9 +144,9 @@
 
 <!-- ── Dogs ────────────────────────────────────────────────────────── -->
 <div class="dogs">
-  <img src="https://placedog.net/400/400?r=1" alt="A very good dog" />
-  <img src="https://placedog.net/400/400?r=2" alt="Another very good dog" />
-  <img src="https://placedog.net/400/400?r=3" alt="Yet another very good dog" />
+  <img id="dog1" src="" alt="A very good wiener dog" />
+  <img id="dog2" src="" alt="Another very good wiener dog" />
+  <img id="dog3" src="" alt="Yet another very good wiener dog" />
 </div>
 
 <!-- ── Blurb ────────────────────────────────────────────────────────── -->
@@ -163,6 +163,17 @@
 </div>
 
 <footer>Made with care (and dogs) · whatisjamesdoing.com</footer>
+
+<!-- ── Dachshund loader ─────────────────────────────────────────────── -->
+<script>
+  fetch('https://dog.ceo/api/breed/dachshund/images/random/3')
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById('dog1').src = d.message[0];
+      document.getElementById('dog2').src = d.message[1];
+      document.getElementById('dog3').src = d.message[2];
+    });
+</script>
 
 <!-- ── Game Script ───────────────────────────────────────────────────── -->
 <script>
