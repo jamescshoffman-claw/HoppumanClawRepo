@@ -18,6 +18,11 @@ export default function App() {
               Hoffman
             </span>
           </h1>
+          <div className="flex items-center justify-center gap-6 pt-1">
+            <span className="text-gray-500 text-sm font-medium">6'0"</span>
+            <span className="text-gray-700">·</span>
+            <span className="text-gray-500 text-sm font-medium">165 lbs</span>
+          </div>
           <p className="text-gray-400 text-lg max-w-md mx-auto leading-relaxed">
             Builder · Tinkerer · Enjoyer of long dogs
           </p>
@@ -27,35 +32,68 @@ export default function App() {
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.05s' }}>
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">About</h2>
           <p className="text-gray-300 leading-relaxed text-base">
-            Hey — I'm <strong className="text-white font-semibold">James Hoffman</strong>. This is my personal corner of the internet.
-            I use it to share what I've been building, experimenting with, and generally obsessing over lately.
-            Expect projects ranging from web apps and games to whatever rabbit hole I fell into this week.
+            Hey — I'm <strong className="text-white font-semibold">James Hoffman</strong>. This is where I will share what I am up to lately and what I'm focused on.
           </p>
           <p className="text-gray-500 text-sm mt-3">
             Check back often — this page updates as new things get shipped.
           </p>
         </section>
 
-        {/* ── Jeopardy CTA ── */}
+        {/* ── Claude Code / OpenClaw ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Featured Project</h2>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="flex-1">
-              <p className="text-white font-semibold text-xl mb-1">Jeopardy Game</p>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                A fully playable Jeopardy-style game built from scratch. Categories, Daily Doubles, Final Jeopardy — the whole deal.
-              </p>
-            </div>
-            <a
-              href="/game/"
-              className="shrink-0 inline-flex items-center justify-center gap-2 px-7 py-3 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold text-sm rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-xl hover:shadow-emerald-500/30 active:scale-95"
-            >
-              Play Now
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </a>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Obsessed With</h2>
+
+          {/* Images row */}
+          <div className="flex gap-3 mb-5">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg"
+              alt="Claude Code — AI coding agent"
+              className="w-1/2 rounded-xl object-cover aspect-video bg-gray-800"
+              loading="lazy"
+              onError={e => { e.target.style.display = 'none' }}
+            />
+            <img
+              src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&q=80"
+              alt="Claude Code terminal"
+              className="w-1/2 rounded-xl object-cover aspect-video bg-gray-800"
+              loading="lazy"
+              onError={e => { e.target.style.display = 'none' }}
+            />
           </div>
+
+          <p className="text-white font-semibold text-xl mb-2">AI-Powered Everything</p>
+          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+            I've been going deep on <strong className="text-white">Claude Code</strong> — Anthropic's AI coding agent that writes, edits, and ships code autonomously. It built most of this website. Seriously.
+          </p>
+          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+            I'm running it through <strong className="text-white">OpenClaw</strong>, a personal AI assistant platform that connects Claude to my iMessage. This means:
+          </p>
+          <ul className="text-gray-400 text-sm space-y-2 mb-5 pl-1">
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 mt-0.5">→</span>
+              <span><strong className="text-white">My friends can text me</strong> to add events to my Google Calendar — the AI handles it automatically</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 mt-0.5">→</span>
+              <span><strong className="text-white">I update this website by texting my phone</strong> — no laptop required</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 mt-0.5">→</span>
+              <span>The whole thing runs on my Mac mini at home, 24/7</span>
+            </li>
+          </ul>
+
+          <a
+            href="https://openclaw.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold text-sm rounded-xl transition-all duration-200 hover:scale-105 active:scale-95"
+          >
+            Check out OpenClaw
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+              <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </a>
         </section>
 
         {/* ── Dino Game ── */}
@@ -79,7 +117,7 @@ export default function App() {
         {/* ── Footer ── */}
         <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
           <p>James Hoffman · {new Date().getFullYear()}</p>
-          <p>Built with React + Vite + Tailwind</p>
+          <p>Built with React + Vite + Tailwind · powered by Claude Code</p>
         </footer>
 
       </div>
