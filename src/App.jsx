@@ -38,24 +38,6 @@ export default function App() {
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Working On</h2>
 
-          {/* Images row */}
-          <div className="flex gap-3 mb-5">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg"
-              alt="Claude Code — AI coding agent"
-              className="w-1/2 rounded-xl object-cover aspect-video bg-gray-800"
-              loading="lazy"
-              onError={e => { e.target.style.display = 'none' }}
-            />
-            <img
-              src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&q=80"
-              alt="Claude Code terminal"
-              className="w-1/2 rounded-xl object-cover aspect-video bg-gray-800"
-              loading="lazy"
-              onError={e => { e.target.style.display = 'none' }}
-            />
-          </div>
-
           <p className="text-white font-semibold text-xl mb-2">OpenClaw</p>
           <p className="text-gray-400 text-sm leading-relaxed mb-4">
             I've been ham on <strong className="text-white">OpenClaw</strong>. It built most of this website.
@@ -93,8 +75,9 @@ export default function App() {
 
         {/* ── Dune Imperium ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Also on my mind</h2>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">also on my mind</h2>
           <p className="text-white font-semibold text-xl mb-2">Dune: Imperium Uprising 🪱</p>
+
           <p className="text-gray-400 text-sm leading-relaxed mb-3">
             I've been pretty obsessed with Dune: Imperium Uprising lately. It's a deck-building worker placement game and it's genuinely so good. Every game feels different — you're managing spice, troops, influence across four factions, and trying not to get stomped before you can pull off whatever combo you've been cooking.
           </p>
@@ -105,9 +88,8 @@ export default function App() {
 
         {/* ── Dino Game ── */}
         <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Dino Runner</h2>
-            <span className="text-gray-600 text-xs">space · click · tap to jump  ·  double jump supported</span>
           </div>
           <DinoGame />
         </section>

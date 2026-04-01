@@ -1,7 +1,42 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+const LS_KEY = 'dino_leaderboard'
+const MAX_ENTRIES = 5
+
+function loadBoard() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || [] } catch { return [] }
+}
+function saveBoard(board) {
+  localStorage.setItem(LS_KEY, JSON.stringify(board))
+}
 
 export default function DinoGame() {
   const canvasRef = useRef(null)
+  const [board, setBoard] = useState(loadBoard)
+  const [namePrompt, setNamePrompt] = useState(null) // score when prompting
+  const [nameInput, setNameInput] = useState('')
+  const onDeathRef = useRef(null)
+
+  // register callback from canvas loop → React
+  useEffect(() => {
+    onDeathRef.current = (score) => {
+      const lowestOnBoard = board.length < MAX_ENTRIES ? -1 : board[board.length - 1]?.score ?? -1
+      if (score > lowestOnBoard || board.length < MAX_ENTRIES) {
+        setNamePrompt(score)
+        setNameInput('')
+      }
+    }
+  }, [board])
+
+  function submitName() {
+    const name = nameInput.trim() || 'Anonymous'
+    const updated = [...board, { name, score: namePrompt }]
+      .sort((a, b) => b.score - a.score)
+      .slice(0, MAX_ENTRIES)
+    saveBoard(updated)
+    setBoard(updated)
+    setNamePrompt(null)
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -14,7 +49,6 @@ export default function DinoGame() {
       running: false,
       dead: false,
       score: 0,
-      hiScore: 0,
       frame: 0,
       speed: 5,
       nextObs: 90,
@@ -61,27 +95,18 @@ export default function DinoGame() {
       loop()
     }
 
-    // Draw a simple pixel-art style dino
     function drawDino(x, y, w, h) {
       const onGround = dino.y >= GROUND - dino.h - 1
       const leg = Math.floor(state.frame / 5) % 2
 
       ctx.fillStyle = '#34d399'
-      // body
       ctx.fillRect(x, y, w, h)
-      // head bump
       ctx.fillRect(x + w - 6, y - 10, 12, 14)
-      // eye
       ctx.fillStyle = '#064e3b'
       ctx.fillRect(x + w + 1, y - 6, 5, 5)
-      // mouth
       ctx.fillStyle = '#34d399'
       ctx.fillRect(x + w - 2, y + 2, 10, 4)
-      // arm
-      ctx.fillStyle = '#34d399'
       ctx.fillRect(x + w - 10, y + h * 0.3, 10, 6)
-      // legs
-      ctx.fillStyle = '#34d399'
       if (onGround) {
         if (leg === 0) {
           ctx.fillRect(x + 4, y + h, 10, 10)
@@ -101,25 +126,17 @@ export default function DinoGame() {
       const stemW = Math.round(w * 0.35)
       const armH = Math.round(h * 0.28)
       const armY = y - Math.round(h * 0.62)
-
       ctx.fillStyle = '#4ade80'
-      // Main stem
       ctx.fillRect(x + (w - stemW) / 2, y - h, stemW, h)
-      // Left arm horizontal
       ctx.fillRect(x, armY, (w - stemW) / 2 + stemW / 2, stemW)
-      // Left arm vertical
       ctx.fillRect(x, armY - armH, stemW, armH)
-      // Right arm horizontal
       ctx.fillRect(x + (w + stemW) / 2 - stemW, armY, (w - stemW) / 2 + stemW / 2, stemW)
-      // Right arm vertical
       ctx.fillRect(x + w - stemW, armY - armH, stemW, armH)
     }
 
     function drawHUD() {
       ctx.font = 'bold 13px monospace'
       ctx.textAlign = 'right'
-      ctx.fillStyle = '#6b7280'
-      ctx.fillText(`HI  ${String(state.hiScore).padStart(5, '0')}`, W - 80, 22)
       ctx.fillStyle = '#e5e7eb'
       ctx.fillText(String(state.score).padStart(5, '0'), W - 15, 22)
     }
@@ -150,7 +167,6 @@ export default function DinoGame() {
       ctx.clearRect(0, 0, W, H)
       drawGround()
 
-      // Physics
       dino.vy += 0.65
       dino.y += dino.vy
       if (dino.y >= GROUND - dino.h) {
@@ -159,7 +175,6 @@ export default function DinoGame() {
         dino.jumps = 0
       }
 
-      // Spawn obstacles
       state.frame++
       if (state.frame >= state.nextObs) {
         const h = 38 + Math.random() * 36
@@ -169,13 +184,11 @@ export default function DinoGame() {
         state.speed = Math.min(14, state.speed + 0.12)
       }
 
-      // Update + draw obstacles
       obstacles = obstacles.filter(o => o.x + o.w > -10)
       for (const obs of obstacles) {
         obs.x -= state.speed
         drawCactus(obs)
 
-        // Collision (AABB with margin)
         const m = 7
         const collide =
           dino.x + m < obs.x + obs.w - m &&
@@ -186,13 +199,12 @@ export default function DinoGame() {
         if (collide) {
           state.dead = true
           state.running = false
-          if (state.score > state.hiScore) state.hiScore = state.score
+          const finalScore = Math.floor(state.frame / 6)
+          state.score = finalScore
 
-          // Final frame
           drawDino(dino.x, dino.y, dino.w, dino.h)
           drawHUD()
 
-          // Overlay
           ctx.fillStyle = 'rgba(0, 0, 0, 0.55)'
           ctx.fillRect(W / 2 - 150, H / 2 - 38, 300, 80)
           ctx.strokeStyle = 'rgba(255,255,255,0.08)'
@@ -204,49 +216,89 @@ export default function DinoGame() {
           ctx.fillStyle = '#6b7280'
           ctx.font = '12px monospace'
           ctx.fillText('tap · click · space  to restart', W / 2, H / 2 + 18)
+
+          // notify React
+          if (onDeathRef.current) onDeathRef.current(finalScore)
           return
         }
       }
 
       drawDino(dino.x, dino.y, dino.w, dino.h)
-
       state.score = Math.floor(state.frame / 6)
       drawHUD()
-
       animId = requestAnimationFrame(loop)
     }
 
-    // Initial idle draw
     drawIdleScreen()
 
     const onKey = (e) => {
-      if (e.code === 'Space' || e.code === 'ArrowUp') {
-        e.preventDefault()
-        jump()
-      }
+      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump() }
     }
-    const onClick = () => jump()
-    const onTouch = (e) => { e.preventDefault(); jump() }
-
+    canvas.addEventListener('click', jump)
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump() }, { passive: false })
     window.addEventListener('keydown', onKey)
-    canvas.addEventListener('click', onClick)
-    canvas.addEventListener('touchstart', onTouch, { passive: false })
 
     return () => {
       window.removeEventListener('keydown', onKey)
-      canvas.removeEventListener('click', onClick)
-      canvas.removeEventListener('touchstart', onTouch)
+      canvas.removeEventListener('click', jump)
       if (animId) cancelAnimationFrame(animId)
     }
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={700}
-      height={190}
-      className="w-full cursor-pointer rounded-xl"
-      style={{ background: 'rgba(0,0,0,0)', display: 'block' }}
-    />
+    <div>
+      <canvas
+        ref={canvasRef}
+        width={700}
+        height={190}
+        className="w-full cursor-pointer rounded-xl"
+        style={{ background: 'rgba(0,0,0,0)', display: 'block' }}
+      />
+
+      {/* Name prompt */}
+      {namePrompt !== null && (
+        <div className="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+          <p className="text-emerald-400 font-semibold text-sm mb-2">
+            🏆 You scored {namePrompt}! Enter your name for the leaderboard:
+          </p>
+          <div className="flex gap-2">
+            <input
+              autoFocus
+              type="text"
+              maxLength={20}
+              placeholder="Your name"
+              value={nameInput}
+              onChange={e => setNameInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && submitName()}
+              className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
+            />
+            <button
+              onClick={submitName}
+              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold text-sm rounded-lg transition-colors"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Leaderboard */}
+      {board.length > 0 && (
+        <div className="mt-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-gray-600 mb-2">Leaderboard</p>
+          <div className="space-y-1">
+            {board.map((entry, i) => (
+              <div key={i} className="flex items-center justify-between text-sm">
+                <span className="text-gray-500">
+                  <span className="text-gray-600 mr-2">#{i + 1}</span>
+                  {entry.name}
+                </span>
+                <span className="text-emerald-400 font-mono font-semibold">{entry.score}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
