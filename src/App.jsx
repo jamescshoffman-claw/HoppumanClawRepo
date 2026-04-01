@@ -1,5 +1,6 @@
 import DinoGame from './components/DinoGame'
 import DachshundGallery from './components/DachshundGallery'
+import StatusSlider from './components/StatusSlider'
 
 export default function App() {
   return (
@@ -27,6 +28,9 @@ export default function App() {
             Hey — I'm <strong className="text-white font-semibold">James</strong>. This is where I will share what I am up to lately and what I'm focused on.
           </p>
         </section>
+
+        {/* ── Status Slider ── */}
+        <StatusSlider />
 
         {/* ── Claude Code / OpenClaw ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
