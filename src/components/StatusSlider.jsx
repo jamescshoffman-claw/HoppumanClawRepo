@@ -46,9 +46,6 @@ export default function StatusSlider() {
         })}
       </div>
 
-      <p className="text-gray-500 text-xs text-center mt-3">
-        {current.emoji} James is currently <span className="text-gray-400 font-medium">{current.label.toLowerCase()}</span>
-      </p>
     </section>
   )
 }
