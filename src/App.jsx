@@ -24,7 +24,7 @@ export default function App() {
             <span className="text-gray-500 text-sm font-medium">165 lbs</span>
           </div>
           <p className="text-gray-400 text-lg max-w-md mx-auto leading-relaxed">
-            Builder · Tinkerer · Enjoyer of long dogs
+            What do
           </p>
         </header>
 
@@ -34,9 +34,7 @@ export default function App() {
           <p className="text-gray-300 leading-relaxed text-base">
             Hey — I'm <strong className="text-white font-semibold">James Hoffman</strong>. This is where I will share what I am up to lately and what I'm focused on.
           </p>
-          <p className="text-gray-500 text-sm mt-3">
-            Check back often — this page updates as new things get shipped.
-          </p>
+
         </section>
 
         {/* ── Claude Code / OpenClaw ── */}
