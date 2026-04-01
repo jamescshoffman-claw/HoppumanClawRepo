@@ -9,9 +9,6 @@ export default function App() {
 
         {/* ── Hero ── */}
         <header className="text-center space-y-4 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium tracking-widest uppercase mb-2">
-            ● Live
-          </div>
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight leading-none">
             James{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
@@ -92,6 +89,18 @@ export default function App() {
               <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
             </svg>
           </a>
+        </section>
+
+        {/* ── Dune Imperium ── */}
+        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Also on my mind</h2>
+          <p className="text-white font-semibold text-xl mb-2">Dune: Imperium Uprising 🪱</p>
+          <p className="text-gray-400 text-sm leading-relaxed mb-3">
+            I've been pretty obsessed with Dune: Imperium Uprising lately. It's a deck-building worker placement game and it's genuinely so good. Every game feels different — you're managing spice, troops, influence across four factions, and trying not to get stomped before you can pull off whatever combo you've been cooking.
+          </p>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            The Uprising expansion adds a whole naval combat layer which sounds complicated but ends up being really satisfying. Highly recommend if you're into strategy games at all.
+          </p>
         </section>
 
         {/* ── Dino Game ── */}
