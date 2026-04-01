@@ -180,8 +180,8 @@ export default function DinoGame() {
         const h = 38 + Math.random() * 36
         const w = 28 + Math.random() * 14
         obstacles.push({ x: W + 10, y: GROUND, w, h })
-        state.nextObs = state.frame + 55 + Math.floor(Math.random() * 75)
-        state.speed = Math.min(14, state.speed + 0.12)
+        state.nextObs = state.frame + Math.max(25, 65 - Math.floor(state.speed * 3)) + Math.floor(Math.random() * 40)
+        state.speed = Math.min(22, state.speed + 0.35)
       }
 
       obstacles = obstacles.filter(o => o.x + o.w > -10)

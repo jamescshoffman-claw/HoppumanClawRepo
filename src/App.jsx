@@ -10,9 +10,8 @@ export default function App() {
         {/* ── Hero ── */}
         <header className="text-center space-y-4 animate-fade-in">
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight leading-none">
-            James{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
-              Hoffman
+              James
             </span>
           </h1>
           <div className="flex items-center justify-center gap-6 pt-1">
@@ -27,9 +26,8 @@ export default function App() {
 
         {/* ── About ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.05s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">About</h2>
           <p className="text-gray-300 leading-relaxed text-base">
-            Hey — I'm <strong className="text-white font-semibold">James Hoffman</strong>. This is where I will share what I am up to lately and what I'm focused on.
+            Hey — I'm <strong className="text-white font-semibold">James</strong>. This is where I will share what I am up to lately and what I'm focused on.
           </p>
 
         </section>
@@ -77,7 +75,6 @@ export default function App() {
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.15s' }}>
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">also on my mind</h2>
           <p className="text-white font-semibold text-xl mb-2">Dune: Imperium Uprising 🪱</p>
-
           <p className="text-gray-400 text-sm leading-relaxed mb-3">
             I've been pretty obsessed with Dune: Imperium Uprising lately. It's a deck-building worker placement game and it's genuinely so good. Every game feels different — you're managing spice, troops, influence across four factions, and trying not to get stomped before you can pull off whatever combo you've been cooking.
           </p>
@@ -96,16 +93,15 @@ export default function App() {
 
         {/* ── Dachshunds ── */}
         <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Daily Dachshunds</h2>
-            <span className="text-gray-600 text-xs">via dog.ceo · refreshes on load</span>
           </div>
           <DachshundGallery />
         </section>
 
         {/* ── Footer ── */}
         <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
-          <p>James Hoffman · {new Date().getFullYear()}</p>
+          <p>James · {new Date().getFullYear()}</p>
           <p>Built with React + Vite + Tailwind · powered by Claude Code</p>
         </footer>
 
