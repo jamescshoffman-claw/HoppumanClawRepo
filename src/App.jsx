@@ -41,7 +41,7 @@ export default function App() {
 
         {/* ── Claude Code / OpenClaw ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Obsessed With</h2>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Working On</h2>
 
           {/* Images row */}
           <div className="flex gap-3 mb-5">
@@ -61,12 +61,12 @@ export default function App() {
             />
           </div>
 
-          <p className="text-white font-semibold text-xl mb-2">AI-Powered Everything</p>
+          <p className="text-white font-semibold text-xl mb-2">OpenClaw</p>
           <p className="text-gray-400 text-sm leading-relaxed mb-4">
-            I've been going deep on <strong className="text-white">Claude Code</strong> — Anthropic's AI coding agent that writes, edits, and ships code autonomously. It built most of this website. Seriously.
+            I've been ham on <strong className="text-white">OpenClaw</strong>. It built most of this website.
           </p>
           <p className="text-gray-400 text-sm leading-relaxed mb-4">
-            I'm running it through <strong className="text-white">OpenClaw</strong>, a personal AI assistant platform that connects Claude to my iMessage. This means:
+            I'm running it on a Mac mini to connect Claude to my iMessage. This means:
           </p>
           <ul className="text-gray-400 text-sm space-y-2 mb-5 pl-1">
             <li className="flex items-start gap-2">
