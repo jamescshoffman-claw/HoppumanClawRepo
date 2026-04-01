@@ -1,36 +1,48 @@
 import { useState, useEffect } from 'react'
 
+const SUPABASE_URL = 'https://mrumapmwohcjyownhvoi.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_hLTIQ49G_GYQSfClMIDn6Q_0YKuUWq0'
+const HEADERS = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' }
+
 const STATUSES = [
   { id: 'work',       label: 'At Work',           emoji: '💼' },
   { id: 'home',       label: 'At Home',            emoji: '🏠' },
   { id: 'volleyball', label: 'Playing Volleyball', emoji: '🏐' },
 ]
 
-const DEFAULT_STATUS = 'work'
 const PASSWORD = 'boostedmonkey'
-const STORAGE_KEY = 'james_status'
+
+async function fetchStatus() {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/status?select=value&id=eq.1`, { headers: HEADERS })
+  const data = await res.json()
+  return data[0]?.value ?? 'work'
+}
+
+async function saveStatus(value) {
+  await fetch(`${SUPABASE_URL}/rest/v1/status?id=eq.1`, {
+    method: 'PATCH',
+    headers: HEADERS,
+    body: JSON.stringify({ value }),
+  })
+}
 
 export default function StatusSlider() {
-  const [currentId, setCurrentId] = useState(DEFAULT_STATUS)
+  const [currentId, setCurrentId] = useState('work')
   const [unlocked, setUnlocked] = useState(false)
   const [showPrompt, setShowPrompt] = useState(false)
   const [input, setInput] = useState('')
   const [shake, setShake] = useState(false)
 
-  // Load persisted status on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved && STATUSES.find(s => s.id === saved)) {
-      setCurrentId(saved)
-    }
+    fetchStatus().then(setCurrentId)
   }, [])
 
   const currentIndex = STATUSES.findIndex(s => s.id === currentId)
 
-  const handleStatusClick = (id) => {
+  const handleStatusClick = async (id) => {
     if (!unlocked) return
     setCurrentId(id)
-    localStorage.setItem(STORAGE_KEY, id)
+    await saveStatus(id)
   }
 
   const handleUnlockSubmit = (e) => {
@@ -114,7 +126,7 @@ export default function StatusSlider() {
       {showPrompt && !unlocked && (
         <form
           onSubmit={handleUnlockSubmit}
-          className={`mt-3 flex gap-2 justify-center ${shake ? 'animate-[wiggle_0.4s_ease-in-out]' : ''}`}
+          className={`mt-3 flex gap-2 justify-center ${shake ? 'animate-wiggle' : ''}`}
         >
           <input
             autoFocus
