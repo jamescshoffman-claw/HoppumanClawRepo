@@ -1,41 +1,61 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
-const LS_KEY = 'dino_leaderboard'
-const MAX_ENTRIES = 5
+const SUPABASE_URL = 'https://mrumapmwohcjyownhvoi.supabase.co'
+const SUPABASE_KEY = 'sb_publishable_hLTIQ49G_GYQSfClMIDn6Q_0YKuUWq0'
 
-function loadBoard() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY)) || [] } catch { return [] }
+async function fetchBoard() {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/leaderboard?select=name,score&order=score.desc&limit=5`,
+    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+  )
+  return res.ok ? res.json() : []
 }
-function saveBoard(board) {
-  localStorage.setItem(LS_KEY, JSON.stringify(board))
+
+async function postScore(name, score) {
+  await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify({ name, score }),
+  })
 }
 
 export default function DinoGame() {
   const canvasRef = useRef(null)
-  const [board, setBoard] = useState(loadBoard)
-  const [namePrompt, setNamePrompt] = useState(null) // score when prompting
+  const [board, setBoard] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [namePrompt, setNamePrompt] = useState(null)
   const [nameInput, setNameInput] = useState('')
   const onDeathRef = useRef(null)
 
-  // register callback from canvas loop → React
+  const refreshBoard = useCallback(async () => {
+    setLoading(true)
+    const data = await fetchBoard()
+    setBoard(data)
+    setLoading(false)
+  }, [])
+
+  useEffect(() => { refreshBoard() }, [refreshBoard])
+
   useEffect(() => {
     onDeathRef.current = (score) => {
-      const lowestOnBoard = board.length < MAX_ENTRIES ? -1 : board[board.length - 1]?.score ?? -1
-      if (score > lowestOnBoard || board.length < MAX_ENTRIES) {
+      const lowestTop5 = board.length < 5 ? -1 : board[board.length - 1]?.score ?? -1
+      if (score > lowestTop5 || board.length < 5) {
         setNamePrompt(score)
         setNameInput('')
       }
     }
   }, [board])
 
-  function submitName() {
+  async function submitName() {
     const name = nameInput.trim() || 'Anonymous'
-    const updated = [...board, { name, score: namePrompt }]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, MAX_ENTRIES)
-    saveBoard(updated)
-    setBoard(updated)
+    await postScore(name, namePrompt)
     setNamePrompt(null)
+    await refreshBoard()
   }
 
   useEffect(() => {
@@ -46,59 +66,29 @@ export default function DinoGame() {
     const GROUND = H - 36
 
     const state = {
-      running: false,
-      dead: false,
-      score: 0,
-      frame: 0,
-      speed: 5,
-      nextObs: 90,
+      running: false, dead: false, score: 0,
+      frame: 0, speed: 5, nextObs: 90,
     }
-
-    const dino = {
-      x: 60,
-      y: GROUND - 44,
-      w: 32,
-      h: 44,
-      vy: 0,
-      jumps: 0,
-    }
-
+    const dino = { x: 60, y: GROUND - 44, w: 32, h: 44, vy: 0, jumps: 0 }
     let obstacles = []
     let animId = null
 
     function jump() {
       if (state.dead) { restart(); return }
       if (!state.running) { start(); return }
-      if (dino.jumps < 2) {
-        dino.vy = -13
-        dino.jumps++
-      }
+      if (dino.jumps < 2) { dino.vy = -13; dino.jumps++ }
     }
-
-    function start() {
-      state.running = true
-      state.dead = false
-      loop()
-    }
-
+    function start() { state.running = true; state.dead = false; loop() }
     function restart() {
-      state.score = 0
-      state.frame = 0
-      state.speed = 5
-      state.nextObs = 90
-      state.dead = false
-      state.running = true
+      Object.assign(state, { score: 0, frame: 0, speed: 5, nextObs: 90, dead: false, running: true })
       obstacles = []
-      dino.y = GROUND - dino.h
-      dino.vy = 0
-      dino.jumps = 0
+      Object.assign(dino, { y: GROUND - dino.h, vy: 0, jumps: 0 })
       loop()
     }
 
     function drawDino(x, y, w, h) {
       const onGround = dino.y >= GROUND - dino.h - 1
       const leg = Math.floor(state.frame / 5) % 2
-
       ctx.fillStyle = '#34d399'
       ctx.fillRect(x, y, w, h)
       ctx.fillRect(x + w - 6, y - 10, 12, 14)
@@ -108,17 +98,9 @@ export default function DinoGame() {
       ctx.fillRect(x + w - 2, y + 2, 10, 4)
       ctx.fillRect(x + w - 10, y + h * 0.3, 10, 6)
       if (onGround) {
-        if (leg === 0) {
-          ctx.fillRect(x + 4, y + h, 10, 10)
-          ctx.fillRect(x + 16, y + h - 6, 10, 6)
-        } else {
-          ctx.fillRect(x + 4, y + h - 6, 10, 6)
-          ctx.fillRect(x + 16, y + h, 10, 10)
-        }
-      } else {
-        ctx.fillRect(x + 4, y + h, 10, 8)
-        ctx.fillRect(x + 16, y + h, 10, 8)
-      }
+        if (leg === 0) { ctx.fillRect(x + 4, y + h, 10, 10); ctx.fillRect(x + 16, y + h - 6, 10, 6) }
+        else { ctx.fillRect(x + 4, y + h - 6, 10, 6); ctx.fillRect(x + 16, y + h, 10, 10) }
+      } else { ctx.fillRect(x + 4, y + h, 10, 8); ctx.fillRect(x + 16, y + h, 10, 8) }
     }
 
     function drawCactus(obs) {
@@ -166,14 +148,9 @@ export default function DinoGame() {
     function loop() {
       ctx.clearRect(0, 0, W, H)
       drawGround()
-
       dino.vy += 0.65
       dino.y += dino.vy
-      if (dino.y >= GROUND - dino.h) {
-        dino.y = GROUND - dino.h
-        dino.vy = 0
-        dino.jumps = 0
-      }
+      if (dino.y >= GROUND - dino.h) { dino.y = GROUND - dino.h; dino.vy = 0; dino.jumps = 0 }
 
       state.frame++
       if (state.frame >= state.nextObs) {
@@ -188,24 +165,16 @@ export default function DinoGame() {
       for (const obs of obstacles) {
         obs.x -= state.speed
         drawCactus(obs)
-
         const m = 7
-        const collide =
-          dino.x + m < obs.x + obs.w - m &&
-          dino.x + dino.w - m > obs.x + m &&
-          dino.y + m < obs.y &&
-          dino.y + dino.h - m > obs.y - obs.h + m
-
-        if (collide) {
-          state.dead = true
-          state.running = false
+        const hit = dino.x + m < obs.x + obs.w - m && dino.x + dino.w - m > obs.x + m &&
+                    dino.y + m < obs.y && dino.y + dino.h - m > obs.y - obs.h + m
+        if (hit) {
+          state.dead = true; state.running = false
           const finalScore = Math.floor(state.frame / 6)
           state.score = finalScore
-
           drawDino(dino.x, dino.y, dino.w, dino.h)
           drawHUD()
-
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.55)'
+          ctx.fillStyle = 'rgba(0,0,0,0.55)'
           ctx.fillRect(W / 2 - 150, H / 2 - 38, 300, 80)
           ctx.strokeStyle = 'rgba(255,255,255,0.08)'
           ctx.strokeRect(W / 2 - 150, H / 2 - 38, 300, 80)
@@ -216,8 +185,6 @@ export default function DinoGame() {
           ctx.fillStyle = '#6b7280'
           ctx.font = '12px monospace'
           ctx.fillText('tap · click · space  to restart', W / 2, H / 2 + 18)
-
-          // notify React
           if (onDeathRef.current) onDeathRef.current(finalScore)
           return
         }
@@ -231,13 +198,10 @@ export default function DinoGame() {
 
     drawIdleScreen()
 
-    const onKey = (e) => {
-      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump() }
-    }
+    const onKey = (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump() } }
     canvas.addEventListener('click', jump)
     canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump() }, { passive: false })
     window.addEventListener('keydown', onKey)
-
     return () => {
       window.removeEventListener('keydown', onKey)
       canvas.removeEventListener('click', jump)
@@ -259,7 +223,7 @@ export default function DinoGame() {
       {namePrompt !== null && (
         <div className="mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
           <p className="text-emerald-400 font-semibold text-sm mb-2">
-            🏆 You scored {namePrompt}! Enter your name for the leaderboard:
+            🏆 You scored {namePrompt}! Enter your name for the global leaderboard:
           </p>
           <div className="flex gap-2">
             <input
@@ -282,10 +246,16 @@ export default function DinoGame() {
         </div>
       )}
 
-      {/* Leaderboard */}
-      {board.length > 0 && (
-        <div className="mt-4">
-          <p className="text-xs font-semibold tracking-widest uppercase text-gray-600 mb-2">Leaderboard</p>
+      {/* Global Leaderboard */}
+      <div className="mt-4">
+        <p className="text-xs font-semibold tracking-widest uppercase text-gray-600 mb-2">
+          Global Leaderboard
+        </p>
+        {loading ? (
+          <p className="text-gray-600 text-xs">Loading...</p>
+        ) : board.length === 0 ? (
+          <p className="text-gray-600 text-xs">No scores yet — be the first!</p>
+        ) : (
           <div className="space-y-1">
             {board.map((entry, i) => (
               <div key={i} className="flex items-center justify-between text-sm">
@@ -297,8 +267,8 @@ export default function DinoGame() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
