@@ -3,14 +3,7 @@ import DachshundGallery from './components/DachshundGallery'
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden">
-
-      {/* Ambient background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
-        <div className="absolute -top-48 -left-32 w-[500px] h-[500px] bg-emerald-600/15 rounded-full blur-[120px]" />
-        <div className="absolute top-1/3 -right-24 w-[400px] h-[400px] bg-sky-600/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-600/8 rounded-full blur-[120px]" />
-      </div>
+    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'linear-gradient(135deg, #030712 0%, #0a1628 50%, #030712 100%)' }}>
 
       <div className="relative max-w-3xl mx-auto px-5 py-20 space-y-12">
 
@@ -31,7 +24,7 @@ export default function App() {
         </header>
 
         {/* ── About ── */}
-        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.05s' }}>
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">About</h2>
           <p className="text-gray-300 leading-relaxed text-base">
             Hey — I'm <strong className="text-white font-semibold">James Hoffman</strong>. This is my personal corner of the internet.
@@ -44,7 +37,7 @@ export default function App() {
         </section>
 
         {/* ── Jeopardy CTA ── */}
-        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Featured Project</h2>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1">
@@ -66,7 +59,7 @@ export default function App() {
         </section>
 
         {/* ── Dino Game ── */}
-        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.15s' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Dino Runner</h2>
             <span className="text-gray-600 text-xs">space · click · tap to jump  ·  double jump supported</span>
@@ -75,7 +68,7 @@ export default function App() {
         </section>
 
         {/* ── Dachshunds ── */}
-        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Daily Dachshunds</h2>
             <span className="text-gray-600 text-xs">via dog.ceo · refreshes on load</span>
