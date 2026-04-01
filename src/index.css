@@ -4,14 +4,18 @@
 
 @layer base {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
   }
   body {
-    background-color: #ffffff;
-    color: #000000;
-    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
+    @apply bg-gray-950 text-white antialiased;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+  .glass-card-hover {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl transition-all duration-300 hover:bg-white/8 hover:border-white/20;
   }
 }
