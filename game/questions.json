@@ -61,7 +61,7 @@
         {
           "name": "Who's That Company?",
           "clues": [
-            { "value": 100, "question": "image:jeopardyImages/logo_kodak.svg", "answer": "Kodak" },
+            { "value": 100, "question": "image:jeopardyImages/logo_kodak.png", "answer": "Kodak" },
             { "value": 200, "question": "image:jeopardyImages/logo_bmw.svg", "answer": "BMW" },
             { "value": 300, "question": "image:jeopardyImages/logo_adobe.png", "answer": "Adobe" },
             { "value": 400, "question": "image:jeopardyImages/logo_delta.png", "answer": "Delta" },
