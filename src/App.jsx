@@ -107,18 +107,19 @@ export default function App() {
         </section>
 
         {/* ── Jeopardy ── */}
-        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-4">Jeopardy!</h2>
-          <div className="rounded-xl overflow-hidden" style={{ height: '600px' }}>
-            <iframe
-              src="/game/index.html"
-              title="Jeopardy Game"
-              width="100%"
-              height="100%"
-              style={{ border: 'none', display: 'block' }}
-            />
+        <a
+          href="/game/index.html"
+          className="glass-card p-6 animate-slide-up flex items-center justify-between group no-underline"
+          style={{ animationDelay: '0.3s', display: 'flex' }}
+        >
+          <div>
+            <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-1">Play</h2>
+            <p className="text-white font-semibold text-xl">Jeopardy!</p>
           </div>
-        </section>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-emerald-400 group-hover:translate-x-1 transition-transform" aria-hidden>
+            <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </a>
 
         {/* ── Footer ── */}
         <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
