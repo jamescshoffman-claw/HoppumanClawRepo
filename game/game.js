@@ -175,6 +175,7 @@ function renderBoard() {
   const board = state.data.boards[state.currentBoard];
   const grid = dom.board;
   grid.innerHTML = '';
+  grid.style.gridTemplateColumns = `repeat(${board.categories.length}, 1fr)`;
 
   // Category headers
   board.categories.forEach(cat => {
@@ -223,8 +224,26 @@ function openModal(boardIdx, catIdx, clueIdx) {
   state.scoredTeams = {};  // reset per-team lock for this clue
 
   dom.modalCategory.textContent = cat.name;
-  dom.modalValue.textContent = `$${clue.value}`;
-  dom.modalQuestion.textContent = clue.question;
+  dom.modalValue.textContent = `$${value}`;
+  const q = clue.question;
+  if (q.startsWith('image:')) {
+    const src = q.slice('image:'.length);
+    const img = document.createElement('img');
+    img.src = src + '?v=' + Date.now();
+    img.alt = 'Clue image';
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '300px';
+    img.style.objectFit = 'contain';
+    img.style.margin = '10px auto';
+    img.style.display = 'block';
+    if (src.includes('logo_')) {
+      img.style.filter = 'grayscale(100%) contrast(120%)';
+    }
+    dom.modalQuestion.innerHTML = '';
+    dom.modalQuestion.appendChild(img);
+  } else {
+    dom.modalQuestion.textContent = q;
+  }
   dom.modalAnswer.textContent = clue.answer;
   dom.modalAnswerSec.classList.remove('visible');
   dom.revealBtn.style.display = 'block';
@@ -451,18 +470,25 @@ function loadSavedState() {
     if (typeof saved.activeTeam === 'number') state.activeTeam = saved.activeTeam;
     if (typeof saved.currentBoard === 'number') state.currentBoard = saved.currentBoard;
 
-    // Validate and restore usedCells shape
+    // Validate and restore usedCells shape — must match exactly
     if (saved.usedCells) {
       let valid = true;
-      state.data.boards.forEach((board, bi) => {
-        board.categories.forEach((cat, ci) => {
-          cat.clues.forEach((_, li) => {
-            if (!saved.usedCells[bi] || !saved.usedCells[bi][ci] || saved.usedCells[bi][ci][li] === undefined) {
-              valid = false;
-            }
-          });
+      // Check saved has same number of boards and categories
+      if (!saved.usedCells || saved.usedCells.length !== state.data.boards.length) {
+        valid = false;
+      } else {
+        state.data.boards.forEach((board, bi) => {
+          if (!saved.usedCells[bi] || saved.usedCells[bi].length !== board.categories.length) {
+            valid = false;
+          } else {
+            board.categories.forEach((cat, ci) => {
+              if (!saved.usedCells[bi][ci] || saved.usedCells[bi][ci].length !== cat.clues.length) {
+                valid = false;
+              }
+            });
+          }
         });
-      });
+      }
       if (valid) state.usedCells = saved.usedCells;
     }
   } catch (e) { /* ignore corrupted state */ }

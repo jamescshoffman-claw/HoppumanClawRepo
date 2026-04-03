@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180" width="300" height="180">
+  <!-- Budweiser bowtie shape - no text, just the iconic red bowtie -->
+  <!-- Main bowtie/bow shape -->
+  <path d="
+    M150,90
+    C130,70 40,30 10,50
+    C0,56 0,66 10,72
+    L140,90
+    L10,108
+    C0,114 0,124 10,130
+    C40,150 130,110 150,90
+    Z
+  " fill="#C8102E"/>
+  <path d="
+    M150,90
+    C170,70 260,30 290,50
+    C300,56 300,66 290,72
+    L160,90
+    L290,108
+    C300,114 300,124 290,130
+    C260,150 170,110 150,90
+    Z
+  " fill="#C8102E"/>
+  <!-- Center knot -->
+  <ellipse cx="150" cy="90" rx="18" ry="22" fill="#A00020"/>
+  <!-- Gold outline trim -->
+  <path d="
+    M150,90
+    C130,70 40,30 10,50
+    C0,56 0,66 10,72
+    L140,90
+    L10,108
+    C0,114 0,124 10,130
+    C40,150 130,110 150,90
+    Z
+  " fill="none" stroke="#C8A000" stroke-width="2"/>
+  <path d="
+    M150,90
+    C170,70 260,30 290,50
+    C300,56 300,66 290,72
+    L160,90
+    L290,108
+    C300,114 300,124 290,130
+    C260,150 170,110 150,90
+    Z
+  " fill="none" stroke="#C8A000" stroke-width="2"/>
+</svg>

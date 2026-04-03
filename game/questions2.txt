@@ -30,7 +30,7 @@
             { "value": 200, "question": "This palindrome is used to detect aircraft using radio waves.", "answer": "Radar" },
             { "value": 300, "question": "This palindrome is the word for the middle of the day.", "answer": "Noon" },
             { "value": 400, "question": "This palindrome is a narrow boat you paddle.", "answer": "Kayak" },
-            { "value": 500, "question": "This palindrome describes someone who brings things back to life — a doctor, a defibrillator, or even a sequel could be called one of these.", "answer": "Reviver" }
+            { "value": 500, "question": "A formal palindrome title for a woman — 'Yes, ___.'", "answer": "Madam" }
           ]
         },
         {
@@ -39,7 +39,7 @@
             { "value": 100, "question": "His full name is Terrible Rabbit, he played in front of a large sports-enjoying crowd.", "answer": "Bad Bunny" },
             { "value": 200, "question": "His full name is Popular SmokeStack, he is from Brooklyn", "answer": "Pop Smoke" },
             { "value": 300, "question": "His full name is Friday Saturday Sunday", "answer": "The Weeknd" },
-            { "value": 400, "question": "The full name for this group is Beautiful Tractor Sourkraut", "answer": "BTS"},
+            { "value": 400, "question": "The full name for this group is Beautiful Tractor Sauerkraut", "answer": "BTS"},
             { "value": 500, "question": "His full name is Jaquielin Zebra and he performed with Kanye in the song People in France", "answer": "Jay Z" }
           ]
         },
@@ -47,8 +47,8 @@
           "name": "Fish",
           "clues": [
             { "value": 100, "question": "What was the name of the dad in Finding Nemo?", "answer": "Marlin" },
-            { "value": 200, "question": "This is the largest fish in the ocean.", "answer": "Whale shark" },
-            { "value": 300, "question": "This fish is the boating teacher in SpongeBob SquarePants.", "answer": "Mrs. Puff" },
+            { "value": 200, "question": "This Red Candy is Lingonberry flavored and comes from Europe", "answer": "Swedish Fish },
+            { "value": 300, "question": "This fish inflates into a spiky ball when threatened, basically turning itself into a floating “don’t touch me.", "answer": "Pufferfish" },
             { "value": 400, "question": "This deep-sea fish uses a bioluminescent lure on its head to attract prey.", "answer": "Anglerfish" },
             { "value": 500, "question": "This fish is known for swimming upstream to spawn and is a Pacific Northwest icon.", "answer": "Salmon" }
           ]
@@ -61,11 +61,11 @@
         {
           "name": "Who's That Company?",
           "clues": [
-            { "value": 100, "question": "image:jeopardyImages/logo_kodak.svg", "answer": "Kodak" },
-            { "value": 200, "question": "image:jeopardyImages/logo_bmw.svg", "answer": "BMW" },
-            { "value": 300, "question": "image:jeopardyImages/logo_adobe.png", "answer": "Adobe" },
-            { "value": 400, "question": "image:jeopardyImages/logo_delta.png", "answer": "Delta" },
-            { "value": 500, "question": "image:jeopardyImages/logo_popeyes.png", "answer": "Popeyes" }
+            { "value": 100, "question": "image:jeopardyImages/logo_apple.png", "answer": "Apple" },
+            { "value": 200, "question": "image:jeopardyImages/logo_nike.png", "answer": "Nike" },
+            { "value": 300, "question": "image:jeopardyImages/logo_mcdonalds.png", "answer": "McDonald's" },
+            { "value": 400, "question": "image:jeopardyImages/logo_starbucks.png", "answer": "Starbucks" },
+            { "value": 500, "question": "image:jeopardyImages/logo_amazon.png", "answer": "Amazon" }
           ]
         },
         {
@@ -75,24 +75,24 @@
             { "value": 200, "question": "This palindrome detects aircraft using radio waves.", "answer": "Radar" },
             { "value": 300, "question": "This palindrome is the title of a 2020 Christopher Nolan film.", "answer": "Tenet" },
             { "value": 400, "question": "This palindrome is a long narrow boat you paddle.", "answer": "Kayak" },
-            { "value": 500, "question": "This palindrome describes someone who brings things back to life — a doctor, a defibrillator, or even a sequel could be called one of these.", "answer": "Reviver" }
+            { "value": 500, "question": "Someone who in theory would bring people back from the dead, like they go around bringing people back. When you die and come back you would say you did this", "answer": "Reviver" }
           ]
         },
         {
           "name": "Name a Woman",
           "clues": [
-            { "value": 100, "question": "image:jeopardyImages/woman_rosa.jpg", "answer": "Rosa Parks" },
-            { "value": 200, "question": "image:jeopardyImages/woman_amelia.jpg", "answer": "Amelia Earhart" },
-            { "value": 300, "question": "image:jeopardyImages/woman_harriet.jpg", "answer": "Harriet Tubman" },
-            { "value": 400, "question": "image:jeopardyImages/woman_susan.jpg", "answer": "Susan B. Anthony" },
-            { "value": 500, "question": "image:jeopardyImages/woman_venus.jpg", "answer": "Venus Williams" }
+            { "value": 100, "question": "image:jeopardyImages/woman_taylor.jpg", "answer": "Taylor Swift" },
+            { "value": 200, "question": "image:jeopardyImages/woman_oprah.jpg", "answer": "Oprah Winfrey" },
+            { "value": 300, "question": "image:jeopardyImages/woman_michelle.jpg", "answer": "Michelle Obama" },
+            { "value": 400, "question": "image:jeopardyImages/woman_serena.jpg", "answer": "Serena Williams" },
+            { "value": 500, "question": "image:jeopardyImages/woman_beyonce.jpg", "answer": "Beyoncé" }
           ]
         },
         {
           "name": "Acronyms",
           "clues": [
             { "value": 100, "question": "You get money out of this machine.", "answer": "ATM (Automated Teller Machine)" },
-            { "value": 200, "question": "This acronym describes the anxiety of missing out on something fun that others are doing.", "answer": "FOMO (Fear Of Missing Out)" },
+            { "value": 200, "question": "This text-message acronym means you found something funny.", "answer": "LOL (Laughing Out Loud)" },
             { "value": 300, "question": "This acronym stands for an international peacekeeping military alliance founded in 1949.", "answer": "NATO (North Atlantic Treaty Organization)" },
             { "value": 400, "question": "This U.S. government agency was established in 1958 to explore outer space.", "answer": "NASA (National Aeronautics and Space Administration)" },
             { "value": 500, "question": "This medical acronym means a patient does not want to be resuscitated.", "answer": "DNR (Do Not Resuscitate)" }

@@ -106,6 +106,20 @@ export default function App() {
           <DachshundGallery />
         </section>
 
+        {/* ── Jeopardy ── */}
+        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-4">Jeopardy!</h2>
+          <div className="rounded-xl overflow-hidden" style={{ height: '600px' }}>
+            <iframe
+              src="/game/index.html"
+              title="Jeopardy Game"
+              width="100%"
+              height="100%"
+              style={{ border: 'none', display: 'block' }}
+            />
+          </div>
+        </section>
+
         {/* ── Footer ── */}
         <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
           <p>James · {new Date().getFullYear()}</p>

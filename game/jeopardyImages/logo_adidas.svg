@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 240" width="220" height="240">
+  <g transform="translate(110,105)">
+    <!-- Three solid overlapping petals (trefoil) -->
+    <!-- Top petal -->
+    <ellipse cx="0" cy="-42" rx="30" ry="42" fill="black"/>
+    <!-- Bottom-left petal -->
+    <ellipse cx="-36" cy="21" rx="30" ry="42" fill="black" transform="rotate(60,-36,21)"/>
+    <!-- Bottom-right petal -->
+    <ellipse cx="36" cy="21" rx="30" ry="42" fill="black" transform="rotate(-60,36,21)"/>
+    <!-- White triangle cutout from lower center -->
+    <polygon points="0,0 -38,46 38,46" fill="white"/>
+    <!-- Stem -->
+    <rect x="-6" y="47" width="12" height="28" fill="black"/>
+  </g>
+  <!-- Three stripes, widening downward -->
+  <rect x="28"  y="177" width="164" height="13" rx="2" fill="black"/>
+  <rect x="40"  y="195" width="140" height="13" rx="2" fill="black"/>
+  <rect x="54"  y="213" width="112" height="13" rx="2" fill="black"/>
+</svg>

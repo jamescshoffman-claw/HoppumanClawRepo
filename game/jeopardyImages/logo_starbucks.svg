@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="95" fill="#00704A"/>
+  <circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="4"/>
+  <!-- Stylized Starbucks siren - simplified representation -->
+  <circle cx="100" cy="75" r="22" fill="white"/>
+  <ellipse cx="100" cy="130" rx="28" ry="20" fill="white"/>
+  <!-- Crown points -->
+  <polygon points="100,45 93,58 107,58" fill="white"/>
+  <polygon points="82,50 80,63 90,58" fill="white"/>
+  <polygon points="118,50 120,63 110,58" fill="white"/>
+  <!-- Star -->
+  <text x="100" y="170" font-family="Arial" font-size="13" fill="white" text-anchor="middle" font-weight="bold">STARBUCKS</text>
+  <text x="100" y="35" font-family="Arial" font-size="11" fill="white" text-anchor="middle">☆ COFFEE ☆</text>
+</svg>

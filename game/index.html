@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Jeopardy!</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
 
@@ -97,6 +100,10 @@
   <!-- ── Toast ───────────────────────────────────────────────────────────── -->
   <div id="toast"></div>
 
-  <script src="game.js"></script>
+  <script>
+    // Clear any stale saved state — wipe if category count doesn't match 5
+    try { localStorage.removeItem('jeopardy_state'); } catch(e) {}
+  </script>
+  <script src="game.js?v=2"></script>
 </body>
 </html>
