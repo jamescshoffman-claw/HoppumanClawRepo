@@ -67,6 +67,7 @@ export default function App() {
               ['Messaging Server', 'BlueBubbles'],
               ['Notion Sync', 'Notion API'],
               ['Calendar Sync', 'Google Calendar API'],
+              ['LLM', 'Claude (Anthropic)'],
             ].map(([label, value]) => (
               <div key={label} className="flex justify-between text-sm border border-white/5 rounded-lg px-3 py-2 bg-white/[0.03]">
                 <span className="text-gray-500">{label}</span>
@@ -94,18 +95,40 @@ export default function App() {
 
           <div className="space-y-5">
             <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Currently Reading</p>
-              <a
-                href="https://www.goodreads.com/book/show/44767458-dune"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
-              >
-                Dune — Frank Herbert
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-              </a>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Currently Reading</p>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="https://www.goodreads.com/book/show/44767458-dune"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
+                  >
+                    Dune — Frank Herbert
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+                      <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.goodreads.com/book/show/6289420-a-practical-guide-to-quantitative-finance-interviews"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
+                  >
+                    A Practical Guide to Quantitative Finance Interviews
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+                      <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Currently Learning</p>
+              <p className="text-white text-sm">Probability and statistics</p>
             </div>
 
             <div>
@@ -146,7 +169,8 @@ export default function App() {
         >
           <div>
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-1">Play</h2>
-            <p className="text-white font-semibold text-xl">Jeopardy!</p>
+            <p className="text-white font-semibold text-xl mb-1">Jeopardy!</p>
+            <p className="text-gray-400 text-sm">Made this for a dinner party with friends</p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-emerald-400 group-hover:translate-x-1 transition-transform" aria-hidden>
             <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
