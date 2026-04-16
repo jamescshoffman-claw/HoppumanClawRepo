@@ -1,5 +1,4 @@
 import DinoGame from './components/DinoGame'
-import DachshundGallery from './components/DachshundGallery'
 import StatusSlider from './components/StatusSlider'
 
 export default function App() {
@@ -37,26 +36,44 @@ export default function App() {
           <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Working On</h2>
 
           <p className="text-white font-semibold text-xl mb-2">OpenClaw</p>
-          <p className="text-gray-400 text-sm leading-relaxed mb-4">
-            I've been ham on <strong className="text-white">OpenClaw</strong>. It built most of this website.
+          <p className="text-gray-400 text-sm leading-relaxed mb-5">
+            I've been heads down on <strong className="text-white">OpenClaw</strong> — an AI agent running 24/7 on a Mac mini at home, connected to my iMessage.
           </p>
-          <p className="text-gray-400 text-sm leading-relaxed mb-4">
-            I'm running it on a Mac mini to connect Claude to my iMessage. This means:
-          </p>
-          <ul className="text-gray-400 text-sm space-y-2 mb-5 pl-1">
+
+          <p className="text-white text-sm font-semibold mb-3">Use Cases</p>
+          <ul className="text-gray-400 text-sm space-y-2 mb-6 pl-1">
             <li className="flex items-start gap-2">
               <span className="text-emerald-400 mt-0.5">→</span>
-              <span><strong className="text-white">My friends can text me</strong> to add events to my Google Calendar — the AI handles it automatically</span>
+              <span><strong className="text-white">Updating Notion</strong> — I text the bot and it logs things directly into my Notion workspace</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-400 mt-0.5">→</span>
-              <span><strong className="text-white">I update this website by texting my phone</strong> — no laptop required</span>
+              <span><strong className="text-white">Calendar management</strong> — my friends text the bot to add events to my Google Calendar, the AI handles it automatically</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-400 mt-0.5">→</span>
-              <span>The whole thing runs on my Mac mini at home, 24/7</span>
+              <span><strong className="text-white">Writing, pushing, and deploying code</strong> — this website was updated from my phone</span>
             </li>
           </ul>
+
+          <p className="text-white text-sm font-semibold mb-3">Stack</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+            {[
+              ['Web Hosting', 'GitHub Pages'],
+              ['Domain', 'Squarespace'],
+              ['Database', 'Supabase · PostgreSQL'],
+              ['Web Scraper', 'Brave Search API'],
+              ['Phone Number', 'Mint Mobile'],
+              ['Messaging Server', 'BlueBubbles'],
+              ['Notion Sync', 'Notion API'],
+              ['Calendar Sync', 'Google Calendar API'],
+            ].map(([label, value]) => (
+              <div key={label} className="flex justify-between text-sm border border-white/5 rounded-lg px-3 py-2 bg-white/[0.03]">
+                <span className="text-gray-500">{label}</span>
+                <span className="text-gray-300 font-medium">{value}</span>
+              </div>
+            ))}
+          </div>
 
           <a
             href="https://openclaw.ai"
@@ -71,23 +88,46 @@ export default function App() {
           </a>
         </section>
 
-        {/* ── Dune Imperium ── */}
+        {/* ── Hobbies ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <p className="text-white font-semibold text-xl mb-3">Dune: Imperium Uprising</p>
-          <p className="text-gray-400 text-sm leading-relaxed mb-4">
-            I've been pretty obsessed with Dune: Imperium lately. It's a board game. A deck-building worker placement board game specifically.
-          </p>
-          <a
-            href="https://boardgamegeek.com/boardgame/397598/dune-imperium-uprising"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
-          >
-            View on BoardGameGeek
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-              <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-5">Hobbies</h2>
+
+          <div className="space-y-5">
+            <div>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Currently Reading</p>
+              <a
+                href="https://www.goodreads.com/book/show/44767458-dune"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
+              >
+                Dune — Frank Herbert
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Sports</p>
+              <p className="text-white text-sm">Volleyball, sometimes basketball</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Favorite Board Game</p>
+              <a
+                href="https://boardgamegeek.com/boardgame/397598/dune-imperium-uprising"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
+              >
+                Dune: Imperium Uprising
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
         </section>
 
         {/* ── Dino Game ── */}
@@ -96,14 +136,6 @@ export default function App() {
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Beat The High Score</h2>
           </div>
           <DinoGame />
-        </section>
-
-        {/* ── Dachshunds ── */}
-        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.25s' }}>
-          <div className="mb-4">
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Daily Dachshunds</h2>
-          </div>
-          <DachshundGallery />
         </section>
 
         {/* ── Jeopardy ── */}
