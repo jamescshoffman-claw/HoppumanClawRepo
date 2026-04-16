@@ -127,6 +127,22 @@ export default function App() {
             </div>
 
             <div>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Favorite Daily Puzzle</p>
+              <a
+                href="https://cluesbysam.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
+              >
+                Clues by Sam
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
+                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+              <p className="text-gray-400 text-xs mt-1">Daily logic puzzle where you deterministically deduce who is good and bad based on hints.</p>
+            </div>
+
+            <div>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Currently Learning</p>
               <p className="text-white text-sm">Probability and statistics</p>
             </div>
