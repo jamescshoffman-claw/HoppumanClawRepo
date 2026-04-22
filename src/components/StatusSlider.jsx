@@ -10,8 +10,6 @@ const STATUSES = [
   { id: 'volleyball', label: 'Playing Volleyball', emoji: '🏐' },
 ]
 
-const PASSWORD = 'boostedmonkey'
-
 async function fetchStatus() {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/status?select=value&id=eq.1`, { headers: HEADERS })
   const data = await res.json()
@@ -26,12 +24,8 @@ async function saveStatus(value) {
   })
 }
 
-export default function StatusSlider() {
+export default function StatusSlider({ unlocked }) {
   const [currentId, setCurrentId] = useState('work')
-  const [unlocked, setUnlocked] = useState(false)
-  const [showPrompt, setShowPrompt] = useState(false)
-  const [input, setInput] = useState('')
-  const [shake, setShake] = useState(false)
 
   useEffect(() => {
     fetchStatus().then(setCurrentId)
@@ -43,19 +37,6 @@ export default function StatusSlider() {
     if (!unlocked) return
     setCurrentId(id)
     await saveStatus(id)
-  }
-
-  const handleUnlockSubmit = (e) => {
-    e.preventDefault()
-    if (input === PASSWORD) {
-      setUnlocked(true)
-      setShowPrompt(false)
-      setInput('')
-    } else {
-      setShake(true)
-      setInput('')
-      setTimeout(() => setShake(false), 500)
-    }
   }
 
   return (
@@ -96,54 +77,6 @@ export default function StatusSlider() {
         })}
       </div>
 
-      {/* Lock button */}
-      <div className="flex justify-center mt-3">
-        {unlocked ? (
-          <button
-            onClick={() => setUnlocked(false)}
-            className="text-emerald-500/60 hover:text-emerald-400 transition-colors text-xs flex items-center gap-1"
-            title="Lock"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
-            </svg>
-            unlocked
-          </button>
-        ) : (
-          <button
-            onClick={() => setShowPrompt(p => !p)}
-            className="text-gray-700 hover:text-gray-500 transition-colors"
-            title="Unlock to edit"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* Password prompt */}
-      {showPrompt && !unlocked && (
-        <form
-          onSubmit={handleUnlockSubmit}
-          className={`mt-3 flex gap-2 justify-center ${shake ? 'animate-wiggle' : ''}`}
-        >
-          <input
-            autoFocus
-            type="password"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            placeholder="password"
-            className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-emerald-500/50 w-32"
-          />
-          <button
-            type="submit"
-            className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs rounded-lg transition-colors"
-          >
-            Unlock
-          </button>
-        </form>
-      )}
     </section>
   )
 }

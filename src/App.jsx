@@ -1,7 +1,34 @@
+import { useState } from 'react'
 import DinoGame from './components/DinoGame'
 import StatusSlider from './components/StatusSlider'
 
+const PASSWORD_HASH = 'e4d4fd2cfe768245519a86e8840dda4931fae090cc5bc588c7d943749665d16e'
+
+async function hashInput(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
 export default function App() {
+  const [unlocked, setUnlocked] = useState(false)
+  const [showPrompt, setShowPrompt] = useState(false)
+  const [input, setInput] = useState('')
+  const [shake, setShake] = useState(false)
+
+  const handleUnlockSubmit = async (e) => {
+    e.preventDefault()
+    const hashed = await hashInput(input)
+    if (hashed === PASSWORD_HASH) {
+      setUnlocked(true)
+      setShowPrompt(false)
+      setInput('')
+    } else {
+      setShake(true)
+      setInput('')
+      setTimeout(() => setShake(false), 500)
+    }
+  }
+
   return (
     <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'linear-gradient(135deg, #030712 0%, #0a1628 50%, #030712 100%)' }}>
 
@@ -29,7 +56,7 @@ export default function App() {
         </section>
 
         {/* ── Status Slider ── */}
-        <StatusSlider />
+        <StatusSlider unlocked={unlocked} />
 
         {/* ── Claude Code / OpenClaw ── */}
         <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
@@ -192,6 +219,53 @@ export default function App() {
             <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
           </svg>
         </a>
+
+        {/* ── Lock ── */}
+        <div className="flex flex-col items-center gap-3">
+          {unlocked ? (
+            <button
+              onClick={() => setUnlocked(false)}
+              className="text-emerald-500/60 hover:text-emerald-400 transition-colors text-xs flex items-center gap-1"
+              title="Lock"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+              </svg>
+              unlocked
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowPrompt(p => !p)}
+              className="text-gray-700 hover:text-gray-500 transition-colors"
+              title="Unlock to edit"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              </svg>
+            </button>
+          )}
+          {showPrompt && !unlocked && (
+            <form
+              onSubmit={handleUnlockSubmit}
+              className={`flex gap-2 justify-center ${shake ? 'animate-wiggle' : ''}`}
+            >
+              <input
+                autoFocus
+                type="password"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="password"
+                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-emerald-500/50 w-32"
+              />
+              <button
+                type="submit"
+                className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs rounded-lg transition-colors"
+              >
+                Unlock
+              </button>
+            </form>
+          )}
+        </div>
 
         {/* ── Footer ── */}
         <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
