@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Europe Countries Quiz</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #f1f5f9;
+      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* ── Stats bar ── */
+    .stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .score {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .score .num { color: #4ade80; }
+    .score .sep { color: #475569; }
+    .score .den { color: #f1f5f9; }
+    .score .lbl { color: #94a3b8; font-size: 1rem; font-weight: normal; margin-left: 4px; }
+
+    .prog-wrap { width: 240px; }
+    .prog-bg {
+      background: #1e293b;
+      border-radius: 999px;
+      height: 12px;
+      overflow: hidden;
+    }
+    .prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a, #4ade80);
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 999px;
+    }
+    .prog-label {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* ── Input + buttons row ── */
+    .input-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    #country-input {
+      width: 300px;
+      max-width: 60vw;
+      padding: 12px 22px;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      border: 2px solid #334155;
+      background: #1e293b;
+      color: #f1f5f9;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #country-input::placeholder { color: #475569; }
+    #country-input:focus { border-color: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,0.15); }
+    #country-input.correct { border-color: #4ade80; }
+    #country-input.wrong { border-color: #f87171; animation: shake 0.35s ease; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-5px); }
+      80%      { transform: translateX(5px); }
+    }
+
+    .feedback {
+      text-align: center;
+      height: 22px;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .hint {
+      text-align: center;
+      color: #475569;
+      font-size: 0.78rem;
+      margin-bottom: 14px;
+    }
+
+    /* ── Win banner ── */
+    .win-banner {
+      display: none;
+      text-align: center;
+      padding: 14px;
+      background: linear-gradient(135deg, #14532d, #166534);
+      border-radius: 10px;
+      color: #86efac;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    /* ── Map ── */
+    #map-wrap {
+      background: #0c1f35;
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.5);
+    }
+    svg { width: 100%; height: auto; display: block; }
+
+    .country-path {
+      fill: #2d4a6b;
+      stroke: #0c1f35;
+      stroke-width: 0.6;
+      cursor: default;
+      transition: fill 0.4s ease;
+    }
+    .country-path:hover { fill: #3d5a7b; }
+    .country-path.found { fill: #15803d; }
+    .country-path.found:hover { fill: #22c55e; }
+
+    /* ── Found tags ── */
+    .found-section { display: none; }
+    .found-section h3 {
+      color: #64748b;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
+    }
+    .found-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      background: #14532d;
+      border: 1px solid #166534;
+      color: #86efac;
+      padding: 3px 13px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    /* ── Give Up / Restart buttons ── */
+    #give-up-btn, #restart-btn {
+      padding: 11px 18px;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    #give-up-btn {
+      border: 2px solid #7f1d1d;
+      background: transparent;
+      color: #fca5a5;
+    }
+    #give-up-btn:hover { background: #7f1d1d; color: #fff; }
+    #give-up-btn:disabled { opacity: 0.4; cursor: default; }
+    #restart-btn {
+      display: none;
+      border: 2px solid #1e40af;
+      background: transparent;
+      color: #93c5fd;
+    }
+    #restart-btn:hover { background: #1e40af; color: #fff; }
+
+    /* ── Missed countries (shown on give-up) ── */
+    .country-path.missed { fill: #9f1239; }
+    .country-path.missed:hover { fill: #e11d48; }
+
+    /* ── Small-country note ── */
+    .map-note {
+      text-align: center;
+      color: #475569;
+      font-size: 0.75rem;
+      margin-top: -12px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Missed tags section ── */
+    .missed-section { display: none; margin-top: 16px; }
+    .missed-section h3 {
+      color: #64748b;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
+    }
+    .missed-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .missed-tag {
+      background: #4c0519;
+      border: 1px solid #9f1239;
+      color: #fda4af;
+      padding: 3px 13px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Europe Countries Quiz</h1>
+
+  <div class="stats">
+    <div class="score">
+      <span class="num" id="score-num">0</span>
+      <span class="sep"> / </span>
+      <span class="den" id="score-den">49</span>
+      <span class="lbl">countries</span>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bg"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-label" id="prog-label">0%</div>
+    </div>
+  </div>
+
+  <div class="input-row">
+    <input
+      id="country-input"
+      type="text"
+      placeholder="Type a country name…"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    />
+    <button id="give-up-btn">Give Up</button>
+    <button id="restart-btn">Restart</button>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div class="hint">Type and the country locks in automatically · accepts common alternate names (e.g. "Czech Republic", "UK", "Holland")</div>
+
+  <div class="win-banner" id="win-banner">
+    🎉 Amazing! You named all 49 countries of Europe!
+  </div>
+
+  <div id="map-wrap">
+    <svg id="map" viewBox="0 0 960 600"></svg>
+  </div>
+  <div class="map-note">Monaco, Liechtenstein, San Marino, Vatican City, Andorra, and Malta are shown as callout indicators — type their name to light them up.</div>
+
+  <div class="found-section" id="found-section">
+    <h3>Found (<span id="found-count">0</span>)</h3>
+    <div class="found-tags" id="found-tags"></div>
+  </div>
+
+  <div class="missed-section" id="missed-section">
+    <h3>Missed (<span id="missed-count">0</span>)</h3>
+    <div class="missed-tags" id="missed-tags"></div>
+  </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+(function () {
+  // ── Country list (49 total) ───────────────────────────────────────────────
+  // IDs are ISO 3166-1 numeric codes used by world-atlas TopoJSON
+  const COUNTRIES = [
+    { id: 8,   name: "Albania" },
+    { id: 20,  name: "Andorra" },
+    { id: 51,  name: "Armenia" },
+    { id: 40,  name: "Austria" },
+    { id: 31,  name: "Azerbaijan" },
+    { id: 112, name: "Belarus" },
+    { id: 56,  name: "Belgium" },
+    { id: 70,  name: "Bosnia and Herzegovina", aliases: ["Bosnia", "Bosnia & Herzegovina", "Bosnia-Herzegovina"] },
+    { id: 100, name: "Bulgaria" },
+    { id: 191, name: "Croatia" },
+    { id: 196, name: "Cyprus" },
+    { id: 203, name: "Czechia",            aliases: ["Czech Republic"] },
+    { id: 208, name: "Denmark" },
+    { id: 233, name: "Estonia" },
+    { id: 246, name: "Finland" },
+    { id: 250, name: "France" },
+    { id: 276, name: "Germany" },
+    { id: 300, name: "Greece" },
+    { id: 348, name: "Hungary" },
+    { id: 352, name: "Iceland" },
+    { id: 372, name: "Ireland" },
+    { id: 380, name: "Italy" },
+    { id: -99, name: "Kosovo" },
+    { id: 428, name: "Latvia" },
+    { id: 438, name: "Liechtenstein" },
+    { id: 440, name: "Lithuania" },
+    { id: 442, name: "Luxembourg" },
+    { id: 470, name: "Malta" },
+    { id: 498, name: "Moldova" },
+    { id: 492, name: "Monaco" },
+    { id: 499, name: "Montenegro" },
+    { id: 528, name: "Netherlands",        aliases: ["Holland", "The Netherlands"] },
+    { id: 807, name: "North Macedonia",    aliases: ["Macedonia", "FYR Macedonia"] },
+    { id: 578, name: "Norway" },
+    { id: 616, name: "Poland" },
+    { id: 620, name: "Portugal" },
+    { id: 642, name: "Romania" },
+    { id: 643, name: "Russia" },
+    { id: 674, name: "San Marino" },
+    { id: 688, name: "Serbia" },
+    { id: 703, name: "Slovakia" },
+    { id: 705, name: "Slovenia" },
+    { id: 724, name: "Spain" },
+    { id: 752, name: "Sweden" },
+    { id: 756, name: "Switzerland" },
+    { id: 792, name: "Turkey" },
+    { id: 804, name: "Ukraine" },
+    { id: 826, name: "United Kingdom",     aliases: ["UK", "Great Britain", "England", "Britain"] },
+    { id: 336, name: "Vatican City",       aliases: ["Vatican", "Holy See"] },
+  ];
+
+  // Small countries: no visible path at this map scale — shown as callout indicators
+  // Kosovo also goes here because world-atlas doesn't include it as a separate feature
+  const SMALL_DEF = [
+    { id: 20,  lon: 1.58,  lat: 42.55, dx: -48, dy: -22 }, // Andorra
+    { id: -99, lon: 20.90, lat: 42.58, dx:  55, dy: -30 }, // Kosovo
+    { id: 438, lon: 9.55,  lat: 47.17, dx: -50, dy: -22 }, // Liechtenstein
+    { id: 470, lon: 14.37, lat: 35.90, dx:  50, dy:  22 }, // Malta
+    { id: 492, lon: 7.40,  lat: 43.74, dx:  50, dy: -22 }, // Monaco
+    { id: 674, lon: 12.46, lat: 43.93, dx:  50, dy: -22 }, // San Marino
+    { id: 336, lon: 12.45, lat: 41.90, dx:  50, dy:  22 }, // Vatican City
+  ];
+  const SMALL_IDS = new Set(SMALL_DEF.map(s => s.id));
+
+  const TOTAL = COUNTRIES.length; // 49
+  document.getElementById('score-den').textContent = TOTAL;
+
+  const idSet = new Set(COUNTRIES.map(c => c.id));
+  const found = new Set();
+
+  // Build text → country lookup (case-insensitive)
+  const lookup = new Map();
+  COUNTRIES.forEach(c => {
+    lookup.set(c.name.toLowerCase(), c);
+    (c.aliases || []).forEach(a => lookup.set(a.toLowerCase(), c));
+  });
+
+  // ── D3 map setup ─────────────────────────────────────────────────────────
+  const W = 960, H = 600;
+
+  const svg = d3.select('#map').attr('viewBox', `0 0 ${W} ${H}`);
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35');
+
+  const proj = d3.geoMercator()
+    .center([15, 53])
+    .scale(600)
+    .translate([W / 2, H / 2]);
+
+  const geoPath = d3.geoPath().projection(proj);
+
+  // Graticule
+  svg.append('g').append('path')
+    .datum(d3.geoGraticule()())
+    .attr('d', geoPath)
+    .attr('fill', 'none')
+    .attr('stroke', '#112236')
+    .attr('stroke-width', 0.4);
+
+  // SVG layers — DOM order = paint order (later = on top)
+  const countriesG   = svg.append('g'); // filled country paths
+  const calloutG     = svg.append('g'); // small-country indicators
+  const foundLabelsG = svg.append('g'); // green labels for found countries
+  const missedLabelsG = svg.append('g'); // white labels revealed on give-up
+
+  // id → GeoJSON feature, filled after TopoJSON loads
+  const featureMap = new Map();
+
+  // Encode a numeric country id into a safe DOM/CSS id string (handles negatives like -99)
+  const safeId = id => String(id).replace('-', 'n');
+
+  // ── Small-country callouts ────────────────────────────────────────────────
+  // Drawn immediately (use hardcoded lon/lat, no TopoJSON needed)
+  SMALL_DEF.forEach(sc => {
+    const [px, py] = proj([sc.lon, sc.lat]);
+    const lx = px + sc.dx, ly = py + sc.dy;
+
+    const g = calloutG.append('g').attr('id', `callout-${safeId(sc.id)}`);
+
+    g.append('line')
+      .attr('x1', px).attr('y1', py)
+      .attr('x2', lx).attr('y2', ly)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 2);
+
+    g.append('circle')
+      .attr('cx', px).attr('cy', py)
+      .attr('r', 3)
+      .attr('fill', '#ffffff');
+  });
+
+  const cpId = id => `cp-${safeId(id)}`;
+
+  // ── Load TopoJSON ─────────────────────────────────────────────────────────
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+    .then(world => {
+      const features = topojson.feature(world, world.objects.countries).features;
+      const euroFeatures = features.filter(f => idSet.has(+f.id));
+      euroFeatures.forEach(f => featureMap.set(+f.id, f));
+
+      // Diagnostic: log any of our countries missing from the dataset
+      const dataIds = new Set(features.map(f => +f.id));
+      const missing = COUNTRIES.filter(c => !dataIds.has(c.id));
+      if (missing.length) console.warn('Not in world-atlas dataset:', missing.map(c => `${c.name} (id ${c.id})`).join(', '));
+      console.log('Matched European features:', euroFeatures.map(f => +f.id).sort((a,b)=>a-b));
+
+      countriesG
+        .selectAll('path')
+        .data(euroFeatures)
+        .join('path')
+        .attr('class', 'country-path')
+        .attr('id', d => cpId(+d.id))
+        .attr('d', geoPath);
+    })
+    .catch(() => {
+      document.getElementById('map-wrap').innerHTML =
+        '<p style="color:#f87171;text-align:center;padding:40px;font-size:1rem">' +
+        'Could not load map data — check your internet connection and refresh.</p>';
+    });
+
+  // ── UI helpers ────────────────────────────────────────────────────────────
+  let fbTimer;
+  function setFeedback(msg, color) {
+    const el = document.getElementById('feedback');
+    el.textContent = msg;
+    el.style.color  = color;
+    clearTimeout(fbTimer);
+    fbTimer = setTimeout(() => { el.textContent = ''; }, 1800);
+  }
+
+  function updateProgress() {
+    const pct = Math.round((found.size / TOTAL) * 100);
+    document.getElementById('score-num').textContent  = found.size;
+    document.getElementById('prog-fill').style.width  = pct + '%';
+    document.getElementById('prog-label').textContent = pct + '%';
+  }
+
+  function addMapLabel(country, group, color) {
+    if (SMALL_IDS.has(country.id)) {
+      // Recolor the callout line/dot and add the name at the line's endpoint
+      const sc = SMALL_DEF.find(s => s.id === country.id);
+      if (!sc) return;
+      const g = d3.select(`#callout-${safeId(country.id)}`);
+      g.select('line').attr('stroke', color);
+      g.select('circle').attr('fill', color);
+
+      const [px, py] = proj([sc.lon, sc.lat]);
+      const lx = px + sc.dx, ly = py + sc.dy;
+      g.append('text')
+        .attr('x', lx).attr('y', ly)
+        .attr('text-anchor', sc.dx > 0 ? 'start' : 'end')
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', '7.5px')
+        .attr('font-weight', 'bold')
+        .attr('font-family', 'Segoe UI, Tahoma, sans-serif')
+        .attr('fill', color)
+        .attr('stroke', 'rgba(0,0,0,0.8)')
+        .attr('stroke-width', '2')
+        .style('paint-order', 'stroke fill')
+        .attr('pointer-events', 'none')
+        .text(country.name);
+    } else {
+      const feature = featureMap.get(country.id);
+      if (!feature) return;
+      const [cx, cy] = geoPath.centroid(feature);
+      if (isNaN(cx) || isNaN(cy) || cx < 0 || cx > W || cy < 0 || cy > H) return;
+
+      group.append('text')
+        .attr('x', cx).attr('y', cy)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', '8px')
+        .attr('font-weight', 'bold')
+        .attr('font-family', 'Segoe UI, Tahoma, sans-serif')
+        .attr('pointer-events', 'none')
+        .attr('fill', color)
+        .attr('stroke', 'rgba(0,0,0,0.75)')
+        .attr('stroke-width', '2.5')
+        .style('paint-order', 'stroke fill')
+        .text(country.name);
+    }
+  }
+
+  function markFound(country) {
+    found.add(country.id);
+
+    // Highlight map path and add green label
+    d3.select(`#${cpId(country.id)}`).classed('found', true);
+    addMapLabel(country, foundLabelsG, '#4ade80');
+
+    // Add tag to found list, keep sorted
+    const container = document.getElementById('found-tags');
+    const tag = document.createElement('span');
+    tag.className   = 'tag';
+    tag.textContent = country.name;
+    const existing  = [...container.querySelectorAll('.tag')];
+    const after     = existing.find(t => t.textContent > country.name);
+    container.insertBefore(tag, after ?? null);
+
+    document.getElementById('found-count').textContent = found.size;
+    document.getElementById('found-section').style.display = 'block';
+
+    updateProgress();
+    setFeedback(`✓ ${country.name}!`, '#4ade80');
+
+    if (found.size === TOTAL) {
+      document.getElementById('win-banner').style.display = 'block';
+      endGame();
+    }
+  }
+
+  function endGame() {
+    input.disabled = true;
+    document.getElementById('give-up-btn').style.display = 'none';
+    document.getElementById('restart-btn').style.display = 'block';
+  }
+
+  // ── Input handling ────────────────────────────────────────────────────────
+  const input = document.getElementById('country-input');
+
+  // Auto-detect: triggers as soon as the typed text exactly matches a name
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    if (!val) return;
+    const c = lookup.get(val);
+    if (c && !found.has(c.id)) {
+      markFound(c);
+      input.value = '';
+      input.classList.remove('wrong');
+      input.classList.add('correct');
+      setTimeout(() => input.classList.remove('correct'), 500);
+    }
+  });
+
+  // Enter key: confirm or show "already found / not found" feedback
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const val = input.value.trim().toLowerCase();
+    if (!val) return;
+    const c = lookup.get(val);
+    if (c && !found.has(c.id)) {
+      markFound(c);
+      input.value = '';
+      input.classList.add('correct');
+      setTimeout(() => input.classList.remove('correct'), 500);
+    } else if (c && found.has(c.id)) {
+      setFeedback(`Already got ${c.name}!`, '#fbbf24');
+      pulse('wrong');
+    } else {
+      setFeedback('Not a European country — keep trying!', '#f87171');
+      pulse('wrong');
+    }
+  });
+
+  function pulse(cls) {
+    input.classList.add(cls);
+    setTimeout(() => input.classList.remove(cls), 400);
+  }
+
+  // ── Give Up ───────────────────────────────────────────────────────────────
+  document.getElementById('give-up-btn').addEventListener('click', () => {
+    if (found.size === TOTAL) return;
+
+    const missed = COUNTRIES.filter(c => !found.has(c.id));
+    missed.sort((a, b) => a.name.localeCompare(b.name));
+
+    missed.forEach(c => {
+      d3.select(`#${cpId(c.id)}`).classed('missed', true);
+      addMapLabel(c, missedLabelsG, '#fff');
+    });
+
+    const container = document.getElementById('missed-tags');
+    missed.forEach(c => {
+      const tag = document.createElement('span');
+      tag.className   = 'missed-tag';
+      tag.textContent = c.name;
+      container.appendChild(tag);
+    });
+
+    document.getElementById('missed-count').textContent = missed.length;
+    document.getElementById('missed-section').style.display = 'block';
+    setFeedback(`Game over — you got ${found.size} / ${TOTAL}`, '#94a3b8');
+    endGame();
+  });
+
+  // ── Restart ───────────────────────────────────────────────────────────────
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    window.location.reload();
+  });
+
+  input.focus();
+})();
+</script>
+</body>
+</html>
