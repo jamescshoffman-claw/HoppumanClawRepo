@@ -60,7 +60,7 @@ const PROJECTS = [
   {
     id: 'p5',
     title: 'GitHub (250 stars)',
-    blurb: 'Various projects on GitHub — including TikTokHacks (250 stars).',
+    blurb: "Various projects I've made and shared online for others to use.",
     year: '',
     tags: ['code', 'open-source'],
     link: 'https://github.com/hoppuman/TikTokHacks/tree/master',
