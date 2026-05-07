@@ -1,4 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text x="28" y="68" font-size="52" text-anchor="middle">🦁</text>
-  <text x="75" y="68" font-size="52" text-anchor="middle">🐻</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#fff8e7"/>
+
+  <!-- LION (left, centered ~50, 115) -->
+  <!-- Mane -->
+  <circle cx="50" cy="118" r="40" fill="#d97706" stroke="#1a1612" stroke-width="4.5" stroke-linejoin="round"/>
+  <!-- Head -->
+  <circle cx="50" cy="110" r="30" fill="#fbbf24" stroke="#1a1612" stroke-width="4.5"/>
+  <!-- Left ear -->
+  <circle cx="28" cy="86" r="13" fill="#fbbf24" stroke="#1a1612" stroke-width="4"/>
+  <circle cx="28" cy="86" r="7" fill="#d97706"/>
+  <!-- Right ear -->
+  <circle cx="72" cy="86" r="13" fill="#fbbf24" stroke="#1a1612" stroke-width="4"/>
+  <circle cx="72" cy="86" r="7" fill="#d97706"/>
+  <!-- Eyes -->
+  <circle cx="40" cy="106" r="5.5" fill="#1a1612"/>
+  <circle cx="60" cy="106" r="5.5" fill="#1a1612"/>
+  <circle cx="41.8" cy="104.2" r="2" fill="white" opacity="0.9"/>
+  <circle cx="61.8" cy="104.2" r="2" fill="white" opacity="0.9"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="115" rx="4.5" ry="3.2" fill="#1a1612"/>
+  <!-- Mouth -->
+  <path d="M44,120 Q50,127 56,120" fill="none" stroke="#1a1612" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Whiskers -->
+  <line x1="14" y1="113" x2="43" y2="116" stroke="#1a1612" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <line x1="14" y1="119" x2="43" y2="118" stroke="#1a1612" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <line x1="86" y1="113" x2="57" y2="116" stroke="#1a1612" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  <line x1="86" y1="119" x2="57" y2="118" stroke="#1a1612" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- VS label -->
+  <text x="100" y="124" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="bold" fill="#9a8370" opacity="0.6">VS</text>
+
+  <!-- BEAR (right, centered ~150, 115) -->
+  <!-- Left ear -->
+  <circle cx="128" cy="84" r="14" fill="#78350f" stroke="#1a1612" stroke-width="4"/>
+  <circle cx="128" cy="84" r="7.5" fill="#b45309"/>
+  <!-- Right ear -->
+  <circle cx="172" cy="84" r="14" fill="#78350f" stroke="#1a1612" stroke-width="4"/>
+  <circle cx="172" cy="84" r="7.5" fill="#b45309"/>
+  <!-- Head -->
+  <circle cx="150" cy="112" r="33" fill="#78350f" stroke="#1a1612" stroke-width="4.5"/>
+  <!-- Snout -->
+  <ellipse cx="150" cy="122" rx="17" ry="13" fill="#b45309" stroke="#1a1612" stroke-width="3.5"/>
+  <!-- Eyes -->
+  <circle cx="138" cy="105" r="5.5" fill="#1a1612"/>
+  <circle cx="162" cy="105" r="5.5" fill="#1a1612"/>
+  <circle cx="139.8" cy="103.2" r="2" fill="white" opacity="0.9"/>
+  <circle cx="163.8" cy="103.2" r="2" fill="white" opacity="0.9"/>
+  <!-- Nose -->
+  <ellipse cx="150" cy="117" rx="6" ry="4.2" fill="#1a1612"/>
+  <!-- Mouth -->
+  <path d="M143,124 Q150,131 157,124" fill="none" stroke="#1a1612" stroke-width="3.5" stroke-linecap="round"/>
 </svg>
