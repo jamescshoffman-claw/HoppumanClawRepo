@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="400" height="400" fill="#0a1f44"></rect>
+  <g transform="translate(200 175)" fill="#f15a29">
+    
+    <path d="M -90 30 L -30 -50 L 0 -10 L 30 -50 L 90 30 L 60 30 L 30 -10 L 0 30 L -30 -10 L -60 30 Z"></path>
+  </g>
+  <text x="200" y="270" text-anchor="middle" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="34" fill="#ffffff" letter-spacing="-0.5">The Trade Desk</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="0.8" fill="#7fb8d4" opacity="0.5"></circle>
+    </pattern>
+  </defs>
+  
+  <rect width="400" height="400" fill="#cfe7f2"></rect>
+  <rect width="400" height="400" fill="url(#dots)"></rect>
+
+  
+  <line x1="0" y1="200" x2="400" y2="200" stroke="#9bc8db" stroke-width="1" stroke-dasharray="3 5" opacity="0.7"></line>
+  <line x1="0" y1="150" x2="400" y2="150" stroke="#9bc8db" stroke-width="0.6" stroke-dasharray="2 4" opacity="0.5"></line>
+  <line x1="0" y1="250" x2="400" y2="250" stroke="#9bc8db" stroke-width="0.6" stroke-dasharray="2 4" opacity="0.5"></line>
+
+  <g stroke="#3a5d3a" stroke-width="2.5" stroke-linejoin="round" fill="#a6cf8a">
+    
+    <path d="M30,90 Q22,70 38,55 Q60,45 90,52 Q115,48 130,62 Q138,80 122,98 Q115,118 95,128 Q78,142 60,155 Q40,162 28,150 Q18,135 22,118 Z"></path>
+    
+    <path d="M85,160 Q90,178 98,188 Q104,200 112,205 Q105,215 100,210 Q92,200 85,188 Q80,175 85,160 Z"></path>
+    
+    <path d="M120,210 Q140,205 150,225 Q158,250 152,280 Q145,310 132,330 Q120,345 108,335 Q98,310 105,280 Q108,250 118,228 Z"></path>
+    
+    <ellipse cx="160" cy="55" rx="20" ry="14" transform="rotate(-15 160 55)"></ellipse>
+    
+    <path d="M195,90 Q210,82 228,88 Q240,95 235,108 Q225,118 210,120 Q198,116 192,105 Z"></path>
+    
+    <path d="M205,135 Q230,130 245,145 Q255,170 248,200 Q240,225 225,245 Q212,255 200,245 Q190,225 192,195 Q195,165 205,140 Z"></path>
+    
+    <path d="M240,80 Q280,70 320,82 Q345,95 340,120 Q325,140 295,145 Q270,148 250,135 Q238,118 240,98 Z"></path>
+    
+    <path d="M280,150 Q295,150 300,165 Q298,180 288,182 Q278,175 278,162 Z"></path>
+    
+    <path d="M325,150 Q345,148 350,165 Q345,180 330,178 Q322,168 325,155 Z"></path>
+    
+    <path d="M320,255 Q350,250 370,265 Q372,285 355,295 Q330,298 318,285 Q310,270 318,258 Z"></path>
+    
+    <path d="M20,360 Q120,350 220,358 Q320,352 380,362 L380,395 L20,395 Z"></path>
+  </g>
+
+  
+  <g fill="#a6cf8a" stroke="#3a5d3a" stroke-width="1">
+    <circle cx="180" cy="180" r="2.5"></circle>
+    <circle cx="172" cy="195" r="2"></circle>
+    <circle cx="265" cy="200" r="2"></circle>
+    <circle cx="365" cy="205" r="2.5"></circle>
+    <circle cx="355" cy="220" r="2"></circle>
+    <circle cx="385" cy="240" r="2"></circle>
+    <circle cx="80" cy="200" r="2"></circle>
+    <circle cx="305" cy="195" r="2"></circle>
+  </g>
+
+  
+  <g transform="translate(355,55)" stroke="#3a5d3a" stroke-width="1.2" fill="#fff8e7">
+    <circle r="14"></circle>
+    <path d="M0,-10 L3,0 L0,10 L-3,0 Z" fill="#c5613f" stroke="#3a5d3a"></path>
+    <text x="0" y="-16" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="6" fill="#3a5d3a" stroke="none">N</text>
+  </g>
+
+  
+  <g transform="translate(115,125)">
+    <circle r="6" fill="#c5613f" stroke="#3a5d3a" stroke-width="1.5"></circle>
+    <path d="M-2,-2 L2,2 M2,-2 L-2,2" stroke="#fff8e7" stroke-width="1.5"></path>
+  </g>
+</svg>

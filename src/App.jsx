@@ -1,295 +1,399 @@
-import { useState } from 'react'
-import DinoGame from './components/DinoGame'
-import StatusSlider from './components/StatusSlider'
+import { useState, useEffect } from 'react'
 
-const PASSWORD_HASH = 'e4d4fd2cfe768245519a86e8840dda4931fae090cc5bc588c7d943749665d16e'
+const ACCENT = '#c5613f'
 
-async function hashInput(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
+// ---------- Data ----------
+
+const PROJECTS = [
+  {
+    id: 'p1',
+    title: 'TikTok (600k followers)',
+    blurb: 'Short videos and experiments on TikTok.',
+    status: 'Live',
+    year: '2026',
+    tags: ['video', 'social'],
+    link: 'https://www.tiktok.com/@hoppuman',
+    image: '/images/tiktok.png',
+  },
+  {
+    id: 'p2',
+    title: 'Country Study',
+    blurb: 'See if you can name all the countries of each continent.',
+    status: 'Live',
+    year: '2025',
+    tags: ['geography', 'learning'],
+    link: '/countrystudy/index.html',
+    image: '/images/world-map.svg',
+  },
+  {
+    id: 'p3',
+    title: 'HoppuHabit',
+    blurb: 'A habit-tracking app I built — available on the App Store.',
+    status: 'Live',
+    year: '2025',
+    tags: ['app', 'ios'],
+    link: 'https://apps.apple.com/us/app/hoppuhabit/id6749086418',
+    image: '/images/hoppuhabit.png',
+  },
+  {
+    id: 'p4',
+    title: 'OpenClaw',
+    blurb: 'An AI agent running 24/7 on a Mac mini at home, connected to my iMessage.',
+    longBlurb: "I've been heads down on OpenClaw — an AI agent running 24/7 on a Mac mini at home, connected to my iMessage.",
+    useCases: [
+      'Updating Notion — I text the bot and it logs things directly into my Notion workspace',
+      'Calendar management — my friends text the bot to add events to my Google Calendar, the AI handles it automatically',
+      'Writing, pushing, and deploying code — this website was updated from my phone',
+    ],
+    stack: [
+      ['Web Hosting', 'GitHub Pages'],
+      ['Domain', 'Squarespace'],
+      ['Database', 'Supabase · PostgreSQL'],
+      ['Web Scraper', 'Brave Search API'],
+      ['Phone Number', 'Mint Mobile'],
+      ['Messaging Server', 'BlueBubbles'],
+      ['Notion Sync', 'Notion API'],
+      ['Calendar Sync', 'Google Calendar API'],
+      ['LLM', 'Claude (Anthropic)'],
+    ],
+    status: 'In progress',
+    year: '2026',
+    tags: ['ai', 'agent', 'imessage'],
+    link: 'https://openclaw.ai',
+    image: '/images/openclaw.svg',
+  },
+  {
+    id: 'p5',
+    title: 'GitHub (250 stars)',
+    blurb: 'Various projects on GitHub — including TikTokHacks (250 stars).',
+    status: 'Live',
+    year: '',
+    tags: ['code', 'open-source'],
+    link: 'https://github.com/hoppuman/TikTokHacks/tree/master',
+    image: '/images/github.svg',
+  },
+  {
+    id: 'p6',
+    title: 'The Trade Desk',
+    blurb: 'Worked at The Trade Desk from 2018–2026.',
+    status: 'Live',
+    year: '2018–2026',
+    tags: ['work', 'adtech'],
+    link: 'https://www.thetradedesk.com/',
+    image: '/images/thetradedesk.png',
+  },
+]
+
+const HOBBIES = [
+  {
+    id: 'h1',
+    title: 'Clues by Sam',
+    blurb: 'Daily detective puzzles by Sam — a favorite ritual.',
+    status: 'Live',
+    year: '',
+    tags: ['puzzle', 'daily'],
+    link: 'https://cluesbysam.com/',
+    image: '/images/detective.png',
+  },
+  {
+    id: 'h2',
+    title: 'Dune: Imperium Uprising',
+    blurb: 'A favorite board game — strategy, spice, and intrigue.',
+    status: 'Live',
+    year: '',
+    tags: ['board game', 'strategy'],
+    link: 'https://boardgamegeek.com/boardgame/397598/dune-imperium-uprising',
+    image: '/images/dune.svg',
+  },
+  {
+    id: 'h3',
+    title: 'Jump Training',
+    blurb: 'My goal is to be able to dunk a basketball. Currently this is where I am.',
+    stats: [
+      ['Max Squat', '285'],
+      ['Current Vertical', '39 inches'],
+      ['Current Weight', '165 lbs'],
+      ['Current Height', "6'0"],
+    ],
+    status: 'In progress',
+    year: '',
+    tags: ['gym', 'lifting'],
+    link: '',
+    image: '/images/dumbbell.svg',
+  },
+]
+
+// ---------- Thumbnail ----------
+
+function Thumb({ item }) {
+  if (item?.image) {
+    const isContain = /\.svg$/.test(item.image) && !/world-map/.test(item.image)
+    return (
+      <img
+        src={item.image}
+        alt={item.title}
+        style={{
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          objectFit: isContain ? 'contain' : 'cover',
+          background: isContain ? '#fff8e7' : 'transparent',
+          padding: isContain ? '12%' : 0,
+          boxSizing: 'border-box',
+        }}
+      />
+    )
+  }
+  return <PlaceholderThumb id={item.id} />
 }
 
-export default function App() {
-  const [unlocked, setUnlocked] = useState(false)
-  const [showPrompt, setShowPrompt] = useState(false)
-  const [input, setInput] = useState('')
-  const [shake, setShake] = useState(false)
+const PLACEHOLDER_HUES = [25, 35, 18, 45, 12, 30, 50, 22, 38, 28, 42]
 
-  const handleUnlockSubmit = async (e) => {
-    e.preventDefault()
-    const hashed = await hashInput(input)
-    if (hashed === PASSWORD_HASH) {
-      setUnlocked(true)
-      setShowPrompt(false)
-      setInput('')
-    } else {
-      setShake(true)
-      setInput('')
-      setTimeout(() => setShake(false), 500)
-    }
-  }
-
+function PlaceholderThumb({ id }) {
+  const seed = String(id).split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+  const hue = PLACEHOLDER_HUES[seed % PLACEHOLDER_HUES.length]
+  const bg = `oklch(0.78 0.04 ${hue})`
+  const fg = `oklch(0.68 0.06 ${hue})`
+  const ink = `oklch(0.30 0.04 ${hue})`
   return (
-    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'linear-gradient(135deg, #030712 0%, #0a1628 50%, #030712 100%)' }}>
+    <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" style={{ display: 'block', width: '100%', height: '100%' }}>
+      <defs>
+        <pattern id={`stripes-${id}`} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="14" height="14" fill={bg} />
+          <rect width="7" height="14" fill={fg} />
+        </pattern>
+      </defs>
+      <rect width="400" height="400" fill={`url(#stripes-${id})`} />
+      <text x="20" y="380" fill={ink} style={{ fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace", fontSize: 14, letterSpacing: '0.08em' }}>
+        IMG / {id}
+      </text>
+    </svg>
+  )
+}
 
-      <div className="relative max-w-3xl mx-auto px-5 py-20 space-y-6">
+// ---------- Tile ----------
 
-        {/* ── Hero ── */}
-        <header className="text-center space-y-4 animate-fade-in">
-          <h1 className="text-5xl sm:text-7xl font-black tracking-tight leading-none">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
-              James
-            </span>
-          </h1>
-          <div className="flex items-center justify-center gap-6 pt-1">
-            <span className="text-gray-500 text-sm font-medium">6'0"</span>
-            <span className="text-gray-700">·</span>
-            <span className="text-gray-500 text-sm font-medium">165 lbs</span>
-          </div>
-        </header>
+function Tile({ item, expanded, onToggle }) {
+  return (
+    <button
+      className={`tile ${expanded ? 'tile--expanded' : ''}`}
+      onClick={() => onToggle(item.id)}
+      aria-expanded={expanded}
+    >
+      <div className="tile__thumb">
+        <Thumb item={item} />
+        {expanded && <div className="tile__active-dot" style={{ background: ACCENT }} />}
+      </div>
+      <div className="tile__caption">
+        <span className="tile__title">{item.title}</span>
+        <span className="tile__year">{item.year}</span>
+      </div>
+    </button>
+  )
+}
 
-        {/* ── About ── */}
-        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.05s' }}>
-          <p className="text-gray-300 leading-relaxed text-base">
-            Hey — I'm <strong className="text-white font-semibold">James</strong>. This is where I will share what I am up to lately and what I'm focused on.
-          </p>
-        </section>
+// ---------- Expanded panel ----------
 
-        {/* ── Status Slider ── */}
-        <StatusSlider unlocked={unlocked} />
+function ExpandedPanel({ item, onClose }) {
+  if (!item) return null
+  return (
+    <div className="panel" role="region" aria-label={`${item.title} details`}>
+      <div className="panel__inner">
+        <div className="panel__media">
+          <Thumb item={item} />
+        </div>
+        <div className="panel__body">
+          {item.year && (
+            <div className="panel__meta">
+              <span>{item.year}</span>
+            </div>
+          )}
+          <h2 className="panel__title">{item.title}</h2>
+          <p className="panel__blurb">{item.longBlurb || item.blurb}</p>
 
-        {/* ── Claude Code / OpenClaw ── */}
-        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-3">Currently Working On</h2>
-
-          <p className="text-white font-semibold text-xl mb-2">OpenClaw</p>
-          <p className="text-gray-400 text-sm leading-relaxed mb-5">
-            I've been heads down on <strong className="text-white">OpenClaw</strong> — an AI agent running 24/7 on a Mac mini at home, connected to my iMessage.
-          </p>
-
-          <p className="text-white text-sm font-semibold mb-3">Use Cases</p>
-          <ul className="text-gray-400 text-sm space-y-2 mb-6 pl-1">
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5">→</span>
-              <span><strong className="text-white">Updating Notion</strong> — I text the bot and it logs things directly into my Notion workspace</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5">→</span>
-              <span><strong className="text-white">Calendar management</strong> — my friends text the bot to add events to my Google Calendar, the AI handles it automatically</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5">→</span>
-              <span><strong className="text-white">Writing, pushing, and deploying code</strong> — this website was updated from my phone</span>
-            </li>
-          </ul>
-
-          <p className="text-white text-sm font-semibold mb-3">Stack</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-            {[
-              ['Web Hosting', 'GitHub Pages'],
-              ['Domain', 'Squarespace'],
-              ['Database', 'Supabase · PostgreSQL'],
-              ['Web Scraper', 'Brave Search API'],
-              ['Phone Number', 'Mint Mobile'],
-              ['Messaging Server', 'BlueBubbles'],
-              ['Notion Sync', 'Notion API'],
-              ['Calendar Sync', 'Google Calendar API'],
-              ['LLM', 'Claude (Anthropic)'],
-            ].map(([label, value]) => (
-              <div key={label} className="flex justify-between text-sm border border-white/5 rounded-lg px-3 py-2 bg-white/[0.03]">
-                <span className="text-gray-500">{label}</span>
-                <span className="text-gray-300 font-medium">{value}</span>
-              </div>
-            ))}
-          </div>
-
-          <a
-            href="https://openclaw.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold text-sm rounded-xl transition-all duration-200 hover:scale-105 active:scale-95"
-          >
-            Check out OpenClaw
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-              <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
-        </section>
-
-        {/* ── Hobbies ── */}
-        <section className="glass-card p-7 animate-slide-up" style={{ animationDelay: '0.15s' }}>
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-5">Hobbies</h2>
-
-          <div className="space-y-5">
-            <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-2">Currently Reading</p>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="https://www.goodreads.com/book/show/44767458-dune"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
-                  >
-                    Dune — Frank Herbert
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                      <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.goodreads.com/book/show/6289420-a-practical-guide-to-quantitative-finance-interviews"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
-                  >
-                    A Practical Guide to Quantitative Finance Interviews
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                      <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                  </a>
-                </li>
+          {item.useCases && (
+            <div className="panel__section">
+              <div className="panel__sec-label">Use Cases</div>
+              <ul className="panel__usecases">
+                {item.useCases.map((u, i) => (
+                  <li key={i}>
+                    <span className="panel__arrow" style={{ color: ACCENT }}>→</span>
+                    <span>{u}</span>
+                  </li>
+                ))}
               </ul>
             </div>
-
-            <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Favorite Daily Puzzle</p>
-              <a
-                href="https://cluesbysam.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
-              >
-                Clues by Sam
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-              </a>
-              <p className="text-gray-400 text-xs mt-1">Daily logic puzzle where you deterministically deduce who is good and bad based on hints.</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Currently Learning</p>
-              <p className="text-white text-sm">Probability and statistics</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Sports</p>
-              <p className="text-white text-sm">Volleyball, sometimes basketball</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">Favorite Board Game</p>
-              <a
-                href="https://boardgamegeek.com/boardgame/397598/dune-imperium-uprising"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white hover:text-emerald-300 text-sm font-medium transition-colors"
-              >
-                Dune: Imperium Uprising
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16" aria-hidden>
-                  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Dino Game ── */}
-        <section className="glass-card p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <div className="mb-4">
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400">Beat The High Score</h2>
-          </div>
-          <DinoGame />
-        </section>
-
-        {/* ── Jeopardy ── */}
-        <a
-          href="/game/index.html"
-          className="glass-card p-6 animate-slide-up flex items-center justify-between group no-underline"
-          style={{ animationDelay: '0.3s', display: 'flex' }}
-        >
-          <div>
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-1">Play</h2>
-            <p className="text-white font-semibold text-xl mb-1">Jeopardy!</p>
-            <p className="text-gray-400 text-sm">Made this for a dinner party with friends</p>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-emerald-400 group-hover:translate-x-1 transition-transform" aria-hidden>
-            <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-          </svg>
-        </a>
-
-        {/* ── Country Study ── */}
-        <a
-          href="/countrystudy/index.html"
-          className="glass-card p-6 animate-slide-up flex items-center justify-between group no-underline"
-          style={{ animationDelay: '0.35s', display: 'flex' }}
-        >
-          <div>
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-1">Study</h2>
-            <p className="text-white font-semibold text-xl mb-1">Countries Quiz</p>
-            <p className="text-gray-400 text-sm">Name all the countries of Europe and Asia on an interactive map</p>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-emerald-400 group-hover:translate-x-1 transition-transform" aria-hidden>
-            <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-          </svg>
-        </a>
-
-        {/* ── Lock ── */}
-        <div className="flex flex-col items-center gap-3">
-          {unlocked ? (
-            <button
-              onClick={() => setUnlocked(false)}
-              className="text-emerald-500/60 hover:text-emerald-400 transition-colors text-xs flex items-center gap-1"
-              title="Lock"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
-              </svg>
-              unlocked
-            </button>
-          ) : (
-            <button
-              onClick={() => setShowPrompt(p => !p)}
-              className="text-gray-700 hover:text-gray-500 transition-colors"
-              title="Unlock to edit"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-              </svg>
-            </button>
           )}
-          {showPrompt && !unlocked && (
-            <form
-              onSubmit={handleUnlockSubmit}
-              className={`flex gap-2 justify-center ${shake ? 'animate-wiggle' : ''}`}
-            >
-              <input
-                autoFocus
-                type="password"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                placeholder="password"
-                className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-emerald-500/50 w-32"
-              />
-              <button
-                type="submit"
-                className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 text-xs rounded-lg transition-colors"
-              >
-                Unlock
-              </button>
-            </form>
+
+          {item.stats && (
+            <div className="panel__section">
+              <div className="panel__sec-label">Stats</div>
+              <dl className="panel__stack">
+                {item.stats.map(([k, v], i) => (
+                  <div className="panel__stack-row" key={i}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           )}
+
+          {item.stack && (
+            <div className="panel__section">
+              <div className="panel__sec-label">Stack</div>
+              <dl className="panel__stack">
+                {item.stack.map(([k, v], i) => (
+                  <div className="panel__stack-row" key={i}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+
+          <div className="panel__actions">
+            {item.link && (
+              <a
+                href={item.link}
+                target={item.link.startsWith('/') ? '_self' : '_blank'}
+                rel="noopener noreferrer"
+                className="panel__link panel__link--primary"
+                style={{ background: ACCENT }}
+              >
+                Visit →
+              </a>
+            )}
+            <button className="panel__close" onClick={onClose}>Close ✕</button>
+          </div>
         </div>
-
-        {/* ── Footer ── */}
-        <footer className="text-center text-gray-700 text-xs pt-4 pb-8 space-y-1">
-          <p>James · {new Date().getFullYear()}</p>
-          <p>Built with React + Vite + Tailwind · powered by Claude Code</p>
-        </footer>
-
       </div>
+    </div>
+  )
+}
+
+// ---------- Section ----------
+
+const COLS = 4
+
+function Section({ title, items, openId, onToggle, onClose }) {
+  const rowOf = (idx) => Math.floor(idx / COLS)
+  const expandedItem = openId != null ? items.find(p => p.id === openId) : null
+  const expandedIdx = openId != null ? items.findIndex(p => p.id === openId) : -1
+  const expandedRow = expandedIdx >= 0 ? rowOf(expandedIdx) : -1
+
+  const rows = []
+  for (let i = 0; i < items.length; i += COLS) rows.push(items.slice(i, i + COLS))
+
+  return (
+    <section className="section">
+      <div className="section__head">
+        <h2 className="section__title">{title}</h2>
+        <span className="section__count">{String(items.length).padStart(2, '0')}</span>
+      </div>
+      <div className="grid">
+        {rows.map((row, rIdx) => (
+          <>
+            <div className="grid__row" key={`row-${rIdx}`}>
+              {row.map(p => (
+                <Tile key={p.id} item={p} expanded={openId === p.id} onToggle={onToggle} />
+              ))}
+              {row.length < COLS && Array.from({ length: COLS - row.length }).map((_, k) => (
+                <div key={`fill-${k}`} className="tile tile--empty" aria-hidden="true" />
+              ))}
+            </div>
+            {expandedRow === rIdx && expandedItem && (
+              <ExpandedPanel key={`panel-${rIdx}`} item={expandedItem} onClose={onClose} />
+            )}
+          </>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+// ---------- Now drawer ----------
+
+function NowDrawer({ open, onClose }) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+
+  return (
+    <div className={`now ${open ? 'now--open' : ''}`} aria-hidden={!open}>
+      <div className="now__head">
+        <span className="now__label">Now</span>
+        <button className="now__close" onClick={onClose} aria-label="Close">✕</button>
+      </div>
+      <p className="now__date">May 2026</p>
+      <ul className="now__list">
+        <li><span className="now__bullet" style={{ background: ACCENT }} />Working on a few new projects.</li>
+        <li><span className="now__bullet" style={{ background: ACCENT }} />Solving Clues by Sam every morning.</li>
+        <li><span className="now__bullet" style={{ background: ACCENT }} />Open to small collaborations — say hi.</li>
+      </ul>
+    </div>
+  )
+}
+
+// ---------- App ----------
+
+export default function App() {
+  const [openId, setOpenId] = useState(null)
+  const [nowOpen, setNowOpen] = useState(false)
+
+  const onToggle = (id) => setOpenId(prev => prev === id ? null : id)
+  const onClose = () => setOpenId(null)
+
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="header__row">
+          <div>
+            <h1 className="brand">James</h1>
+          </div>
+          <button
+            className="header__now"
+            onClick={() => setNowOpen(v => !v)}
+            aria-pressed={nowOpen}
+          >
+            <span className="header__now-dot" style={{ background: ACCENT }} />
+            Now
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <Section
+          title="Projects"
+          items={PROJECTS}
+          openId={openId}
+          onToggle={onToggle}
+          onClose={onClose}
+        />
+        <Section
+          title="Hobbies"
+          items={HOBBIES}
+          openId={openId}
+          onToggle={onToggle}
+          onClose={onClose}
+        />
+      </main>
+
+      <footer className="footer">
+        <span>© James, {new Date().getFullYear()}</span>
+        <span className="footer__sep">·</span>
+        <a href="mailto:james.cs.hoffman@gmail.com">james.cs.hoffman@gmail.com</a>
+        <span className="footer__sep">·</span>
+        <a href="https://www.linkedin.com/in/jhoffman1204/" target="_blank" rel="noopener noreferrer">linkedin</a>
+        <span className="footer__sep">·</span>
+        <a href="https://github.com/hoppuman" target="_blank" rel="noopener noreferrer">github</a>
+      </footer>
+
+      <NowDrawer open={nowOpen} onClose={() => setNowOpen(false)} />
     </div>
   )
 }
