@@ -364,6 +364,9 @@
   const svg = d3.select('#map').attr('viewBox', `0 0 ${W} ${H}`);
   svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35');
 
+  // Prevent page scroll when wheeling over the map
+  document.getElementById('map').addEventListener('wheel', e => e.preventDefault(), { passive: false });
+
   const proj = d3.geoMercator()
     .center([15, 53])
     .scale(600)
@@ -371,8 +374,11 @@
 
   const geoPath = d3.geoPath().projection(proj);
 
+  // Single group that zoom transforms are applied to
+  const zoomG = svg.append('g');
+
   // Graticule
-  svg.append('g').append('path')
+  zoomG.append('g').append('path')
     .datum(d3.geoGraticule()())
     .attr('d', geoPath)
     .attr('fill', 'none')
@@ -380,10 +386,16 @@
     .attr('stroke-width', 0.4);
 
   // SVG layers — DOM order = paint order (later = on top)
-  const countriesG   = svg.append('g'); // filled country paths
-  const calloutG     = svg.append('g'); // small-country indicators
-  const foundLabelsG = svg.append('g'); // green labels for found countries
-  const missedLabelsG = svg.append('g'); // white labels revealed on give-up
+  const countriesG   = zoomG.append('g'); // filled country paths
+  const calloutG     = zoomG.append('g'); // small-country indicators
+  const foundLabelsG = zoomG.append('g'); // green labels for found countries
+  const missedLabelsG = zoomG.append('g'); // white labels revealed on give-up
+
+  // Zoom behaviour — scroll zooms the map, drag pans it
+  const zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on('zoom', ({ transform }) => zoomG.attr('transform', transform));
+  svg.call(zoom);
 
   // id → GeoJSON feature, filled after TopoJSON loads
   const featureMap = new Map();
