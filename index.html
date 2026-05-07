@@ -10,8 +10,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-DKABRu6P.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B-9jyEVH.css">
+    <script>
+      // GitHub Pages SPA redirect — restores path from 404.html query param
+      (function(l){
+        if(l.search[1]==='/'){
+          var d=l.search.slice(1).split('&').map(function(s){return s.replace(/~and~/g,'&')});
+          window.history.replaceState(null,null,l.pathname.slice(0,-1)+d[0]+(d[1]?'?'+d[1]:'')+l.hash);
+        }
+      }(window.location));
+    </script>
+    <script type="module" crossorigin src="/assets/index-Dfk0ryDq.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C6vvKPvZ.css">
   </head>
   <body>
     <div id="root"></div>
