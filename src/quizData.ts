@@ -201,16 +201,8 @@ const NORTH_AMERICA: Country[] = [
 ]
 
 const NORTH_AMERICA_SMALL: SmallDef[] = [
-  { id: 28,  lon: -61.8, lat: 17.1, dx:  45, dy: -20 }, // Antigua and Barbuda
   { id: 44,  lon: -77.4, lat: 24.7, dx: -45, dy: -25 }, // Bahamas
-  { id: 52,  lon: -59.6, lat: 13.2, dx:  45, dy:  10 }, // Barbados
-  { id: 212, lon: -61.4, lat: 15.4, dx:  45, dy:  10 }, // Dominica
-  { id: 308, lon: -61.7, lat: 12.1, dx:  45, dy:  20 }, // Grenada
   { id: 388, lon: -77.3, lat: 18.1, dx: -45, dy: -20 }, // Jamaica
-  { id: 659, lon: -62.7, lat: 17.3, dx:  45, dy: -25 }, // Saint Kitts and Nevis
-  { id: 662, lon: -60.9, lat: 13.9, dx:  45, dy: -15 }, // Saint Lucia
-  { id: 670, lon: -61.2, lat: 13.2, dx:  45, dy:  20 }, // Saint Vincent and the Grenadines
-  { id: 780, lon: -61.2, lat: 10.5, dx:  45, dy:  25 }, // Trinidad and Tobago
 ]
 
 // ── South America ─────────────────────────────────────────────────────────────

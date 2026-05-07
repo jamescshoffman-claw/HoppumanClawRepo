@@ -116,6 +116,22 @@ function Quiz({ config, onRestart }: QuizProps) {
       .attr('fill', 'none').attr('stroke', '#112236').attr('stroke-width', 0.4)
 
     const countriesG    = zoomG.append<SVGGElement>('g')
+
+    // Dashed ring on main map indicating countries shown in the inset panel
+    if (config.inset) {
+      const [cx, cy] = proj(config.inset.projCenter) ?? [0, 0]
+      const northPt: [number, number] = [config.inset.projCenter[0], config.inset.projCenter[1] + 4]
+      const [, ny] = proj(northPt) ?? [cx, cy - 20]
+      const r = Math.abs(cy - ny) * 1.6
+      zoomG.append('circle')
+        .attr('cx', cx).attr('cy', cy).attr('r', r)
+        .attr('fill', 'none')
+        .attr('stroke', '#8ba7c2').attr('stroke-width', 1.2)
+        .attr('stroke-dasharray', '4 3')
+        .attr('opacity', 0.5)
+        .attr('pointer-events', 'none')
+    }
+
     const calloutG      = zoomG.append<SVGGElement>('g')
     const foundLabelsG  = zoomG.append<SVGGElement>('g')
     const missedLabelsG = zoomG.append<SVGGElement>('g')
@@ -131,13 +147,14 @@ function Quiz({ config, onRestart }: QuizProps) {
     let insetCountriesG: d3.Selection<SVGGElement, unknown, null, undefined> | null = null
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let insetGeoPath: d3.GeoPath | null = null
+    let insetProj: d3.GeoProjection | null = null
 
     if (config.inset && insetRef.current) {
       const insetSvg = d3.select(insetRef.current)
       insetSvg.selectAll('*').remove()
       insetSvg.append('rect').attr('width', IW).attr('height', IH).attr('fill', '#0c1f35')
 
-      const insetProj = d3.geoMercator()
+      insetProj = d3.geoMercator()
         .center(config.inset.projCenter)
         .scale(config.inset.projScale)
         .translate([IW / 2, IH / 2])
@@ -238,9 +255,25 @@ function Quiz({ config, onRestart }: QuizProps) {
       const n = foundSetRef.current.size
       d3.select(`#${cpId(country.id)}`).classed('country-found', true)
       d3.select(`#${icpId(country.id)}`).classed('country-found', true)
+      const icDataFound = config.inset?.callouts?.find(ic => ic.id === country.id)
       const iCalloutFound = d3.select(`#i-callout-${safeId(country.id)}`)
       iCalloutFound.select('line').attr('stroke', '#4ade80')
       iCalloutFound.select('circle').attr('fill', '#4ade80')
+      if (icDataFound && insetProj) {
+        const [px, py] = insetProj([icDataFound.lon, icDataFound.lat]) ?? [0, 0]
+        iCalloutFound.append('text')
+          .attr('x', px + icDataFound.dx + (icDataFound.dx > 0 ? 5 : -5))
+          .attr('y', py + icDataFound.dy)
+          .attr('text-anchor', icDataFound.dx > 0 ? 'start' : 'end')
+          .attr('dominant-baseline', 'middle')
+          .attr('font-size', '14px').attr('font-weight', '600')
+          .attr('font-family', 'Geist, system-ui, sans-serif')
+          .attr('fill', '#4ade80')
+          .attr('stroke', 'rgba(0,0,0,0.9)').attr('stroke-width', '3')
+          .style('paint-order', 'stroke fill')
+          .attr('pointer-events', 'none')
+          .text(country.name)
+      }
       addMapLabel(country, foundLabelsG, '#4ade80')
       setScore(n)
       setFoundNames(prev => [...prev, country.name].sort((a, b) => a.localeCompare(b)))
@@ -262,9 +295,25 @@ function Quiz({ config, onRestart }: QuizProps) {
       missed.forEach(c => {
         d3.select(`#${cpId(c.id)}`).classed('country-missed', true)
         d3.select(`#${icpId(c.id)}`).classed('country-missed', true)
+        const icDataMissed = config.inset?.callouts?.find(ic => ic.id === c.id)
         const iCalloutMissed = d3.select(`#i-callout-${safeId(c.id)}`)
         iCalloutMissed.select('line').attr('stroke', '#fff')
         iCalloutMissed.select('circle').attr('fill', '#fff')
+        if (icDataMissed && insetProj) {
+          const [px, py] = insetProj([icDataMissed.lon, icDataMissed.lat]) ?? [0, 0]
+          iCalloutMissed.append('text')
+            .attr('x', px + icDataMissed.dx + (icDataMissed.dx > 0 ? 5 : -5))
+            .attr('y', py + icDataMissed.dy)
+            .attr('text-anchor', icDataMissed.dx > 0 ? 'start' : 'end')
+            .attr('dominant-baseline', 'middle')
+            .attr('font-size', '14px').attr('font-weight', '600')
+            .attr('font-family', 'Geist, system-ui, sans-serif')
+            .attr('fill', '#fff')
+            .attr('stroke', 'rgba(0,0,0,0.9)').attr('stroke-width', '3')
+            .style('paint-order', 'stroke fill')
+            .attr('pointer-events', 'none')
+            .text(c.name)
+        }
         addMapLabel(c, missedLabelsG, '#fff')
       })
       setMissedNames(missed.map(c => c.name))
