@@ -643,9 +643,21 @@ a { color: inherit; }
   flex: 0 0 38%;
 }
 
-.quiz-inset-label {
+.quiz-map-hint {
   position: absolute;
   top: 10px;
+  left: 12px;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quiz-inset-label {
+  position: absolute;
+  top: 24px;
   left: 12px;
   font-size: 0.65rem;
   font-weight: 700;

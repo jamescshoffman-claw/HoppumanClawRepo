@@ -5,6 +5,9 @@ import { CONFIGS, type QuizConfig, type Country, type RegionKey } from './quizDa
 
 const W = 960
 const H = 600
+// Inset SVG uses a narrower viewBox so text/paths render at higher apparent size
+const IW = 380
+const IH = 580
 const TIMER_SECONDS = 600
 const safeId = (id: number) => String(id).replace('-', 'n')
 const cpId  = (id: number) => `cp-${safeId(id)}`
@@ -38,7 +41,7 @@ function Quiz({ config, onRestart }: QuizProps) {
   const lookupRef    = useRef(new Map<string, Country>())
   const gameOverRef  = useRef(false)
   const quizVersionRef = useRef(0)
-  const fbTimerRef   = useRef<ReturnType<typeof setTimeout>>()
+  const fbTimerRef   = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const markFoundRef = useRef<(c: Country) => void>(() => {})
   const giveUpRef    = useRef<() => void>(() => {})
 
@@ -81,6 +84,7 @@ function Quiz({ config, onRestart }: QuizProps) {
 
     const svgEl = svgRef.current
     if (!svgEl) return
+    const insetEl = insetRef.current
 
     const myVersion = ++quizVersionRef.current
 
@@ -131,12 +135,12 @@ function Quiz({ config, onRestart }: QuizProps) {
     if (config.inset && insetRef.current) {
       const insetSvg = d3.select(insetRef.current)
       insetSvg.selectAll('*').remove()
-      insetSvg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35')
+      insetSvg.append('rect').attr('width', IW).attr('height', IH).attr('fill', '#0c1f35')
 
       const insetProj = d3.geoMercator()
         .center(config.inset.projCenter)
         .scale(config.inset.projScale)
-        .translate([W / 2, H / 2])
+        .translate([IW / 2, IH / 2])
 
       insetGeoPath = d3.geoPath().projection(insetProj)
       const insetG = insetSvg.append<SVGGElement>('g')
@@ -149,6 +153,25 @@ function Quiz({ config, onRestart }: QuizProps) {
         .attr('fill', 'none').attr('stroke', '#112236').attr('stroke-width', 0.4)
 
       insetCountriesG = insetG.append<SVGGElement>('g')
+
+      // Callout indicators in the inset — always visible, color updates when found/missed
+      const insetCalloutG = insetG.append<SVGGElement>('g')
+      config.inset.callouts?.forEach(ic => {
+        const [px, py] = insetProj([ic.lon, ic.lat]) ?? [0, 0]
+        const g = insetCalloutG.append('g').attr('id', `i-callout-${safeId(ic.id)}`)
+        g.append('line')
+          .attr('x1', px).attr('y1', py)
+          .attr('x2', px + ic.dx).attr('y2', py + ic.dy)
+          .attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
+        g.append('circle')
+          .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#8ba7c2')
+      })
+
+      const insetZoom = d3.zoom<SVGSVGElement, unknown>()
+        .scaleExtent([0.8, 16])
+        .on('zoom', ({ transform }) => insetG.attr('transform', String(transform)))
+      insetSvg.call(insetZoom)
+      insetSvg.call(insetZoom.transform, d3.zoomIdentity)
     }
 
     // ── Small-country callout indicators ──────────────────────────────────
@@ -164,10 +187,7 @@ function Quiz({ config, onRestart }: QuizProps) {
         .attr('x2', px + sc.dx).attr('y2', py + sc.dy)
         .attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
       g.append('circle')
-        .attr('cx', px).attr('cy', py).attr('r', 7)
-        .attr('fill', '#2d4a6b').attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
-      g.append('circle')
-        .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#8ba7c2')
+        .attr('cx', px).attr('cy', py).attr('r', 2.5).attr('fill', '#8ba7c2')
     })
 
     // ── Helpers ───────────────────────────────────────────────────────────
@@ -182,10 +202,7 @@ function Quiz({ config, onRestart }: QuizProps) {
         const [px, py] = proj([sc.lon, sc.lat]) ?? [0, 0]
         const g = d3.select<SVGGElement, unknown>(`#callout-${safeId(country.id)}`)
         g.select('line').attr('stroke', color)
-        g.selectAll('circle')
-          .attr('stroke', color)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          .attr('fill', (_d: unknown, i: number) => i === 0 ? '#0c1f35' : color)
+        g.select('circle').attr('fill', color)
         g.append('text')
           .attr('x', px + sc.dx).attr('y', py + sc.dy)
           .attr('text-anchor', sc.dx > 0 ? 'start' : 'end')
@@ -221,6 +238,9 @@ function Quiz({ config, onRestart }: QuizProps) {
       const n = foundSetRef.current.size
       d3.select(`#${cpId(country.id)}`).classed('country-found', true)
       d3.select(`#${icpId(country.id)}`).classed('country-found', true)
+      const iCalloutFound = d3.select(`#i-callout-${safeId(country.id)}`)
+      iCalloutFound.select('line').attr('stroke', '#4ade80')
+      iCalloutFound.select('circle').attr('fill', '#4ade80')
       addMapLabel(country, foundLabelsG, '#4ade80')
       setScore(n)
       setFoundNames(prev => [...prev, country.name].sort((a, b) => a.localeCompare(b)))
@@ -242,6 +262,9 @@ function Quiz({ config, onRestart }: QuizProps) {
       missed.forEach(c => {
         d3.select(`#${cpId(c.id)}`).classed('country-missed', true)
         d3.select(`#${icpId(c.id)}`).classed('country-missed', true)
+        const iCalloutMissed = d3.select(`#i-callout-${safeId(c.id)}`)
+        iCalloutMissed.select('line').attr('stroke', '#fff')
+        iCalloutMissed.select('circle').attr('fill', '#fff')
         addMapLabel(c, missedLabelsG, '#fff')
       })
       setMissedNames(missed.map(c => c.name))
@@ -287,7 +310,11 @@ function Quiz({ config, onRestart }: QuizProps) {
 
     const handleWheel = (e: WheelEvent) => e.preventDefault()
     svgEl.addEventListener('wheel', handleWheel, { passive: false })
-    return () => svgEl.removeEventListener('wheel', handleWheel)
+    if (insetEl) insetEl.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      svgEl.removeEventListener('wheel', handleWheel)
+      if (insetEl) insetEl.removeEventListener('wheel', handleWheel)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -408,12 +435,14 @@ function Quiz({ config, onRestart }: QuizProps) {
       {/* Maps */}
       <div className="quiz-maps-area">
         <div className="quiz-map-wrap">
+          <span className="quiz-map-hint">Pinch to zoom</span>
           <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} />
         </div>
         {config.inset && (
           <div className="quiz-map-wrap quiz-map-inset">
+            <span className="quiz-map-hint">Pinch to zoom</span>
             <span className="quiz-inset-label">{config.inset.label}</span>
-            <svg ref={insetRef} viewBox={`0 0 ${W} ${H}`} />
+            <svg ref={insetRef} viewBox={`0 0 ${IW} ${IH}`} />
           </div>
         )}
       </div>
