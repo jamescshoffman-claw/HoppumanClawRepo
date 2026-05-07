@@ -87,6 +87,8 @@ const EUROPE_SMALL: SmallDef[] = [
 
 const ASIA: Country[] = [
   { id: 4,   name: 'Afghanistan' },
+  { id: 51,  name: 'Armenia' },
+  { id: 31,  name: 'Azerbaijan' },
   { id: 48,  name: 'Bahrain' },
   { id: 50,  name: 'Bangladesh' },
   { id: 64,  name: 'Bhutan' },
@@ -171,11 +173,11 @@ export const CONFIGS: Record<RegionKey, QuizConfig> = {
     label: 'Asia',
     countries: ASIA,
     smallDef: ASIA_SMALL,
-    total: 45,
+    total: 47,
     projCenter: [88, 30],
     projScale: 280,
     regionLabel: 'Asian',
-    winMsg: '🎉 You named all 45 countries of Asia!',
+    winMsg: '🎉 You named all 47 countries of Asia!',
   },
   southamerica: {
     label: 'South America',
