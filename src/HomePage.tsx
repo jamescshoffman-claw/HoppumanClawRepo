@@ -128,7 +128,7 @@ type Item = (typeof PROJECTS)[number] | (typeof HOBBIES)[number]
 // ── Thumbnail ─────────────────────────────────────────────────────────────
 
 function Thumb({ item }: { item: Item }) {
-  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw/.test(item.image)
+  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune/.test(item.image)
   return (
     <img
       src={item.image}
