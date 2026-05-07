@@ -228,8 +228,8 @@ export default function App() {
         >
           <div>
             <h2 className="text-xs font-semibold tracking-widest uppercase text-emerald-400 mb-1">Study</h2>
-            <p className="text-white font-semibold text-xl mb-1">Europe Countries Quiz</p>
-            <p className="text-gray-400 text-sm">Name all 49 European countries on an interactive map</p>
+            <p className="text-white font-semibold text-xl mb-1">Countries Quiz</p>
+            <p className="text-gray-400 text-sm">Name all the countries of Europe and Asia on an interactive map</p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" className="text-emerald-400 group-hover:translate-x-1 transition-transform" aria-hidden>
             <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>

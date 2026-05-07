@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Europe Countries Quiz</title>
+  <title>Countries Quiz</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,10 +21,31 @@
       text-align: center;
       font-size: 2rem;
       color: #f1f5f9;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       font-weight: 700;
       letter-spacing: -0.5px;
     }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .tab-btn {
+      padding: 8px 32px;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid #334155;
+      background: transparent;
+      color: #94a3b8;
+      font-weight: 600;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .tab-btn:hover { border-color: #4ade80; color: #f1f5f9; }
+    .tab-btn.active { background: #15803d; border-color: #16a34a; color: #fff; }
 
     /* ── Stats bar ── */
     .stats {
@@ -106,12 +127,6 @@
       height: 22px;
       font-size: 0.9rem;
       margin-bottom: 4px;
-    }
-    .hint {
-      text-align: center;
-      color: #475569;
-      font-size: 0.78rem;
-      margin-bottom: 14px;
     }
 
     /* ── Win banner ── */
@@ -195,15 +210,6 @@
     .country-path.missed { fill: #9f1239; }
     .country-path.missed:hover { fill: #e11d48; }
 
-    /* ── Small-country note ── */
-    .map-note {
-      text-align: center;
-      color: #475569;
-      font-size: 0.75rem;
-      margin-top: -12px;
-      margin-bottom: 14px;
-    }
-
     /* ── Missed tags section ── */
     .missed-section { display: none; margin-top: 16px; }
     .missed-section h3 {
@@ -226,7 +232,12 @@
 </head>
 <body>
 <div class="container">
-  <h1>Europe Countries Quiz</h1>
+  <h1>Countries Quiz</h1>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-region="europe">Europe</button>
+    <button class="tab-btn" data-region="asia">Asia</button>
+  </div>
 
   <div class="stats">
     <div class="score">
@@ -255,9 +266,7 @@
     <button id="restart-btn">Restart</button>
   </div>
   <div class="feedback" id="feedback"></div>
-  <div class="win-banner" id="win-banner">
-    🎉 Amazing! You named all 49 countries of Europe!
-  </div>
+  <div class="win-banner" id="win-banner"></div>
 
   <div id="map-wrap">
     <svg id="map" viewBox="0 0 960 600"></svg>
@@ -278,9 +287,10 @@
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script>
 (function () {
-  // ── Country list (49 total) ───────────────────────────────────────────────
-  // IDs are ISO 3166-1 numeric codes used by world-atlas TopoJSON
-  const COUNTRIES = [
+
+  // ── Quiz data ─────────────────────────────────────────────────────────────
+
+  const EUROPE_COUNTRIES = [
     { id: 8,   name: "Albania" },
     { id: 20,  name: "Andorra" },
     { id: 51,  name: "Armenia" },
@@ -332,9 +342,7 @@
     { id: 336, name: "Vatican City",       aliases: ["Vatican", "Holy See"] },
   ];
 
-  // Small countries: no visible path at this map scale — shown as callout indicators
-  // Kosovo also goes here because world-atlas doesn't include it as a separate feature
-  const SMALL_DEF = [
+  const EUROPE_SMALL_DEF = [
     { id: 20,  lon: 1.58,  lat: 42.55, dx: -48, dy: -22 }, // Andorra
     { id: -99, lon: 20.90, lat: 42.58, dx:  55, dy: -30 }, // Kosovo
     { id: 438, lon: 9.55,  lat: 47.17, dx: -50, dy: -22 }, // Liechtenstein
@@ -343,117 +351,119 @@
     { id: 674, lon: 12.46, lat: 43.93, dx:  50, dy: -22 }, // San Marino
     { id: 336, lon: 12.45, lat: 41.90, dx:  50, dy:  22 }, // Vatican City
   ];
-  const SMALL_IDS = new Set(SMALL_DEF.map(s => s.id));
 
-  const TOTAL = COUNTRIES.length; // 49
-  document.getElementById('score-den').textContent = TOTAL;
+  const ASIA_COUNTRIES = [
+    { id: 4,   name: "Afghanistan" },
+    { id: 51,  name: "Armenia" },
+    { id: 31,  name: "Azerbaijan" },
+    { id: 48,  name: "Bahrain" },
+    { id: 50,  name: "Bangladesh" },
+    { id: 64,  name: "Bhutan" },
+    { id: 96,  name: "Brunei",             aliases: ["Brunei Darussalam"] },
+    { id: 116, name: "Cambodia" },
+    { id: 156, name: "China" },
+    { id: 268, name: "Georgia" },
+    { id: 356, name: "India" },
+    { id: 360, name: "Indonesia" },
+    { id: 364, name: "Iran" },
+    { id: 368, name: "Iraq" },
+    { id: 376, name: "Israel" },
+    { id: 392, name: "Japan" },
+    { id: 400, name: "Jordan" },
+    { id: 398, name: "Kazakhstan" },
+    { id: 414, name: "Kuwait" },
+    { id: 417, name: "Kyrgyzstan" },
+    { id: 418, name: "Laos" },
+    { id: 422, name: "Lebanon" },
+    { id: 458, name: "Malaysia" },
+    { id: 462, name: "Maldives" },
+    { id: 496, name: "Mongolia" },
+    { id: 104, name: "Myanmar",            aliases: ["Burma"] },
+    { id: 524, name: "Nepal" },
+    { id: 408, name: "North Korea" },
+    { id: 512, name: "Oman" },
+    { id: 586, name: "Pakistan" },
+    { id: 608, name: "Philippines" },
+    { id: 634, name: "Qatar" },
+    { id: 682, name: "Saudi Arabia" },
+    { id: 702, name: "Singapore" },
+    { id: 410, name: "South Korea",        aliases: ["Korea"] },
+    { id: 144, name: "Sri Lanka",          aliases: ["Ceylon"] },
+    { id: 760, name: "Syria" },
+    { id: 158, name: "Taiwan" },
+    { id: 762, name: "Tajikistan" },
+    { id: 764, name: "Thailand" },
+    { id: 626, name: "Timor-Leste",        aliases: ["East Timor"] },
+    { id: 792, name: "Turkey" },
+    { id: 795, name: "Turkmenistan" },
+    { id: 784, name: "United Arab Emirates", aliases: ["UAE"] },
+    { id: 860, name: "Uzbekistan" },
+    { id: 704, name: "Vietnam",            aliases: ["Viet Nam"] },
+    { id: 887, name: "Yemen" },
+  ];
 
-  const idSet = new Set(COUNTRIES.map(c => c.id));
-  const found = new Set();
+  const ASIA_SMALL_DEF = [
+    { id: 48,  lon: 50.55,  lat: 26.00, dx:  55, dy: -25 }, // Bahrain
+    { id: 96,  lon: 114.83, lat:  4.94, dx:  50, dy: -28 }, // Brunei
+    { id: 462, lon: 73.50,  lat:  4.00, dx: -55, dy: -20 }, // Maldives
+    { id: 634, lon: 51.20,  lat: 25.30, dx:  55, dy:  25 }, // Qatar
+    { id: 702, lon: 103.82, lat:  1.35, dx:  50, dy: -25 }, // Singapore
+  ];
 
-  // Build text → country lookup (case-insensitive)
-  const lookup = new Map();
-  COUNTRIES.forEach(c => {
-    lookup.set(c.name.toLowerCase(), c);
-    (c.aliases || []).forEach(a => lookup.set(a.toLowerCase(), c));
-  });
+  // ── Configs ───────────────────────────────────────────────────────────────
 
-  // ── D3 map setup ─────────────────────────────────────────────────────────
+  const CONFIGS = {
+    europe: {
+      countries:   EUROPE_COUNTRIES,
+      smallDef:    EUROPE_SMALL_DEF,
+      total:       49,
+      projCenter:  [15, 53],
+      projScale:   600,
+      regionLabel: 'European',
+      winMsg:      '🎉 Amazing! You named all 49 countries of Europe!',
+    },
+    asia: {
+      countries:   ASIA_COUNTRIES,
+      smallDef:    ASIA_SMALL_DEF,
+      total:       47,
+      projCenter:  [88, 30],
+      projScale:   280,
+      regionLabel: 'Asian',
+      winMsg:      '🎉 Amazing! You named all 47 countries of Asia!',
+    },
+  };
+
+  // ── Shared module state (reset by initQuiz) ───────────────────────────────
+
   const W = 960, H = 600;
+  let lookup       = new Map();
+  let found        = new Set();
+  let TOTAL        = 0;
+  let COUNTRIES_LIST = [];
+  let SMALL_DEF_CUR  = [];
+  let SMALL_IDS      = new Set();
+  let featureMap     = new Map();
+  let proj           = null;
+  let geoPath        = null;
+  let foundLabelsG   = null;
+  let missedLabelsG  = null;
+  let calloutG       = null;
+  let gameOver       = false;
+  let regionLabel    = '';
+  let winMsg         = '';
+  let quizVersion    = 0;
+  let fbTimer;
 
-  const svg = d3.select('#map').attr('viewBox', `0 0 ${W} ${H}`);
-  svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35');
+  const input = document.getElementById('country-input');
 
-  // Prevent page scroll when wheeling over the map
+  // Prevent page scroll when wheeling over the map (attached once)
   document.getElementById('map').addEventListener('wheel', e => e.preventDefault(), { passive: false });
 
-  const proj = d3.geoMercator()
-    .center([15, 53])
-    .scale(600)
-    .translate([W / 2, H / 2]);
+  // ── Utilities ─────────────────────────────────────────────────────────────
 
-  const geoPath = d3.geoPath().projection(proj);
-
-  // Single group that zoom transforms are applied to
-  const zoomG = svg.append('g');
-
-  // Graticule
-  zoomG.append('g').append('path')
-    .datum(d3.geoGraticule()())
-    .attr('d', geoPath)
-    .attr('fill', 'none')
-    .attr('stroke', '#112236')
-    .attr('stroke-width', 0.4);
-
-  // SVG layers — DOM order = paint order (later = on top)
-  const countriesG   = zoomG.append('g'); // filled country paths
-  const calloutG     = zoomG.append('g'); // small-country indicators
-  const foundLabelsG = zoomG.append('g'); // green labels for found countries
-  const missedLabelsG = zoomG.append('g'); // white labels revealed on give-up
-
-  // Zoom behaviour — scroll zooms the map, drag pans it
-  const zoom = d3.zoom()
-    .scaleExtent([1, 8])
-    .on('zoom', ({ transform }) => zoomG.attr('transform', transform));
-  svg.call(zoom);
-
-  // id → GeoJSON feature, filled after TopoJSON loads
-  const featureMap = new Map();
-
-  // Encode a numeric country id into a safe DOM/CSS id string (handles negatives like -99)
   const safeId = id => String(id).replace('-', 'n');
+  const cpId   = id => `cp-${safeId(id)}`;
 
-  // ── Small-country callouts ────────────────────────────────────────────────
-  // Drawn immediately (use hardcoded lon/lat, no TopoJSON needed)
-  SMALL_DEF.forEach(sc => {
-    const [px, py] = proj([sc.lon, sc.lat]);
-    const lx = px + sc.dx, ly = py + sc.dy;
-
-    const g = calloutG.append('g').attr('id', `callout-${safeId(sc.id)}`);
-
-    g.append('line')
-      .attr('x1', px).attr('y1', py)
-      .attr('x2', lx).attr('y2', ly)
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 2);
-
-    g.append('circle')
-      .attr('cx', px).attr('cy', py)
-      .attr('r', 3)
-      .attr('fill', '#ffffff');
-  });
-
-  const cpId = id => `cp-${safeId(id)}`;
-
-  // ── Load TopoJSON ─────────────────────────────────────────────────────────
-  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
-    .then(world => {
-      const features = topojson.feature(world, world.objects.countries).features;
-      const euroFeatures = features.filter(f => idSet.has(+f.id));
-      euroFeatures.forEach(f => featureMap.set(+f.id, f));
-
-      // Diagnostic: log any of our countries missing from the dataset
-      const dataIds = new Set(features.map(f => +f.id));
-      const missing = COUNTRIES.filter(c => !dataIds.has(c.id));
-      if (missing.length) console.warn('Not in world-atlas dataset:', missing.map(c => `${c.name} (id ${c.id})`).join(', '));
-      console.log('Matched European features:', euroFeatures.map(f => +f.id).sort((a,b)=>a-b));
-
-      countriesG
-        .selectAll('path')
-        .data(euroFeatures)
-        .join('path')
-        .attr('class', 'country-path')
-        .attr('id', d => cpId(+d.id))
-        .attr('d', geoPath);
-    })
-    .catch(() => {
-      document.getElementById('map-wrap').innerHTML =
-        '<p style="color:#f87171;text-align:center;padding:40px;font-size:1rem">' +
-        'Could not load map data — check your internet connection and refresh.</p>';
-    });
-
-  // ── UI helpers ────────────────────────────────────────────────────────────
-  let fbTimer;
   function setFeedback(msg, color) {
     const el = document.getElementById('feedback');
     el.textContent = msg;
@@ -471,15 +481,13 @@
 
   function addMapLabel(country, group, color) {
     if (SMALL_IDS.has(country.id)) {
-      // Recolor the callout line/dot and add the name at the line's endpoint
-      const sc = SMALL_DEF.find(s => s.id === country.id);
+      const sc = SMALL_DEF_CUR.find(s => s.id === country.id);
       if (!sc) return;
+      const [px, py] = proj([sc.lon, sc.lat]);
+      const lx = px + sc.dx, ly = py + sc.dy;
       const g = d3.select(`#callout-${safeId(country.id)}`);
       g.select('line').attr('stroke', color);
       g.select('circle').attr('fill', color);
-
-      const [px, py] = proj([sc.lon, sc.lat]);
-      const lx = px + sc.dx, ly = py + sc.dy;
       g.append('text')
         .attr('x', lx).attr('y', ly)
         .attr('text-anchor', sc.dx > 0 ? 'start' : 'end')
@@ -498,7 +506,6 @@
       if (!feature) return;
       const [cx, cy] = geoPath.centroid(feature);
       if (isNaN(cx) || isNaN(cy) || cx < 0 || cx > W || cy < 0 || cy > H) return;
-
       group.append('text')
         .attr('x', cx).attr('y', cy)
         .attr('text-anchor', 'middle')
@@ -517,12 +524,9 @@
 
   function markFound(country) {
     found.add(country.id);
-
-    // Highlight map path and add green label
     d3.select(`#${cpId(country.id)}`).classed('found', true);
     addMapLabel(country, foundLabelsG, '#4ade80');
 
-    // Add tag to found list, keep sorted
     const container = document.getElementById('found-tags');
     const tag = document.createElement('span');
     tag.className   = 'tag';
@@ -538,21 +542,27 @@
     setFeedback(`✓ ${country.name}!`, '#4ade80');
 
     if (found.size === TOTAL) {
-      document.getElementById('win-banner').style.display = 'block';
+      const banner = document.getElementById('win-banner');
+      banner.textContent = winMsg;
+      banner.style.display = 'block';
       endGame();
     }
   }
 
   function endGame() {
+    gameOver = true;
     input.disabled = true;
     document.getElementById('give-up-btn').style.display = 'none';
     document.getElementById('restart-btn').style.display = 'block';
   }
 
-  // ── Input handling ────────────────────────────────────────────────────────
-  const input = document.getElementById('country-input');
+  function pulse(cls) {
+    input.classList.add(cls);
+    setTimeout(() => input.classList.remove(cls), 400);
+  }
 
-  // Auto-detect: triggers as soon as the typed text exactly matches a name
+  // ── Persistent event listeners ────────────────────────────────────────────
+
   input.addEventListener('input', () => {
     const val = input.value.trim().toLowerCase();
     if (!val) return;
@@ -566,7 +576,6 @@
     }
   });
 
-  // Enter key: confirm or show "already found / not found" feedback
   input.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     const val = input.value.trim().toLowerCase();
@@ -581,28 +590,19 @@
       setFeedback(`Already got ${c.name}!`, '#fbbf24');
       pulse('wrong');
     } else {
-      setFeedback('Not a European country — keep trying!', '#f87171');
+      setFeedback(`Not a ${regionLabel} country — keep trying!`, '#f87171');
       pulse('wrong');
     }
   });
 
-  function pulse(cls) {
-    input.classList.add(cls);
-    setTimeout(() => input.classList.remove(cls), 400);
-  }
-
-  // ── Give Up ───────────────────────────────────────────────────────────────
   document.getElementById('give-up-btn').addEventListener('click', () => {
-    if (found.size === TOTAL) return;
-
-    const missed = COUNTRIES.filter(c => !found.has(c.id));
+    if (gameOver) return;
+    const missed = COUNTRIES_LIST.filter(c => !found.has(c.id));
     missed.sort((a, b) => a.name.localeCompare(b.name));
-
     missed.forEach(c => {
       d3.select(`#${cpId(c.id)}`).classed('missed', true);
       addMapLabel(c, missedLabelsG, '#fff');
     });
-
     const container = document.getElementById('missed-tags');
     missed.forEach(c => {
       const tag = document.createElement('span');
@@ -610,19 +610,142 @@
       tag.textContent = c.name;
       container.appendChild(tag);
     });
-
     document.getElementById('missed-count').textContent = missed.length;
     document.getElementById('missed-section').style.display = 'block';
     setFeedback(`Game over — you got ${found.size} / ${TOTAL}`, '#94a3b8');
     endGame();
   });
 
-  // ── Restart ───────────────────────────────────────────────────────────────
   document.getElementById('restart-btn').addEventListener('click', () => {
-    window.location.reload();
+    const activeRegion = document.querySelector('.tab-btn.active').dataset.region;
+    initQuiz(activeRegion);
   });
 
-  input.focus();
+  // ── Tab switching ─────────────────────────────────────────────────────────
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('active')) return;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      initQuiz(btn.dataset.region);
+    });
+  });
+
+  // ── initQuiz ──────────────────────────────────────────────────────────────
+
+  function initQuiz(regionKey) {
+    const config = CONFIGS[regionKey];
+    const myVersion = ++quizVersion;
+
+    // Update shared state
+    COUNTRIES_LIST = config.countries;
+    TOTAL          = config.total;
+    SMALL_DEF_CUR  = config.smallDef;
+    SMALL_IDS      = new Set(config.smallDef.map(s => s.id));
+    regionLabel    = config.regionLabel;
+    winMsg         = config.winMsg;
+    found          = new Set();
+    gameOver       = false;
+    featureMap     = new Map();
+
+    lookup = new Map();
+    COUNTRIES_LIST.forEach(c => {
+      lookup.set(c.name.toLowerCase(), c);
+      (c.aliases || []).forEach(a => lookup.set(a.toLowerCase(), c));
+    });
+
+    // Reset UI
+    document.getElementById('score-num').textContent     = 0;
+    document.getElementById('score-den').textContent     = TOTAL;
+    document.getElementById('prog-fill').style.width     = '0%';
+    document.getElementById('prog-label').textContent    = '0%';
+    document.getElementById('feedback').textContent      = '';
+    document.getElementById('win-banner').style.display  = 'none';
+    document.getElementById('win-banner').textContent    = '';
+    document.getElementById('found-section').style.display  = 'none';
+    document.getElementById('found-count').textContent   = 0;
+    document.getElementById('found-tags').innerHTML      = '';
+    document.getElementById('missed-section').style.display = 'none';
+    document.getElementById('missed-count').textContent  = 0;
+    document.getElementById('missed-tags').innerHTML     = '';
+    document.getElementById('give-up-btn').style.display = '';
+    document.getElementById('restart-btn').style.display = 'none';
+    input.disabled = false;
+    input.value    = '';
+    input.classList.remove('correct', 'wrong');
+
+    // Rebuild SVG
+    const svgEl = d3.select('#map');
+    svgEl.on('.zoom', null);
+    svgEl.selectAll('*').remove();
+    svgEl.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35');
+
+    proj    = d3.geoMercator().center(config.projCenter).scale(config.projScale).translate([W / 2, H / 2]);
+    geoPath = d3.geoPath().projection(proj);
+
+    const zoomG = svgEl.append('g');
+
+    zoomG.append('g').append('path')
+      .datum(d3.geoGraticule()())
+      .attr('d', geoPath)
+      .attr('fill', 'none')
+      .attr('stroke', '#112236')
+      .attr('stroke-width', 0.4);
+
+    const countriesG = zoomG.append('g');
+    calloutG      = zoomG.append('g');
+    foundLabelsG  = zoomG.append('g');
+    missedLabelsG = zoomG.append('g');
+
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on('zoom', ({ transform }) => zoomG.attr('transform', transform));
+    svgEl.call(zoom);
+    svgEl.call(zoom.transform, d3.zoomIdentity);
+
+    // Draw small-country callout indicators
+    SMALL_DEF_CUR.forEach(sc => {
+      const [px, py] = proj([sc.lon, sc.lat]);
+      const lx = px + sc.dx, ly = py + sc.dy;
+      const g = calloutG.append('g').attr('id', `callout-${safeId(sc.id)}`);
+      g.append('line')
+        .attr('x1', px).attr('y1', py).attr('x2', lx).attr('y2', ly)
+        .attr('stroke', '#ffffff').attr('stroke-width', 2);
+      g.append('circle')
+        .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#ffffff');
+    });
+
+    const idSet = new Set(COUNTRIES_LIST.map(c => c.id));
+
+    // Load TopoJSON (cached by browser after first fetch)
+    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+      .then(world => {
+        if (quizVersion !== myVersion) return;
+        const features        = topojson.feature(world, world.objects.countries).features;
+        const regionFeatures  = features.filter(f => idSet.has(+f.id));
+        regionFeatures.forEach(f => featureMap.set(+f.id, f));
+        countriesG
+          .selectAll('path')
+          .data(regionFeatures)
+          .join('path')
+          .attr('class', 'country-path')
+          .attr('id', d => cpId(+d.id))
+          .attr('d', geoPath);
+      })
+      .catch(() => {
+        if (quizVersion !== myVersion) return;
+        document.getElementById('map-wrap').innerHTML =
+          '<p style="color:#f87171;text-align:center;padding:40px;font-size:1rem">' +
+          'Could not load map data — check your internet connection and refresh.</p>';
+      });
+
+    input.focus();
+  }
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  initQuiz('europe');
+
 })();
 </script>
 </body>
