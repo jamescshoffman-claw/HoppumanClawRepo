@@ -237,6 +237,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-region="europe">Europe</button>
     <button class="tab-btn" data-region="asia">Asia</button>
+    <button class="tab-btn" data-region="southamerica">South America</button>
   </div>
 
   <div class="stats">
@@ -412,6 +413,21 @@
 
   // ── Configs ───────────────────────────────────────────────────────────────
 
+  const SOUTH_AMERICA_COUNTRIES = [
+    { id: 32,  name: "Argentina" },
+    { id: 68,  name: "Bolivia" },
+    { id: 76,  name: "Brazil",   aliases: ["Brasil"] },
+    { id: 152, name: "Chile" },
+    { id: 170, name: "Colombia" },
+    { id: 218, name: "Ecuador" },
+    { id: 328, name: "Guyana" },
+    { id: 600, name: "Paraguay" },
+    { id: 604, name: "Peru" },
+    { id: 740, name: "Suriname" },
+    { id: 858, name: "Uruguay" },
+    { id: 862, name: "Venezuela" },
+  ];
+
   const CONFIGS = {
     europe: {
       countries:   EUROPE_COUNTRIES,
@@ -430,6 +446,15 @@
       projScale:   280,
       regionLabel: 'Asian',
       winMsg:      '🎉 Amazing! You named all 47 countries of Asia!',
+    },
+    southamerica: {
+      countries:   SOUTH_AMERICA_COUNTRIES,
+      smallDef:    [],
+      total:       12,
+      projCenter:  [-58, -18],
+      projScale:   400,
+      regionLabel: 'South American',
+      winMsg:      '🎉 Amazing! You named all 12 countries of South America!',
     },
   };
 
