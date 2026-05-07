@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="tb-dots" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="0.8" fill="#d9c89a" opacity="0.6"></circle>
+    </pattern>
+  </defs>
+
+  
+  <rect width="400" height="400" fill="#f3e6c4"></rect>
+  <rect width="400" height="400" fill="url(#tb-dots)"></rect>
+
+  
+  <path d="M0,310 Q100,300 200,308 T400,305" stroke="#3a5d3a" stroke-width="2.5" fill="none"></path>
+
+  
+  <g stroke="#3a2614" stroke-width="2.5" stroke-linejoin="round">
+    
+    <ellipse cx="92" cy="220" rx="58" ry="42" fill="#f0a050"></ellipse>
+    
+    <circle cx="92" cy="160" r="38" fill="#f0a050"></circle>
+    
+    <path d="M65,135 L60,118 L78,128 Z" fill="#f0a050"></path>
+    <path d="M119,135 L124,118 L106,128 Z" fill="#f0a050"></path>
+    
+    <path d="M68,130 L66,123 L74,128 Z" fill="#3a2614" stroke="none"></path>
+    <path d="M116,130 L118,123 L110,128 Z" fill="#3a2614" stroke="none"></path>
+    
+    <path d="M55,205 Q60,220 55,235" fill="none"></path>
+    <path d="M70,195 Q75,225 70,250" fill="none"></path>
+    <path d="M115,195 Q110,225 115,250" fill="none"></path>
+    <path d="M130,205 Q125,220 130,235" fill="none"></path>
+    
+    <path d="M70,140 L65,150" fill="none"></path>
+    <path d="M114,140 L119,150" fill="none"></path>
+    <path d="M92,128 L92,140" fill="none"></path>
+    
+    <ellipse cx="92" cy="172" rx="14" ry="10" fill="#fff8e7"></ellipse>
+    
+    <circle cx="80" cy="158" r="3" fill="#1a1612" stroke="none"></circle>
+    <circle cx="104" cy="158" r="3" fill="#1a1612" stroke="none"></circle>
+    
+    <path d="M88,168 L96,168 L92,173 Z" fill="#1a1612" stroke="none"></path>
+    
+    <path d="M92,173 Q88,180 84,178" fill="none"></path>
+    <path d="M92,173 Q96,180 100,178" fill="none"></path>
+    
+    <rect x="58" y="248" width="14" height="22" rx="3" fill="#f0a050"></rect>
+    <rect x="112" y="248" width="14" height="22" rx="3" fill="#f0a050"></rect>
+    
+    <path d="M148,225 Q175,210 170,180" fill="none" stroke-width="6" stroke-linecap="round" stroke="#f0a050"></path>
+    <path d="M148,225 Q175,210 170,180" fill="none" stroke-width="6" stroke-linecap="round"></path>
+  </g>
+
+  
+  <g stroke="#2a1a10" stroke-width="2.5" stroke-linejoin="round">
+    
+    <ellipse cx="308" cy="225" rx="62" ry="45" fill="#7a4a2a"></ellipse>
+    
+    <circle cx="308" cy="165" r="40" fill="#7a4a2a"></circle>
+    
+    <circle cx="282" cy="132" r="11" fill="#7a4a2a"></circle>
+    <circle cx="334" cy="132" r="11" fill="#7a4a2a"></circle>
+    
+    <circle cx="282" cy="134" r="5" fill="#3a2010" stroke="none"></circle>
+    <circle cx="334" cy="134" r="5" fill="#3a2010" stroke="none"></circle>
+    
+    <ellipse cx="308" cy="180" rx="18" ry="13" fill="#d9b58a"></ellipse>
+    
+    <circle cx="296" cy="160" r="3" fill="#1a1612" stroke="none"></circle>
+    <circle cx="320" cy="160" r="3" fill="#1a1612" stroke="none"></circle>
+    
+    <ellipse cx="308" cy="175" rx="4" ry="3" fill="#1a1612" stroke="none"></ellipse>
+    
+    <path d="M308,178 L308,184" fill="none"></path>
+    <path d="M308,184 Q303,188 300,186" fill="none"></path>
+    <path d="M308,184 Q313,188 316,186" fill="none"></path>
+    
+    <rect x="272" y="252" width="16" height="22" rx="3" fill="#7a4a2a"></rect>
+    <rect x="328" y="252" width="16" height="22" rx="3" fill="#7a4a2a"></rect>
+    
+    <ellipse cx="308" cy="232" rx="22" ry="18" fill="#a06a40" stroke="none"></ellipse>
+  </g>
+
+  
+  <g>
+    <circle cx="200" cy="195" r="26" fill="#fff8e7" stroke="#1a1612" stroke-width="2.5"></circle>
+    <text x="200" y="204" text-anchor="middle" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700" font-size="22" fill="#1a1612" font-style="italic">or</text>
+  </g>
+
+  
+  <text x="40" y="80" font-family="Geist, system-ui, sans-serif" font-weight="700" font-size="28" fill="#c5613f" transform="rotate(-12 40 80)">?</text>
+  <text x="350" y="70" font-family="Geist, system-ui, sans-serif" font-weight="700" font-size="22" fill="#c5613f" transform="rotate(15 350 70)">?</text>
+  <text x="200" y="60" font-family="Geist, system-ui, sans-serif" font-weight="700" font-size="18" fill="#c5613f" transform="rotate(-5 200 60)">?</text>
+</svg>

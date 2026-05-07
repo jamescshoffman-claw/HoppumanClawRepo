@@ -29,7 +29,7 @@ const PROJECTS = [
     year: '2026',
     tags: ['game', 'trivia'],
     link: '/animals',
-    image: '/images/animal-game.svg',
+    image: '/images/tiger-or-bear.svg',
     internal: true,
   },
   {
