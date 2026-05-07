@@ -23,6 +23,16 @@ const PROJECTS = [
     internal: true,
   },
   {
+    id: 'p7',
+    title: 'Animal Showdown',
+    blurb: 'Guess which animal has more in the world. How long can you keep your streak?',
+    year: '2026',
+    tags: ['game', 'trivia'],
+    link: '/animals',
+    image: '/images/animal-game.svg',
+    internal: true,
+  },
+  {
     id: 'p3',
     title: 'HoppuHabit',
     blurb: 'A habit-tracking app I built — available on the App Store.',
