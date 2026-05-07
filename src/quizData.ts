@@ -12,6 +12,13 @@ export interface SmallDef {
   dy: number
 }
 
+export interface InsetDef {
+  label: string
+  projCenter: [number, number]
+  projScale: number
+  ids: number[]
+}
+
 export interface QuizConfig {
   label: string
   countries: Country[]
@@ -21,9 +28,12 @@ export interface QuizConfig {
   projScale: number
   regionLabel: string
   winMsg: string
+  inset?: InsetDef
 }
 
-export type RegionKey = 'europe' | 'asia' | 'southamerica'
+export type RegionKey = 'europe' | 'africa' | 'northamerica' | 'southamerica' | 'asia' | 'oceania'
+
+// ── Europe ────────────────────────────────────────────────────────────────────
 
 const EUROPE: Country[] = [
   { id: 8,   name: 'Albania' },
@@ -85,6 +95,133 @@ const EUROPE_SMALL: SmallDef[] = [
   { id: 336, lon: 12.45, lat: 41.90, dx:  50, dy:  22 },
 ]
 
+// ── Africa ────────────────────────────────────────────────────────────────────
+
+const AFRICA: Country[] = [
+  { id: 12,  name: 'Algeria' },
+  { id: 24,  name: 'Angola' },
+  { id: 204, name: 'Benin' },
+  { id: 72,  name: 'Botswana' },
+  { id: 854, name: 'Burkina Faso' },
+  { id: 108, name: 'Burundi' },
+  { id: 132, name: 'Cabo Verde',                  aliases: ['Cape Verde'] },
+  { id: 120, name: 'Cameroon' },
+  { id: 140, name: 'Central African Republic',    aliases: ['CAR'] },
+  { id: 148, name: 'Chad' },
+  { id: 174, name: 'Comoros' },
+  { id: 178, name: 'Republic of the Congo',       aliases: ['Congo', 'Congo-Brazzaville', 'Congo Republic'] },
+  { id: 180, name: 'DR Congo',                    aliases: ['DRC', 'Democratic Republic of Congo', 'Democratic Republic of the Congo', 'Congo (DRC)'] },
+  { id: 262, name: 'Djibouti' },
+  { id: 818, name: 'Egypt' },
+  { id: 226, name: 'Equatorial Guinea' },
+  { id: 232, name: 'Eritrea' },
+  { id: 748, name: 'Eswatini',                    aliases: ['Swaziland'] },
+  { id: 231, name: 'Ethiopia' },
+  { id: 266, name: 'Gabon' },
+  { id: 270, name: 'Gambia',                      aliases: ['The Gambia'] },
+  { id: 288, name: 'Ghana' },
+  { id: 324, name: 'Guinea' },
+  { id: 624, name: 'Guinea-Bissau' },
+  { id: 384, name: 'Ivory Coast',                 aliases: ["Côte d'Ivoire", "Cote d'Ivoire", 'Cote d Ivoire'] },
+  { id: 404, name: 'Kenya' },
+  { id: 426, name: 'Lesotho' },
+  { id: 430, name: 'Liberia' },
+  { id: 434, name: 'Libya' },
+  { id: 450, name: 'Madagascar' },
+  { id: 454, name: 'Malawi' },
+  { id: 466, name: 'Mali' },
+  { id: 478, name: 'Mauritania' },
+  { id: 480, name: 'Mauritius' },
+  { id: 504, name: 'Morocco' },
+  { id: 508, name: 'Mozambique' },
+  { id: 516, name: 'Namibia' },
+  { id: 562, name: 'Niger' },
+  { id: 566, name: 'Nigeria' },
+  { id: 646, name: 'Rwanda' },
+  { id: 678, name: 'São Tomé and Príncipe',       aliases: ['Sao Tome and Principe', 'Sao Tome'] },
+  { id: 686, name: 'Senegal' },
+  { id: 690, name: 'Seychelles' },
+  { id: 694, name: 'Sierra Leone' },
+  { id: 706, name: 'Somalia' },
+  { id: 710, name: 'South Africa' },
+  { id: 728, name: 'South Sudan' },
+  { id: 729, name: 'Sudan' },
+  { id: 834, name: 'Tanzania' },
+  { id: 768, name: 'Togo' },
+  { id: 788, name: 'Tunisia' },
+  { id: 800, name: 'Uganda' },
+  { id: 894, name: 'Zambia' },
+  { id: 716, name: 'Zimbabwe' },
+]
+
+const AFRICA_SMALL: SmallDef[] = [
+  { id: 132, lon: -24.0, lat: 16.0, dx: -40, dy: -25 }, // Cabo Verde
+  { id: 174, lon:  43.3, lat: -11.6, dx:  40, dy: -20 }, // Comoros
+  { id: 480, lon:  57.5, lat: -20.3, dx:  40, dy:  15 }, // Mauritius
+  { id: 678, lon:   6.7, lat:   0.2, dx: -40, dy: -25 }, // São Tomé and Príncipe
+  { id: 690, lon:  55.5, lat:  -4.6, dx:  40, dy: -25 }, // Seychelles
+]
+
+// ── North America ─────────────────────────────────────────────────────────────
+
+const NORTH_AMERICA: Country[] = [
+  { id: 28,  name: 'Antigua and Barbuda',           aliases: ['Antigua'] },
+  { id: 44,  name: 'Bahamas',                        aliases: ['The Bahamas'] },
+  { id: 52,  name: 'Barbados' },
+  { id: 84,  name: 'Belize' },
+  { id: 124, name: 'Canada' },
+  { id: 188, name: 'Costa Rica' },
+  { id: 192, name: 'Cuba' },
+  { id: 212, name: 'Dominica' },
+  { id: 214, name: 'Dominican Republic' },
+  { id: 222, name: 'El Salvador' },
+  { id: 308, name: 'Grenada' },
+  { id: 320, name: 'Guatemala' },
+  { id: 332, name: 'Haiti' },
+  { id: 340, name: 'Honduras' },
+  { id: 388, name: 'Jamaica' },
+  { id: 484, name: 'Mexico' },
+  { id: 558, name: 'Nicaragua' },
+  { id: 591, name: 'Panama' },
+  { id: 659, name: 'Saint Kitts and Nevis',          aliases: ['St Kitts', 'St Kitts and Nevis'] },
+  { id: 662, name: 'Saint Lucia',                    aliases: ['St Lucia'] },
+  { id: 670, name: 'Saint Vincent and the Grenadines', aliases: ['Saint Vincent', 'St Vincent'] },
+  { id: 780, name: 'Trinidad and Tobago',             aliases: ['Trinidad'] },
+  { id: 840, name: 'United States',                  aliases: ['USA', 'US', 'America', 'United States of America'] },
+]
+
+const NORTH_AMERICA_SMALL: SmallDef[] = [
+  { id: 28,  lon: -61.8, lat: 17.1, dx:  45, dy: -20 }, // Antigua and Barbuda
+  { id: 44,  lon: -77.4, lat: 24.7, dx: -45, dy: -25 }, // Bahamas
+  { id: 52,  lon: -59.6, lat: 13.2, dx:  45, dy:  10 }, // Barbados
+  { id: 212, lon: -61.4, lat: 15.4, dx:  45, dy:  10 }, // Dominica
+  { id: 308, lon: -61.7, lat: 12.1, dx:  45, dy:  20 }, // Grenada
+  { id: 388, lon: -77.3, lat: 18.1, dx: -45, dy: -20 }, // Jamaica
+  { id: 659, lon: -62.7, lat: 17.3, dx:  45, dy: -25 }, // Saint Kitts and Nevis
+  { id: 662, lon: -60.9, lat: 13.9, dx:  45, dy: -15 }, // Saint Lucia
+  { id: 670, lon: -61.2, lat: 13.2, dx:  45, dy:  20 }, // Saint Vincent and the Grenadines
+  { id: 780, lon: -61.2, lat: 10.5, dx:  45, dy:  25 }, // Trinidad and Tobago
+]
+
+// ── South America ─────────────────────────────────────────────────────────────
+
+const SOUTH_AMERICA: Country[] = [
+  { id: 32,  name: 'Argentina' },
+  { id: 68,  name: 'Bolivia' },
+  { id: 76,  name: 'Brazil',    aliases: ['Brasil'] },
+  { id: 152, name: 'Chile' },
+  { id: 170, name: 'Colombia' },
+  { id: 218, name: 'Ecuador' },
+  { id: 328, name: 'Guyana' },
+  { id: 600, name: 'Paraguay' },
+  { id: 604, name: 'Peru' },
+  { id: 740, name: 'Suriname' },
+  { id: 858, name: 'Uruguay' },
+  { id: 862, name: 'Venezuela' },
+]
+
+// ── Asia ──────────────────────────────────────────────────────────────────────
+
 const ASIA: Country[] = [
   { id: 4,   name: 'Afghanistan' },
   { id: 51,  name: 'Armenia' },
@@ -143,20 +280,37 @@ const ASIA_SMALL: SmallDef[] = [
   { id: 702, lon: 103.82, lat:  1.35, dx:  50, dy: -25 },
 ]
 
-const SOUTH_AMERICA: Country[] = [
-  { id: 32,  name: 'Argentina' },
-  { id: 68,  name: 'Bolivia' },
-  { id: 76,  name: 'Brazil',    aliases: ['Brasil'] },
-  { id: 152, name: 'Chile' },
-  { id: 170, name: 'Colombia' },
-  { id: 218, name: 'Ecuador' },
-  { id: 328, name: 'Guyana' },
-  { id: 600, name: 'Paraguay' },
-  { id: 604, name: 'Peru' },
-  { id: 740, name: 'Suriname' },
-  { id: 858, name: 'Uruguay' },
-  { id: 862, name: 'Venezuela' },
+// ── Oceania ───────────────────────────────────────────────────────────────────
+
+const OCEANIA: Country[] = [
+  { id: 36,  name: 'Australia' },
+  { id: 242, name: 'Fiji' },
+  { id: 296, name: 'Kiribati' },
+  { id: 584, name: 'Marshall Islands' },
+  { id: 583, name: 'Micronesia',       aliases: ['Federated States of Micronesia', 'FSM'] },
+  { id: 520, name: 'Nauru' },
+  { id: 554, name: 'New Zealand' },
+  { id: 585, name: 'Palau' },
+  { id: 598, name: 'Papua New Guinea', aliases: ['PNG'] },
+  { id: 882, name: 'Samoa',            aliases: ['Western Samoa'] },
+  { id: 90,  name: 'Solomon Islands' },
+  { id: 776, name: 'Tonga' },
+  { id: 798, name: 'Tuvalu' },
+  { id: 548, name: 'Vanuatu' },
 ]
+
+const OCEANIA_SMALL: SmallDef[] = [
+  { id: 296, lon: 173.0,  lat:   1.3, dx:  40, dy: -30 }, // Kiribati (Gilbert Islands)
+  { id: 584, lon: 168.0,  lat:   7.1, dx:  40, dy: -25 }, // Marshall Islands
+  { id: 583, lon: 158.2,  lat:   6.9, dx:  40, dy: -30 }, // Micronesia
+  { id: 520, lon: 166.9,  lat:  -0.5, dx:  40, dy: -25 }, // Nauru
+  { id: 585, lon: 134.5,  lat:   7.5, dx: -40, dy: -25 }, // Palau
+  { id: 882, lon: -172.1, lat: -13.8, dx:  40, dy: -25 }, // Samoa
+  { id: 776, lon: -175.2, lat: -21.2, dx:  40, dy:  20 }, // Tonga
+  { id: 798, lon: 179.2,  lat:  -8.5, dx:  40, dy:  20 }, // Tuvalu
+]
+
+// ── Configs ───────────────────────────────────────────────────────────────────
 
 export const CONFIGS: Record<RegionKey, QuizConfig> = {
   europe: {
@@ -169,15 +323,31 @@ export const CONFIGS: Record<RegionKey, QuizConfig> = {
     regionLabel: 'European',
     winMsg: '🎉 You named all 47 countries of Europe!',
   },
-  asia: {
-    label: 'Asia',
-    countries: ASIA,
-    smallDef: ASIA_SMALL,
-    total: 47,
-    projCenter: [88, 30],
-    projScale: 280,
-    regionLabel: 'Asian',
-    winMsg: '🎉 You named all 47 countries of Asia!',
+  africa: {
+    label: 'Africa',
+    countries: AFRICA,
+    smallDef: AFRICA_SMALL,
+    total: 54,
+    projCenter: [20, 2],
+    projScale: 380,
+    regionLabel: 'African',
+    winMsg: '🎉 You named all 54 countries of Africa!',
+  },
+  northamerica: {
+    label: 'North America',
+    countries: NORTH_AMERICA,
+    smallDef: NORTH_AMERICA_SMALL,
+    total: 23,
+    projCenter: [-90, 35],
+    projScale: 340,
+    regionLabel: 'North American',
+    winMsg: '🎉 You named all 23 countries of North America!',
+    inset: {
+      label: 'Caribbean',
+      projCenter: [-72, 17],
+      projScale: 900,
+      ids: [28, 44, 52, 192, 212, 214, 308, 332, 388, 659, 662, 670, 780],
+    },
   },
   southamerica: {
     label: 'South America',
@@ -188,5 +358,25 @@ export const CONFIGS: Record<RegionKey, QuizConfig> = {
     projScale: 400,
     regionLabel: 'South American',
     winMsg: '🎉 You named all 12 countries of South America!',
+  },
+  asia: {
+    label: 'Asia',
+    countries: ASIA,
+    smallDef: ASIA_SMALL,
+    total: 47,
+    projCenter: [88, 30],
+    projScale: 360,
+    regionLabel: 'Asian',
+    winMsg: '🎉 You named all 47 countries of Asia!',
+  },
+  oceania: {
+    label: 'Oceania',
+    countries: OCEANIA,
+    smallDef: OCEANIA_SMALL,
+    total: 14,
+    projCenter: [155, -20],
+    projScale: 350,
+    regionLabel: 'Oceanian',
+    winMsg: '🎉 You named all 14 countries of Oceania!',
   },
 }

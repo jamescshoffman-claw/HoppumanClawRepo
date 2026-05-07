@@ -7,7 +7,8 @@ const W = 960
 const H = 600
 const TIMER_SECONDS = 600
 const safeId = (id: number) => String(id).replace('-', 'n')
-const cpId = (id: number) => `cp-${safeId(id)}`
+const cpId  = (id: number) => `cp-${safeId(id)}`
+const icpId = (id: number) => `icp-${safeId(id)}`
 const formatTime = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
 // ── Inner quiz (re-mounts on every tab switch or restart) ─────────────────
@@ -30,15 +31,16 @@ function Quiz({ config, onRestart }: QuizProps) {
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS)
   const [copied, setCopied] = useState(false)
 
-  const svgRef = useRef<SVGSVGElement>(null)
+  const svgRef   = useRef<SVGSVGElement>(null)
+  const insetRef = useRef<SVGSVGElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const foundSetRef = useRef(new Set<number>())
-  const lookupRef = useRef(new Map<string, Country>())
-  const gameOverRef = useRef(false)
+  const foundSetRef  = useRef(new Set<number>())
+  const lookupRef    = useRef(new Map<string, Country>())
+  const gameOverRef  = useRef(false)
   const quizVersionRef = useRef(0)
-  const fbTimerRef = useRef<ReturnType<typeof setTimeout>>()
+  const fbTimerRef   = useRef<ReturnType<typeof setTimeout>>()
   const markFoundRef = useRef<(c: Country) => void>(() => {})
-  const giveUpRef = useRef<() => void>(() => {})
+  const giveUpRef    = useRef<() => void>(() => {})
 
   // ── Timer ─────────────────────────────────────────────────────────────────
 
@@ -48,12 +50,8 @@ function Quiz({ config, onRestart }: QuizProps) {
     return () => clearInterval(id)
   }, [started, gameOver])
 
-  // Auto-fail when time hits 0
   useEffect(() => {
-    if (timeLeft === 0 && started && !gameOverRef.current) {
-      giveUpRef.current()
-    }
-  // giveUpRef is a stable ref — intentionally excluded
+    if (timeLeft === 0 && started && !gameOverRef.current) giveUpRef.current()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft, started])
 
@@ -61,9 +59,7 @@ function Quiz({ config, onRestart }: QuizProps) {
 
   const handleShare = () => {
     const elapsed = TIMER_SECONDS - timeLeft
-    const timeStr = timeLeft === 0
-      ? 'Time ran out!'
-      : `Finished in ${formatTime(elapsed)}`
+    const timeStr = timeLeft === 0 ? 'Time ran out!' : `Finished in ${formatTime(elapsed)}`
     const resultLine = won
       ? `🎉 All ${config.total}/${config.total} countries found!`
       : `✅ ${score}/${config.total} countries found`
@@ -76,7 +72,6 @@ function Quiz({ config, onRestart }: QuizProps) {
   // ── D3 map setup ──────────────────────────────────────────────────────────
 
   useEffect(() => {
-    // Build name → country lookup
     const lk = new Map<string, Country>()
     config.countries.forEach(c => {
       lk.set(c.name.toLowerCase(), c)
@@ -95,6 +90,7 @@ function Quiz({ config, onRestart }: QuizProps) {
       fbTimerRef.current = setTimeout(() => setFeedback(null), 1800)
     }
 
+    // ── Main map ──────────────────────────────────────────────────────────
     const svg = d3.select(svgEl)
     svg.on('.zoom', null)
     svg.selectAll('*').remove()
@@ -106,7 +102,6 @@ function Quiz({ config, onRestart }: QuizProps) {
       .translate([W / 2, H / 2])
 
     const geoPath = d3.geoPath().projection(proj)
-
     const zoomG = svg.append<SVGGElement>('g')
 
     zoomG.append('path')
@@ -114,12 +109,10 @@ function Quiz({ config, onRestart }: QuizProps) {
       .datum(d3.geoGraticule()() as any)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .attr('d', geoPath as any)
-      .attr('fill', 'none')
-      .attr('stroke', '#112236')
-      .attr('stroke-width', 0.4)
+      .attr('fill', 'none').attr('stroke', '#112236').attr('stroke-width', 0.4)
 
-    const countriesG = zoomG.append<SVGGElement>('g')
-    const calloutG   = zoomG.append<SVGGElement>('g')
+    const countriesG    = zoomG.append<SVGGElement>('g')
+    const calloutG      = zoomG.append<SVGGElement>('g')
     const foundLabelsG  = zoomG.append<SVGGElement>('g')
     const missedLabelsG = zoomG.append<SVGGElement>('g')
 
@@ -129,6 +122,36 @@ function Quiz({ config, onRestart }: QuizProps) {
     svg.call(zoomBehavior)
     svg.call(zoomBehavior.transform, d3.zoomIdentity)
 
+    // ── Inset map ─────────────────────────────────────────────────────────
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let insetCountriesG: d3.Selection<SVGGElement, unknown, null, undefined> | null = null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let insetGeoPath: d3.GeoPath | null = null
+
+    if (config.inset && insetRef.current) {
+      const insetSvg = d3.select(insetRef.current)
+      insetSvg.selectAll('*').remove()
+      insetSvg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35')
+
+      const insetProj = d3.geoMercator()
+        .center(config.inset.projCenter)
+        .scale(config.inset.projScale)
+        .translate([W / 2, H / 2])
+
+      insetGeoPath = d3.geoPath().projection(insetProj)
+      const insetG = insetSvg.append<SVGGElement>('g')
+
+      insetG.append('path')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .datum(d3.geoGraticule()() as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .attr('d', insetGeoPath as any)
+        .attr('fill', 'none').attr('stroke', '#112236').attr('stroke-width', 0.4)
+
+      insetCountriesG = insetG.append<SVGGElement>('g')
+    }
+
+    // ── Small-country callout indicators ──────────────────────────────────
     const smallIds = new Set(config.smallDef.map(s => s.id))
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const featureMap = new Map<number, any>()
@@ -139,11 +162,15 @@ function Quiz({ config, onRestart }: QuizProps) {
       g.append('line')
         .attr('x1', px).attr('y1', py)
         .attr('x2', px + sc.dx).attr('y2', py + sc.dy)
-        .attr('stroke', '#fff').attr('stroke-width', 2)
+        .attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
       g.append('circle')
-        .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#fff')
+        .attr('cx', px).attr('cy', py).attr('r', 7)
+        .attr('fill', '#2d4a6b').attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
+      g.append('circle')
+        .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#8ba7c2')
     })
 
+    // ── Helpers ───────────────────────────────────────────────────────────
     function addMapLabel(
       country: Country,
       group: d3.Selection<SVGGElement, unknown, null, undefined>,
@@ -155,7 +182,10 @@ function Quiz({ config, onRestart }: QuizProps) {
         const [px, py] = proj([sc.lon, sc.lat]) ?? [0, 0]
         const g = d3.select<SVGGElement, unknown>(`#callout-${safeId(country.id)}`)
         g.select('line').attr('stroke', color)
-        g.select('circle').attr('fill', color)
+        g.selectAll('circle')
+          .attr('stroke', color)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .attr('fill', (_d: unknown, i: number) => i === 0 ? '#0c1f35' : color)
         g.append('text')
           .attr('x', px + sc.dx).attr('y', py + sc.dy)
           .attr('text-anchor', sc.dx > 0 ? 'start' : 'end')
@@ -190,6 +220,7 @@ function Quiz({ config, onRestart }: QuizProps) {
       foundSetRef.current.add(country.id)
       const n = foundSetRef.current.size
       d3.select(`#${cpId(country.id)}`).classed('country-found', true)
+      d3.select(`#${icpId(country.id)}`).classed('country-found', true)
       addMapLabel(country, foundLabelsG, '#4ade80')
       setScore(n)
       setFoundNames(prev => [...prev, country.name].sort((a, b) => a.localeCompare(b)))
@@ -210,6 +241,7 @@ function Quiz({ config, onRestart }: QuizProps) {
         .sort((a, b) => a.name.localeCompare(b.name))
       missed.forEach(c => {
         d3.select(`#${cpId(c.id)}`).classed('country-missed', true)
+        d3.select(`#${icpId(c.id)}`).classed('country-missed', true)
         addMapLabel(c, missedLabelsG, '#fff')
       })
       setMissedNames(missed.map(c => c.name))
@@ -224,6 +256,8 @@ function Quiz({ config, onRestart }: QuizProps) {
         if (quizVersionRef.current !== myVersion || !world) return
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const features = (topojson.feature(world, world.objects.countries) as any).features as any[]
+
+        // Main map paths
         const regionFeatures = features.filter(f => idSet.has(+f.id))
         regionFeatures.forEach(f => featureMap.set(+f.id, f))
         countriesG
@@ -234,13 +268,26 @@ function Quiz({ config, onRestart }: QuizProps) {
           .attr('id', (d: unknown) => cpId(+(d as { id: string }).id))
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .attr('d', geoPath as any)
+
+        // Inset map paths
+        if (config.inset && insetCountriesG && insetGeoPath) {
+          const insetIdSet = new Set(config.inset.ids)
+          const insetFeatures = features.filter(f => insetIdSet.has(+f.id))
+          insetCountriesG
+            .selectAll('path')
+            .data(insetFeatures)
+            .join('path')
+            .attr('class', 'country-path')
+            .attr('id', (d: unknown) => icpId(+(d as { id: string }).id))
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .attr('d', insetGeoPath as any)
+        }
       })
-      .catch(() => {/* network error — map just won't render */})
+      .catch(() => {/* network error */})
 
     const handleWheel = (e: WheelEvent) => e.preventDefault()
     svgEl.addEventListener('wheel', handleWheel, { passive: false })
     return () => svgEl.removeEventListener('wheel', handleWheel)
-  // config is stable per mount (component re-mounts on tab/reset change)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -349,7 +396,6 @@ function Quiz({ config, onRestart }: QuizProps) {
 
       {won && <div className="quiz-win-banner">{config.winMsg}</div>}
 
-      {/* Share button */}
       {gameOver && (
         <button
           className={`quiz-btn-share${copied ? ' quiz-btn-share--copied' : ''}`}
@@ -359,12 +405,20 @@ function Quiz({ config, onRestart }: QuizProps) {
         </button>
       )}
 
-      {/* Map */}
-      <div className="quiz-map-wrap">
-        <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} />
+      {/* Maps */}
+      <div className="quiz-maps-area">
+        <div className="quiz-map-wrap">
+          <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} />
+        </div>
+        {config.inset && (
+          <div className="quiz-map-wrap quiz-map-inset">
+            <span className="quiz-inset-label">{config.inset.label}</span>
+            <svg ref={insetRef} viewBox={`0 0 ${W} ${H}`} />
+          </div>
+        )}
       </div>
 
-      {/* Found tags */}
+      {/* Found / missed tags (hidden in fixed layout) */}
       {foundNames.length > 0 && (
         <div className="quiz-tags-section">
           <h3 className="quiz-tags-title">Found ({foundNames.length})</h3>
@@ -373,8 +427,6 @@ function Quiz({ config, onRestart }: QuizProps) {
           </div>
         </div>
       )}
-
-      {/* Missed tags */}
       {missedNames.length > 0 && (
         <div className="quiz-tags-section" style={{ marginTop: 16 }}>
           <h3 className="quiz-tags-title">Missed ({missedNames.length})</h3>
@@ -395,7 +447,11 @@ export default function CountriesQuiz() {
 
   useEffect(() => {
     document.title = 'Countries Quiz'
-    return () => { document.title = 'James' }
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.title = 'James'
+      document.body.style.overflow = ''
+    }
   }, [])
 
   const switchTab = (r: RegionKey) => {
