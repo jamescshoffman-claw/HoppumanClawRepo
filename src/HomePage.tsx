@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const ACCENT = '#c5613f'
 
@@ -163,9 +163,14 @@ function ExpandedPanel({ item, onClose }: { item: Item; onClose: () => void }) {
   const p = item as Record<string, unknown>
   const link = item.link as string
   const internal = ('internal' in item && item.internal) as boolean
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [])
 
   return (
-    <div className="panel">
+    <div className="panel" ref={panelRef}>
       <div className="panel__inner">
         <div className="panel__media"><Thumb item={item} /></div>
         <div className="panel__body">
