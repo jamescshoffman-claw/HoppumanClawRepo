@@ -182,9 +182,10 @@ export default function BalanceGame() {
     objects: [] as Obj[],
     spawnTimer: 3,
   })
-  const rafRef          = useRef<number>()
-  const lastMsRef       = useRef<number>()
-  const ytPlayerRef = useRef<any>(null)
+  const rafRef       = useRef<number>()
+  const lastMsRef    = useRef<number>()
+  const ytPlayerRef  = useRef<any>(null)
+  const ytWrapperRef = useRef<HTMLDivElement>(null)
 
   const [phase,     setPhase]     = useState<Phase>('idle')
   const [elapsed,   setElapsed]   = useState(0)
@@ -194,8 +195,14 @@ export default function BalanceGame() {
 
   // ── YouTube background music ───────────────────────────────────────────
   useEffect(() => {
+    if (!ytWrapperRef.current) return
+    // Create a child element imperatively so React's reconciler never touches
+    // the node YouTube replaces with its iframe (avoids production breakage).
+    const playerEl = document.createElement('div')
+    ytWrapperRef.current.appendChild(playerEl)
     const init = () => {
-      ytPlayerRef.current = new (window as any).YT.Player('yt-player', {
+      ytPlayerRef.current = new (window as any).YT.Player(playerEl, {
+        width: '1', height: '1',
         videoId: 'y5T5YZ6mYLA',
         playerVars: { autoplay: 0, loop: 1, playlist: 'y5T5YZ6mYLA', controls: 0 },
       })
@@ -211,7 +218,7 @@ export default function BalanceGame() {
         document.head.appendChild(s)
       }
     }
-    return () => { ytPlayerRef.current?.stopVideo?.() }
+    return () => { ytPlayerRef.current?.stopVideo?.(); ytPlayerRef.current?.destroy?.() }
   }, [])
 
   // ── Game loop ──────────────────────────────────────────────────────────
@@ -321,25 +328,27 @@ export default function BalanceGame() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ── Start game (shared by keyboard + touch) ───────────────────────────
+  const startGame = () => {
+    if (phaseRef.current !== 'idle') return
+    const g = gameRef.current
+    g.angle = 0; g.omega = 0
+    g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
+    g.startMs = Date.now(); g.elapsed = 0
+    g.objects = []; g.spawnTimer = 2
+    lastMsRef.current = undefined
+    phaseRef.current = 'playing'
+    setPhase('playing'); setElapsed(0)
+    ytPlayerRef.current?.seekTo?.(0, true)
+    ytPlayerRef.current?.playVideo?.()
+    setMusicOn(true)
+  }
+
   // ── Keyboard ───────────────────────────────────────────────────────────
   useEffect(() => {
-    const start = () => {
-      if (phaseRef.current !== 'idle') return
-      const g = gameRef.current
-      g.angle = 0; g.omega = 0
-      g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
-      g.startMs = Date.now(); g.elapsed = 0
-      g.objects = []; g.spawnTimer = 2
-      lastMsRef.current = undefined
-      phaseRef.current = 'playing'
-      setPhase('playing'); setElapsed(0)
-      ytPlayerRef.current?.seekTo?.(0, true)
-      ytPlayerRef.current?.playVideo?.()
-      setMusicOn(true)
-    }
     const onDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); keysRef.current.left  = true;  start() }
-      if (e.key === 'ArrowRight') { e.preventDefault(); keysRef.current.right = true;  start() }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); keysRef.current.left  = true;  startGame() }
+      if (e.key === 'ArrowRight') { e.preventDefault(); keysRef.current.right = true;  startGame() }
     }
     const onUp = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  keysRef.current.left  = false
@@ -348,6 +357,7 @@ export default function BalanceGame() {
     window.addEventListener('keydown', onDown)
     window.addEventListener('keyup',   onUp)
     return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -384,8 +394,6 @@ export default function BalanceGame() {
     <div className="bl-page">
       <Link to="/" className="ag-back">← James</Link>
       <div className="bl-header">
-        <h1 className="bl-title">Balance</h1>
-        {phase === 'playing' && <div className="bl-live-time">{elapsed.toFixed(2)}s</div>}
         <button className="bl-music" onClick={toggleMusic} title={musicOn ? 'Mute music' : 'Unmute music'}>
           {musicOn ? '♪' : '♪̶'}
         </button>
@@ -410,10 +418,22 @@ export default function BalanceGame() {
         )}
       </div>
 
-      <p className="bl-hint">Hold  <kbd>←</kbd>  or  <kbd>→</kbd>  to tilt the plank</p>
+      <div className="bl-controls">
+        <button
+          className="bl-ctrl-btn"
+          onPointerDown={() => { keysRef.current.left = true;  startGame() }}
+          onPointerUp={() => { keysRef.current.left = false }}
+          onPointerLeave={() => { keysRef.current.left = false }}
+        >←</button>
+        <button
+          className="bl-ctrl-btn"
+          onPointerDown={() => { keysRef.current.right = true; startGame() }}
+          onPointerUp={() => { keysRef.current.right = false }}
+          onPointerLeave={() => { keysRef.current.right = false }}
+        >→</button>
+      </div>
 
-      {/* Hidden YouTube player — starts on first key press */}
-      <div id="yt-player" style={{ position: 'fixed', bottom: 0, right: 0, width: 1, height: 1, opacity: 0, pointerEvents: 'none' }} />
+      <div ref={ytWrapperRef} style={{ position: 'fixed', bottom: 0, right: 0, width: 1, height: 1, overflow: 'hidden', pointerEvents: 'none' }} />
     </div>
   )
 }
