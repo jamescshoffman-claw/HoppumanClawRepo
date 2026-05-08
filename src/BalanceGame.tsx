@@ -37,10 +37,12 @@ const OBJ_TYPES = [
   { radius:  7, mass: 0.4, light: '#ffe070', mid: '#c09020', dark: '#706010' },
 ]
 
-function spawnObj(): Obj {
+function spawnObj(angle: number): Obj {
   const t = OBJ_TYPES[Math.floor(Math.random() * OBJ_TYPES.length)]
+  const s = (Math.random() * 2 - 1) * (PLANK_LEN / 2 - t.radius - 10)
+  const x = PLANK_CX + s * Math.cos(angle)
   return {
-    x: 60 + Math.random() * (CW - 120),
+    x,
     y: -t.radius - 5,
     vy: 60 + Math.random() * 80,
     ...t,
@@ -238,7 +240,7 @@ export default function BalanceGame() {
           g.spawnTimer -= dt
           const active = g.objects.filter(o => !o.gone).length
           if (g.spawnTimer <= 0 && active < 5) {
-            g.objects.push(spawnObj())
+            g.objects.push(spawnObj(g.angle))
             g.spawnTimer = 1.67 + Math.random() * 1.33
           }
 
