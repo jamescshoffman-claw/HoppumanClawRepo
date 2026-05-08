@@ -999,6 +999,9 @@ a { color: inherit; }
   padding: 12px 16px;
   box-sizing: border-box;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .bl-header {
@@ -1024,9 +1027,11 @@ a { color: inherit; }
   font-weight: 700;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   touch-action: none;
-  transition: background 0.1s, transform 0.08s;
   -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 .bl-ctrl-btn:active {
@@ -1046,6 +1051,9 @@ a { color: inherit; }
 
 .bl-canvas {
   display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 
 .bl-overlay {
