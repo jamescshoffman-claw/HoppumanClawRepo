@@ -1086,6 +1086,22 @@ a { color: inherit; }
   color: #8a7d6e;
 }
 
+.bl-music {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.55);
+  font-size: 1.1rem;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-left: auto;
+}
+.bl-music:hover {
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.4);
+}
+
 .bl-hint kbd {
   display: inline-block;
   background: #1a1209;

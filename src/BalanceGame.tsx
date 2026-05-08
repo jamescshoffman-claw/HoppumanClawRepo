@@ -172,23 +172,48 @@ function drawScene(
 
 // ── Component ──────────────────────────────────────────────────────────────
 export default function BalanceGame() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const phaseRef  = useRef<Phase>('idle')
-  const keysRef   = useRef({ left: false, right: false })
-  const gameRef   = useRef({
+  const canvasRef       = useRef<HTMLCanvasElement>(null)
+  const phaseRef        = useRef<Phase>('idle')
+  const keysRef         = useRef({ left: false, right: false })
+  const gameRef         = useRef({
     angle: 0, omega: 0,
     ballPos: 0, ballVel: 0,
     startMs: 0, elapsed: 0,
     objects: [] as Obj[],
     spawnTimer: 3,
   })
-  const rafRef    = useRef<number>()
-  const lastMsRef = useRef<number>()
+  const rafRef          = useRef<number>()
+  const lastMsRef       = useRef<number>()
+  const ytPlayerRef     = useRef<any>(null)
+  const musicStartedRef = useRef(false)
 
   const [phase,     setPhase]     = useState<Phase>('idle')
   const [elapsed,   setElapsed]   = useState(0)
   const [finalTime, setFinalTime] = useState(0)
   const [copied,    setCopied]    = useState(false)
+  const [musicOn,   setMusicOn]   = useState(true)
+
+  // ── YouTube background music ───────────────────────────────────────────
+  useEffect(() => {
+    const init = () => {
+      ytPlayerRef.current = new (window as any).YT.Player('yt-player', {
+        videoId: 'y5T5YZ6mYLA',
+        playerVars: { autoplay: 0, loop: 1, playlist: 'y5T5YZ6mYLA', controls: 0 },
+      })
+    }
+    if ((window as any).YT?.Player) {
+      init()
+    } else {
+      (window as any).onYouTubeIframeAPIReady = init
+      if (!document.getElementById('yt-api-script')) {
+        const s = document.createElement('script')
+        s.id = 'yt-api-script'
+        s.src = 'https://www.youtube.com/iframe_api'
+        document.head.appendChild(s)
+      }
+    }
+    return () => { ytPlayerRef.current?.stopVideo?.() }
+  }, [])
 
   // ── Game loop ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -306,6 +331,10 @@ export default function BalanceGame() {
       lastMsRef.current = undefined
       phaseRef.current = 'playing'
       setPhase('playing'); setElapsed(0)
+      if (!musicStartedRef.current) {
+        ytPlayerRef.current?.playVideo?.()
+        musicStartedRef.current = true
+      }
     }
     const onDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  { e.preventDefault(); keysRef.current.left  = true;  start() }
@@ -335,6 +364,13 @@ export default function BalanceGame() {
     setPhase('idle'); setElapsed(0); setCopied(false)
   }
 
+  const toggleMusic = () => {
+    const p = ytPlayerRef.current
+    if (!p) return
+    if (musicOn) { p.pauseVideo?.(); setMusicOn(false) }
+    else         { p.playVideo?.();  setMusicOn(true)  }
+  }
+
   const handleShare = () => {
     const t = finalTime.toFixed(2)
     const text = `⚖️ I balanced a ball for ${t} seconds!\nCan you beat me? whatisjamesdoing.com/balance`
@@ -349,6 +385,9 @@ export default function BalanceGame() {
       <div className="bl-header">
         <h1 className="bl-title">Balance</h1>
         {phase === 'playing' && <div className="bl-live-time">{elapsed.toFixed(2)}s</div>}
+        <button className="bl-music" onClick={toggleMusic} title={musicOn ? 'Mute music' : 'Unmute music'}>
+          {musicOn ? '♪' : '♪̶'}
+        </button>
       </div>
 
       <div className="bl-canvas-wrap">
@@ -371,6 +410,9 @@ export default function BalanceGame() {
       </div>
 
       <p className="bl-hint">Hold  <kbd>←</kbd>  or  <kbd>→</kbd>  to tilt the plank</p>
+
+      {/* Hidden YouTube player — starts on first key press */}
+      <div id="yt-player" style={{ position: 'fixed', bottom: 0, right: 0, width: 1, height: 1, opacity: 0, pointerEvents: 'none' }} />
     </div>
   )
 }
