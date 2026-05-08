@@ -133,13 +133,15 @@ function drawScene(
     drawBall(ctx, ox, oy, o.radius, o.light, o.mid, o.dark)
   }
 
-  // Main ball — offset from plank TOP surface, not center line
+  // Main ball — sits on TOP surface of plank (same convention as landed objects)
+  // canvas rotation: world = (cx + x·cosA - y·sinA, cy + x·sinA + y·cosA)
+  // top surface y_local = -PLANK_H/2 → normal direction is +sinA in x, -cosA in y
   const SURFACE = PLANK_H / 2
-  const bx = cx + ballPos * cosA - (BALL_R + SURFACE) * sinA
-  const by = cy + ballPos * sinA - (BALL_R + SURFACE) * cosA
+  const bx = cx + ballPos * cosA + (SURFACE + BALL_R) * sinA
+  const by = cy + ballPos * sinA - (SURFACE + BALL_R) * cosA
   // contact shadow at plank top surface
   ctx.save()
-  ctx.translate(cx + ballPos * cosA - SURFACE * sinA, cy + ballPos * sinA - SURFACE * cosA)
+  ctx.translate(cx + ballPos * cosA + SURFACE * sinA, cy + ballPos * sinA - SURFACE * cosA)
   ctx.rotate(angle)
   ctx.scale(1, 0.22)
   ctx.beginPath(); ctx.arc(0, 0, BALL_R * .85, 0, Math.PI * 2)
