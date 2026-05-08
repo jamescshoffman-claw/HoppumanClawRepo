@@ -239,7 +239,7 @@ export default function BalanceGame() {
           const active = g.objects.filter(o => !o.gone).length
           if (g.spawnTimer <= 0 && active < 5) {
             g.objects.push(spawnObj())
-            g.spawnTimer = 2.5 + Math.random() * 2
+            g.spawnTimer = 1.67 + Math.random() * 1.33
           }
 
           // ── Object physics ───────────────────────────────────────────
@@ -295,7 +295,7 @@ export default function BalanceGame() {
       g.angle = 0; g.omega = 0
       g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
       g.startMs = Date.now(); g.elapsed = 0
-      g.objects = []; g.spawnTimer = 3
+      g.objects = []; g.spawnTimer = 2
       lastMsRef.current = undefined
       phaseRef.current = 'playing'
       setPhase('playing'); setElapsed(0)
