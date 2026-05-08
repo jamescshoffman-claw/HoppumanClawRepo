@@ -1041,13 +1041,11 @@ a { color: inherit; }
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  flex-shrink: 0;
 }
 
-/* Canvas scales via CSS — internal buffer stays at 600×400 (×DPR) */
 .bl-canvas {
   display: block;
-  width: 100%;
-  aspect-ratio: 600 / 400;
 }
 
 .bl-overlay {

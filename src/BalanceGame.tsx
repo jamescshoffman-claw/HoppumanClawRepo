@@ -186,10 +186,12 @@ export default function BalanceGame() {
   const lastMsRef    = useRef<number>()
   const ytPlayerRef  = useRef<any>(null)
   const ytWrapperRef = useRef<HTMLDivElement>(null)
+  const wrapRef      = useRef<HTMLDivElement>(null)
 
   const [phase,     setPhase]     = useState<Phase>('idle')
   const [elapsed,   setElapsed]   = useState(0)
   const [finalTime, setFinalTime] = useState(0)
+  const [scale,     setScale]     = useState(1)
   const [copied,    setCopied]    = useState(false)
   const [musicOn,   setMusicOn]   = useState(true)
 
@@ -360,6 +362,16 @@ export default function BalanceGame() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ── Responsive scale ──────────────────────────────────────────────────
+  useEffect(() => {
+    if (!wrapRef.current) return
+    const ro = new ResizeObserver(([entry]) => {
+      setScale(Math.min(1, entry.contentRect.width / CW))
+    })
+    ro.observe(wrapRef.current)
+    return () => ro.disconnect()
+  }, [])
+
   useEffect(() => {
     document.title = 'Balance'
     return () => { document.title = 'James' }
@@ -399,8 +411,12 @@ export default function BalanceGame() {
         </button>
       </div>
 
-      <div className="bl-canvas-wrap">
-        <canvas ref={canvasRef} className="bl-canvas" />
+      <div className="bl-canvas-wrap" ref={wrapRef} style={{ height: CH * scale }}>
+        <canvas
+          ref={canvasRef}
+          className="bl-canvas"
+          style={{ width: CW, height: CH, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+        />
         {phase === 'gameover' && (
           <div className="bl-overlay">
             <div className="bl-overlay__inner">
