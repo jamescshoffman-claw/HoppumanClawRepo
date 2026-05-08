@@ -184,8 +184,7 @@ export default function BalanceGame() {
   })
   const rafRef          = useRef<number>()
   const lastMsRef       = useRef<number>()
-  const ytPlayerRef     = useRef<any>(null)
-  const musicStartedRef = useRef(false)
+  const ytPlayerRef = useRef<any>(null)
 
   const [phase,     setPhase]     = useState<Phase>('idle')
   const [elapsed,   setElapsed]   = useState(0)
@@ -229,6 +228,9 @@ export default function BalanceGame() {
       phaseRef.current = 'gameover'
       setPhase('gameover')
       setFinalTime(gameRef.current.elapsed)
+      ytPlayerRef.current?.seekTo?.(0, true)
+      ytPlayerRef.current?.pauseVideo?.()
+      setMusicOn(false)
     }
 
     function loop(ms: number) {
@@ -331,10 +333,9 @@ export default function BalanceGame() {
       lastMsRef.current = undefined
       phaseRef.current = 'playing'
       setPhase('playing'); setElapsed(0)
-      if (!musicStartedRef.current) {
-        ytPlayerRef.current?.playVideo?.()
-        musicStartedRef.current = true
-      }
+      ytPlayerRef.current?.seekTo?.(0, true)
+      ytPlayerRef.current?.playVideo?.()
+      setMusicOn(true)
     }
     const onDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  { e.preventDefault(); keysRef.current.left  = true;  start() }
