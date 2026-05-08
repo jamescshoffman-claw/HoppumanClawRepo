@@ -219,7 +219,7 @@ export default function BalanceGame() {
         // Object torques on plank
         for (const o of g.objects) {
           if (!o.landed || o.gone) continue
-          alpha -= (o.mass * GRAVITY * o.plankPos * Math.cos(g.angle)) / I_PLANK
+          alpha += (o.mass * GRAVITY * o.plankPos * Math.cos(g.angle)) / I_PLANK
         }
 
         g.omega += alpha * dt
