@@ -23,6 +23,16 @@ const PROJECTS = [
     internal: true,
   },
   {
+    id: 'p8',
+    title: 'Balance',
+    blurb: 'Use arrow keys to keep a ball balanced on a tilting plank. How long can you last?',
+    year: '2026',
+    tags: ['game', 'physics'],
+    link: '/balance',
+    image: '/images/balance-game.svg',
+    internal: true,
+  },
+  {
     id: 'p7',
     title: 'Animal Showdown',
     blurb: 'Guess which animal has more in the world. How long can you keep your streak?',
@@ -128,7 +138,7 @@ type Item = (typeof PROJECTS)[number] | (typeof HOBBIES)[number]
 // ── Thumbnail ─────────────────────────────────────────────────────────────
 
 function Thumb({ item }: { item: Item }) {
-  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune/.test(item.image)
+  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune|balance-game/.test(item.image)
   return (
     <img
       src={item.image}

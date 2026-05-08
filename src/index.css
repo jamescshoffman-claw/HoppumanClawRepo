@@ -985,3 +985,113 @@ a { color: inherit; }
 
 .ag-btn--restart  { background: #e5ddd0; color: #1a1209; }
 .ag-btn--restart:hover { background: #d4c9b8; }
+
+/* ── Balance Game ─────────────────────────────────────────────────────────── */
+
+.bl-page {
+  min-height: 100dvh;
+  background: #f5f0e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 48px;
+  box-sizing: border-box;
+}
+
+.bl-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.bl-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1a1209;
+  margin: 0;
+}
+
+.bl-live-time {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5a4f42;
+  font-variant-numeric: tabular-nums;
+}
+
+.bl-canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+}
+
+.bl-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+}
+
+.bl-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 15, 24, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.bl-overlay__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.bl-overlay__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.bl-overlay__time {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.bl-overlay__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.bl-overlay__actions .ag-btn {
+  min-width: 130px;
+  padding: 11px 0;
+}
+
+.bl-hint {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #8a7d6e;
+}
+
+.bl-hint kbd {
+  display: inline-block;
+  background: #1a1209;
+  color: #f5f0e6;
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-family: inherit;
+  font-size: 0.85rem;
+}

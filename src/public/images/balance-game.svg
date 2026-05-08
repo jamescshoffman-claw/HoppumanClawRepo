@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111c2d"/>
+      <stop offset="100%" stop-color="#090f18"/>
+    </linearGradient>
+    <radialGradient id="ball" cx="38%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ff9966"/>
+      <stop offset="50%" stop-color="#e04515"/>
+      <stop offset="100%" stop-color="#6a1808"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+
+  <!-- Plank tilted slightly -->
+  <g transform="translate(200,220) rotate(-8)">
+    <rect x="-130" y="-8" width="260" height="16" rx="8" fill="#c48a48" stroke="#7a5028" stroke-width="1.5"/>
+    <rect x="-128" y="-7" width="256" height="7" rx="6" fill="rgba(255,220,140,0.2)"/>
+  </g>
+
+  <!-- Pivot -->
+  <polygon points="200,228 190,248 210,248" fill="#3a2d1e" stroke="#5a4428" stroke-width="2"/>
+
+  <!-- Ball sitting on plank (offset left due to tilt) -->
+  <circle cx="165" cy="183" r="30" fill="url(#ball)"/>
+  <circle cx="155" cy="172" r="9" fill="rgba(255,255,255,0.4)"/>
+</svg>
