@@ -400,7 +400,7 @@ export default function BalanceGame() {
       </div>
 
       <div className="bl-canvas-wrap">
-        <canvas ref={canvasRef} style={{ width: CW, height: CH }} className="bl-canvas" />
+        <canvas ref={canvasRef} className="bl-canvas" />
         {phase === 'gameover' && (
           <div className="bl-overlay">
             <div className="bl-overlay__inner">
