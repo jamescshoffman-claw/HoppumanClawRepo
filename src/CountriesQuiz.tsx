@@ -100,8 +100,11 @@ function Quiz({ config, onRestart }: QuizProps) {
     svg.selectAll('*').remove()
     svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0c1f35')
 
+    // Use rotate for longitude centering so antimeridian-crossing regions
+    // (e.g. Oceania: Samoa/Tonga at -172°/-175°) project correctly.
     const proj = d3.geoMercator()
-      .center(config.projCenter)
+      .rotate([-config.projCenter[0], 0])
+      .center([0, config.projCenter[1]])
       .scale(config.projScale)
       .translate([W / 2, H / 2])
 
