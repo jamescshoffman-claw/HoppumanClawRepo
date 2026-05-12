@@ -286,8 +286,8 @@ export default function BalanceGame() {
         let bounceVY = 0, bounceAY = 0
         if (g.elapsed >= 8) {
           const t = g.elapsed - 8
-          const amp = Math.min(120, 2 + t * 10)
-          const ampGrowth = amp < 120 ? 10 : 0
+          const amp = Math.min(65, 2 + t * 8)
+          const ampGrowth = amp < 65 ? 8 : 0
           const freq = 3.5 + t * 0.15
           const phase = t * freq
           g.bounceY = amp * Math.sin(phase)
@@ -305,7 +305,7 @@ export default function BalanceGame() {
           if (Math.abs(g.ballPos) > PLANK_LEN / 2 + BALL_R) {
             endGame(); alive = false
           } else if (g.elapsed >= 8 && bounceAY <= -GRAVITY && bounceVY < 0) {
-            // Plank launches ball: normal force → 0
+            // Plank launches ball upward: normal force → 0
             g.ballOnPlank  = false
             g.ballAirTime  = 0
             const cy = PLANK_CY + g.bounceY
@@ -313,6 +313,15 @@ export default function BalanceGame() {
             g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
             g.ballWorldVX  = g.ballVel * cosA
             g.ballWorldVY  = bounceVY + g.ballVel * sinA
+          } else if (g.elapsed >= 8 && bounceAY >= GRAVITY && bounceVY > 0) {
+            // Plank drops faster than gravity — ball decouples, falls freely
+            g.ballOnPlank  = false
+            g.ballAirTime  = 0
+            const cy = PLANK_CY + g.bounceY
+            g.ballWorldX   = PLANK_CX + g.ballPos * cosA + (PLANK_H / 2 + BALL_R) * sinA
+            g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
+            g.ballWorldVX  = g.ballVel * cosA
+            g.ballWorldVY  = g.ballVel * sinA  // no bounce velocity — falls at g only
           }
         } else {
           // ── Airborne ball ────────────────────────────────────────────
