@@ -77,9 +77,10 @@ function drawScene(
   ballPos: number,
   elapsed: number,
   objects: Obj[],
+  bounceY = 0,
 ) {
   const cosA = Math.cos(angle), sinA = Math.sin(angle)
-  const cx = PLANK_CX, cy = PLANK_CY
+  const cx = PLANK_CX, cy = PLANK_CY + bounceY
 
   ctx.clearRect(0, 0, CW, CH)
 
@@ -181,6 +182,7 @@ export default function BalanceGame() {
     startMs: 0, elapsed: 0,
     objects: [] as Obj[],
     spawnTimer: 3,
+    bounceY: 0,
   })
   const rafRef       = useRef<number>()
   const lastMsRef    = useRef<number>()
@@ -285,6 +287,13 @@ export default function BalanceGame() {
             g.spawnTimer = (1.67 + Math.random() * 1.33) * speedup
           }
 
+          // ── Platform bounce (starts at 15s) ─────────────────────────
+          if (g.elapsed >= 15) {
+            const t = g.elapsed - 15
+            const amp = Math.min(40, 4 + t * 1.5)
+            g.bounceY = amp * Math.sin(t * 3.2)
+          }
+
           // ── Object physics ───────────────────────────────────────────
           for (const o of g.objects) {
             if (o.gone) continue
@@ -293,7 +302,7 @@ export default function BalanceGame() {
               o.vy += GRAVITY * dt
               o.y  += o.vy * dt
 
-              const dx = o.x - PLANK_CX, dy = o.y - PLANK_CY
+              const dx = o.x - PLANK_CX, dy = o.y - (PLANK_CY + g.bounceY)
               const s    =  dx * cosA + dy * sinA
               const perp =  dx * sinA - dy * cosA
               const contact = PLANK_H / 2 + o.radius
@@ -320,11 +329,11 @@ export default function BalanceGame() {
         }
       }
 
-      drawScene(ctx, phaseRef.current, g.angle, g.ballPos, g.elapsed, g.objects)
+      drawScene(ctx, phaseRef.current, g.angle, g.ballPos, g.elapsed, g.objects, g.bounceY)
       rafRef.current = requestAnimationFrame(loop)
     }
 
-    drawScene(ctx, 'idle', 0, 0, 0, [])
+    drawScene(ctx, 'idle', 0, 0, 0, [], 0)
     rafRef.current = requestAnimationFrame(loop)
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -337,7 +346,7 @@ export default function BalanceGame() {
     g.angle = 0; g.omega = 0
     g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
     g.startMs = Date.now(); g.elapsed = 0
-    g.objects = []; g.spawnTimer = 2
+    g.objects = []; g.spawnTimer = 2; g.bounceY = 0
     lastMsRef.current = undefined
     phaseRef.current = 'playing'
     setPhase('playing'); setElapsed(0)
@@ -382,7 +391,7 @@ export default function BalanceGame() {
     keysRef.current  = { left: false, right: false }
     const g = gameRef.current
     g.angle = 0; g.omega = 0; g.ballPos = 0; g.ballVel = 0
-    g.elapsed = 0; g.objects = []; g.spawnTimer = 3
+    g.elapsed = 0; g.objects = []; g.spawnTimer = 3; g.bounceY = 0
     lastMsRef.current = undefined
     setPhase('idle'); setElapsed(0); setCopied(false)
   }
