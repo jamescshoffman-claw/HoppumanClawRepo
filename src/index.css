@@ -1008,7 +1008,7 @@ a { color: inherit; }
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
 }
 
 .bl-controls {
@@ -1041,8 +1041,6 @@ a { color: inherit; }
 
 .bl-canvas-wrap {
   position: relative;
-  width: 100%;
-  max-width: 600px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.22);

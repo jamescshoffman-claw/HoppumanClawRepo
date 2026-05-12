@@ -74,10 +74,8 @@ function drawScene(
   ctx: CanvasRenderingContext2D,
   phase: Phase,
   angle: number,
-  ballPos: number,
-  ballOnPlank: boolean,
-  ballAirX: number,
-  ballAirY: number,
+  ballX: number,
+  ballY: number,
   elapsed: number,
   objects: Obj[],
   bounceY = 0,
@@ -98,6 +96,19 @@ function drawScene(
     for (let y = 20; y < CH; y += 28) {
       ctx.beginPath(); ctx.arc(x, y, 1, 0, Math.PI * 2); ctx.fill()
     }
+
+  // Rainbow overlay (starts at 11.5s, fades in over 3s)
+  if (elapsed >= 11.5) {
+    const t = elapsed - 11.5
+    const fadeIn = Math.min(1, t / 3)
+    const hue1 = (t * 30) % 360
+    const hue2 = (hue1 + 60) % 360
+    const rg = ctx.createLinearGradient(0, 0, CW, CH)
+    rg.addColorStop(0, `hsla(${hue1}, 70%, 45%, ${0.28 * fadeIn})`)
+    rg.addColorStop(1, `hsla(${hue2}, 70%, 45%, ${0.28 * fadeIn})`)
+    ctx.fillStyle = rg
+    ctx.fillRect(0, 0, CW, CH)
+  }
 
   // Falling objects (drawn before plank so they visually go behind if close)
   for (const o of objects) {
@@ -137,24 +148,39 @@ function drawScene(
     drawBall(ctx, ox, oy, o.radius, o.light, o.mid, o.dark)
   }
 
-  // Main ball
-  const SURFACE = PLANK_H / 2
-  let bx: number, by: number
-  if (ballOnPlank) {
-    bx = cx + ballPos * cosA + (SURFACE + BALL_R) * sinA
-    by = cy + ballPos * sinA - (SURFACE + BALL_R) * cosA
-    // contact shadow
+  // Main ball — shadow when close to surface
+  const bdx2 = ballX - cx, bdy2 = ballY - cy
+  const bs2   = bdx2 * cosA + bdy2 * sinA
+  const bperp2 = bdx2 * sinA - bdy2 * cosA
+  if (Math.abs(bs2) <= PLANK_LEN / 2 && bperp2 <= PLANK_H / 2 + BALL_R + 4) {
+    const sx = cx + bs2 * cosA + (PLANK_H / 2) * sinA
+    const sy = cy + bs2 * sinA - (PLANK_H / 2) * cosA
     ctx.save()
-    ctx.translate(cx + ballPos * cosA + SURFACE * sinA, cy + ballPos * sinA - SURFACE * cosA)
-    ctx.rotate(angle)
-    ctx.scale(1, 0.22)
+    ctx.translate(sx, sy); ctx.rotate(angle); ctx.scale(1, 0.22)
     ctx.beginPath(); ctx.arc(0, 0, BALL_R * .85, 0, Math.PI * 2)
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill()
     ctx.restore()
-  } else {
-    bx = ballAirX; by = ballAirY
   }
-  drawBall(ctx, bx, by, BALL_R, '#ff9966', '#e04515', '#6a1808')
+  drawBall(ctx, ballX, ballY, BALL_R, '#ff9966', '#e04515', '#6a1808')
+
+  // Scrolling "try to last 30 seconds" text (starts at 11.5s, repeats every 8s)
+  if (elapsed >= 11.5) {
+    const t = elapsed - 11.5
+    const msg = 'try to last 30 seconds'
+    ctx.save()
+    ctx.font = 'bold 18px Geist, system-ui, sans-serif'
+    ctx.textAlign = 'left'
+    const tw = ctx.measureText(msg).width
+    const cycleTime = 8
+    const totalTravel = CW + tw + 40
+    const offset = (t % cycleTime) / cycleTime * totalTravel
+    const tx = -tw - 20 + offset
+    ctx.shadowColor = 'rgba(0,0,0,0.7)'
+    ctx.shadowBlur = 8
+    ctx.fillStyle = 'rgba(255,255,255,0.9)'
+    ctx.fillText(msg, tx, CH - 16)
+    ctx.restore()
+  }
 
   // Timer
   if (phase === 'playing') {
@@ -184,17 +210,15 @@ export default function BalanceGame() {
   const keysRef         = useRef({ left: false, right: false })
   const gameRef         = useRef({
     angle: 0, omega: 0,
-    ballPos: 0, ballVel: 0,
     startMs: 0, elapsed: 0,
     objects: [] as Obj[],
     spawnTimer: 3,
     bounceY: 0,
-    ballOnPlank: true,
-    ballWorldX: 0,
-    ballWorldY: 0,
+    ballWorldX: PLANK_CX,
+    ballWorldY: PLANK_CY - (PLANK_H / 2 + BALL_R),
     ballWorldVX: 0,
     ballWorldVY: 0,
-    ballAirTime: 0,
+    ballOffEdge: false,
   })
   const rafRef       = useRef<number>()
   const lastMsRef    = useRef<number>()
@@ -283,66 +307,73 @@ export default function BalanceGame() {
         g.angle  = Math.max(-MAX_TILT, Math.min(MAX_TILT, g.angle))
 
         // ── Platform bounce (starts at 8s) ────────────────────────────
-        let bounceVY = 0, bounceAY = 0
+        let bounceVY = 0
         if (g.elapsed >= 8) {
           const t = g.elapsed - 8
-          const amp = Math.min(65, 2 + t * 8)
-          const ampGrowth = amp < 65 ? 8 : 0
+          const amp = Math.min(60, 2 + t * 7)
+          const ampGrowth = amp < 60 ? 7 : 0
           const freq = 3.5 + t * 0.15
           const phase = t * freq
           g.bounceY = amp * Math.sin(phase)
           bounceVY  = ampGrowth * Math.sin(phase) + amp * freq * Math.cos(phase)
-          bounceAY  = -(amp * freq * freq) * Math.sin(phase)
         }
 
-        // ── Ball physics ───────────────────────────────────────────────
+        // ── Ball physics — unified constraint model ────────────────────
+        // Ball always lives in world space under gravity.
+        // Plank is a one-sided constraint: push ball out if it penetrates,
+        // match perpendicular velocity relative to plank surface.
+        // No explicit launch/land state — everything emerges from the constraint.
+
+        g.ballWorldVY += GRAVITY * dt
+        g.ballWorldX  += g.ballWorldVX * dt
+        g.ballWorldY  += g.ballWorldVY * dt
+
+        const bcy     = PLANK_CY + g.bounceY
+        const bdx     = g.ballWorldX - PLANK_CX
+        const bdy     = g.ballWorldY - bcy
+        const bs      = bdx * cosA + bdy * sinA
+        const bperp   = bdx * sinA - bdy * cosA
+        const bcontact = PLANK_H / 2 + BALL_R
+
+        // offEdge: ball has genuinely rolled off the plank edge near the surface.
+        // Block the constraint to prevent plank rotation shifting bs back in-bounds and snapping
+        // the ball back. Only set when ball is actually moving outward (not coordinate drift),
+        // or when clearly well past the edge. Clear when ball is high above the surface.
+        if (Math.abs(bs) > PLANK_LEN / 2 && bperp <= bcontact + BALL_R) {
+          const bsVel = g.ballWorldVX * cosA + g.ballWorldVY * sinA
+          const movingOutward = (bs > 0 && bsVel >= 0) || (bs < 0 && bsVel <= 0)
+          const clearlyOutside = Math.abs(bs) > PLANK_LEN / 2 + BALL_R / 2
+          if (movingOutward || clearlyOutside) g.ballOffEdge = true
+        }
+        if (g.ballOffEdge && bperp > bcontact + BALL_R * 1.5) {
+          g.ballOffEdge = false
+        }
+
         let alive = true
 
-        if (g.ballOnPlank) {
-          g.ballVel += ROLL * GRAVITY * Math.sin(g.angle) * dt
-          g.ballPos += g.ballVel * dt
+        if (!g.ballOffEdge && Math.abs(bs) <= PLANK_LEN / 2 && bperp <= bcontact) {
+          // Positional correction: push ball to surface
+          const overpen = bcontact - bperp
+          g.ballWorldX += overpen * sinA
+          g.ballWorldY -= overpen * cosA
 
-          if (Math.abs(g.ballPos) > PLANK_LEN / 2 + BALL_R) {
-            endGame(); alive = false
-          } else if (g.elapsed >= 8 && bounceAY <= -GRAVITY && bounceVY < 0) {
-            // Plank launches ball upward: normal force → 0
-            g.ballOnPlank  = false
-            g.ballAirTime  = 0
-            const cy = PLANK_CY + g.bounceY
-            g.ballWorldX   = PLANK_CX + g.ballPos * cosA + (PLANK_H / 2 + BALL_R) * sinA
-            g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
-            g.ballWorldVX  = g.ballVel * cosA
-            g.ballWorldVY  = bounceVY + g.ballVel * sinA
-          } else if (g.elapsed >= 8 && bounceAY >= GRAVITY && bounceVY > 0) {
-            // Plank drops faster than gravity — ball decouples, falls freely
-            g.ballOnPlank  = false
-            g.ballAirTime  = 0
-            const cy = PLANK_CY + g.bounceY
-            g.ballWorldX   = PLANK_CX + g.ballPos * cosA + (PLANK_H / 2 + BALL_R) * sinA
-            g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
-            g.ballWorldVX  = g.ballVel * cosA
-            g.ballWorldVY  = g.ballVel * sinA  // no bounce velocity — falls at g only
+          // Velocity constraint: remove relative velocity into surface
+          // Surface perp velocity accounts for plank rotation and bounce
+          const surfPerpVel = -bs * g.omega - bounceVY * cosA
+          const ballPerpVel = g.ballWorldVX * sinA - g.ballWorldVY * cosA
+          const perpRelVel  = ballPerpVel - surfPerpVel
+          if (perpRelVel < 0) {
+            g.ballWorldVX -= perpRelVel * sinA
+            g.ballWorldVY += perpRelVel * cosA
           }
-        } else {
-          // ── Airborne ball ────────────────────────────────────────────
-          g.ballAirTime += dt
-          g.ballWorldVY += GRAVITY * dt
-          g.ballWorldX  += g.ballWorldVX * dt
-          g.ballWorldY  += g.ballWorldVY * dt
 
-          // Landing on plank — min 0.06s airtime prevents immediate re-land
-          const dx2 = g.ballWorldX - PLANK_CX
-          const dy2 = g.ballWorldY - (PLANK_CY + g.bounceY)
-          const s2    = dx2 * cosA + dy2 * sinA
-          const perp2 = dx2 * sinA - dy2 * cosA
+          // Rolling: reduce applied tangential gravity from 1 to ROLL=5/7
+          const rollCorr = (1 - ROLL) * GRAVITY * Math.sin(g.angle) * dt
+          g.ballWorldVX -= rollCorr * cosA
+          g.ballWorldVY -= rollCorr * sinA
 
-          if (g.ballAirTime > 0.06 && Math.abs(s2) <= PLANK_LEN / 2 && perp2 <= PLANK_H / 2 + BALL_R) {
-            g.ballOnPlank = true
-            g.ballPos     = s2
-            g.ballVel     = g.ballWorldVX * cosA + g.ballWorldVY * sinA
-          } else if (g.ballWorldY > CH + BALL_R) {
-            endGame(); alive = false
-          }
+        } else if (g.ballWorldY > CH + BALL_R) {
+          endGame(); alive = false
         }
 
         if (alive) {
@@ -386,11 +417,11 @@ export default function BalanceGame() {
         }
       }
 
-      drawScene(ctx, phaseRef.current, g.angle, g.ballPos, g.ballOnPlank, g.ballWorldX, g.ballWorldY, g.elapsed, g.objects, g.bounceY)
+      drawScene(ctx, phaseRef.current, g.angle, g.ballWorldX, g.ballWorldY, g.elapsed, g.objects, g.bounceY)
       rafRef.current = requestAnimationFrame(loop)
     }
 
-    drawScene(ctx, 'idle', 0, 0, true, 0, 0, 0, [], 0)
+    drawScene(ctx, 'idle', 0, PLANK_CX, PLANK_CY - (PLANK_H / 2 + BALL_R), 0, [], 0)
     rafRef.current = requestAnimationFrame(loop)
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -401,10 +432,10 @@ export default function BalanceGame() {
     if (phaseRef.current !== 'idle') return
     const g = gameRef.current
     g.angle = 0; g.omega = 0
-    g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
     g.startMs = Date.now(); g.elapsed = 0
     g.objects = []; g.spawnTimer = 2; g.bounceY = 0
-    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0; g.ballAirTime = 0
+    g.ballWorldX = PLANK_CX; g.ballWorldY = PLANK_CY - (PLANK_H / 2 + BALL_R)
+    g.ballWorldVX = (Math.random() - 0.5) * 40; g.ballWorldVY = 0; g.ballOffEdge = false
     lastMsRef.current = undefined
     phaseRef.current = 'playing'
     setPhase('playing'); setElapsed(0)
@@ -431,12 +462,14 @@ export default function BalanceGame() {
 
   // ── Responsive scale ──────────────────────────────────────────────────
   useEffect(() => {
-    if (!wrapRef.current) return
-    const ro = new ResizeObserver(([entry]) => {
-      setScale(Math.min(1, entry.contentRect.width / CW))
-    })
-    ro.observe(wrapRef.current)
-    return () => ro.disconnect()
+    const update = () => {
+      const availW = window.innerWidth - 32
+      const availH = window.innerHeight - 220
+      setScale(Math.min(availW / CW, availH / CH))
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
   }, [])
 
   useEffect(() => {
@@ -448,9 +481,10 @@ export default function BalanceGame() {
     phaseRef.current = 'idle'
     keysRef.current  = { left: false, right: false }
     const g = gameRef.current
-    g.angle = 0; g.omega = 0; g.ballPos = 0; g.ballVel = 0
+    g.angle = 0; g.omega = 0
     g.elapsed = 0; g.objects = []; g.spawnTimer = 3; g.bounceY = 0
-    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0; g.ballAirTime = 0
+    g.ballWorldX = PLANK_CX; g.ballWorldY = PLANK_CY - (PLANK_H / 2 + BALL_R)
+    g.ballWorldVX = 0; g.ballWorldVY = 0; g.ballOffEdge = false
     lastMsRef.current = undefined
     setPhase('idle'); setElapsed(0); setCopied(false)
   }
@@ -479,7 +513,7 @@ export default function BalanceGame() {
         </button>
       </div>
 
-      <div className="bl-canvas-wrap" ref={wrapRef} style={{ height: CH * scale }}>
+      <div className="bl-canvas-wrap" ref={wrapRef} style={{ height: CH * scale, width: CW * scale }}>
         <canvas
           ref={canvasRef}
           className="bl-canvas"
