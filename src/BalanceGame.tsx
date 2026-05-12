@@ -75,6 +75,9 @@ function drawScene(
   phase: Phase,
   angle: number,
   ballPos: number,
+  ballOnPlank: boolean,
+  ballAirX: number,
+  ballAirY: number,
   elapsed: number,
   objects: Obj[],
   bounceY = 0,
@@ -134,20 +137,23 @@ function drawScene(
     drawBall(ctx, ox, oy, o.radius, o.light, o.mid, o.dark)
   }
 
-  // Main ball — sits on TOP surface of plank (same convention as landed objects)
-  // canvas rotation: world = (cx + x·cosA - y·sinA, cy + x·sinA + y·cosA)
-  // top surface y_local = -PLANK_H/2 → normal direction is +sinA in x, -cosA in y
+  // Main ball
   const SURFACE = PLANK_H / 2
-  const bx = cx + ballPos * cosA + (SURFACE + BALL_R) * sinA
-  const by = cy + ballPos * sinA - (SURFACE + BALL_R) * cosA
-  // contact shadow at plank top surface
-  ctx.save()
-  ctx.translate(cx + ballPos * cosA + SURFACE * sinA, cy + ballPos * sinA - SURFACE * cosA)
-  ctx.rotate(angle)
-  ctx.scale(1, 0.22)
-  ctx.beginPath(); ctx.arc(0, 0, BALL_R * .85, 0, Math.PI * 2)
-  ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill()
-  ctx.restore()
+  let bx: number, by: number
+  if (ballOnPlank) {
+    bx = cx + ballPos * cosA + (SURFACE + BALL_R) * sinA
+    by = cy + ballPos * sinA - (SURFACE + BALL_R) * cosA
+    // contact shadow
+    ctx.save()
+    ctx.translate(cx + ballPos * cosA + SURFACE * sinA, cy + ballPos * sinA - SURFACE * cosA)
+    ctx.rotate(angle)
+    ctx.scale(1, 0.22)
+    ctx.beginPath(); ctx.arc(0, 0, BALL_R * .85, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fill()
+    ctx.restore()
+  } else {
+    bx = ballAirX; by = ballAirY
+  }
   drawBall(ctx, bx, by, BALL_R, '#ff9966', '#e04515', '#6a1808')
 
   // Timer
@@ -183,6 +189,11 @@ export default function BalanceGame() {
     objects: [] as Obj[],
     spawnTimer: 3,
     bounceY: 0,
+    ballOnPlank: true,
+    ballWorldX: 0,
+    ballWorldY: 0,
+    ballWorldVX: 0,
+    ballWorldVY: 0,
   })
   const rafRef       = useRef<number>()
   const lastMsRef    = useRef<number>()
@@ -258,9 +269,8 @@ export default function BalanceGame() {
         let alpha = 0
         if (k.left)  alpha -= PLAYER_ALPHA
         if (k.right) alpha += PLAYER_ALPHA
-        alpha -= SPRING_K * g.angle  // spring restoring
+        alpha -= SPRING_K * g.angle
 
-        // Object torques on plank
         for (const o of g.objects) {
           if (!o.landed || o.gone) continue
           alpha += (o.mass * GRAVITY * o.plankPos * Math.cos(g.angle)) / I_PLANK
@@ -271,13 +281,59 @@ export default function BalanceGame() {
         g.angle += g.omega * dt
         g.angle  = Math.max(-MAX_TILT, Math.min(MAX_TILT, g.angle))
 
-        // ── Ball physics ───────────────────────────────────────────────
-        g.ballVel += ROLL * GRAVITY * Math.sin(g.angle) * dt
-        g.ballPos += g.ballVel * dt
+        // ── Platform bounce (starts at 8s) ────────────────────────────
+        let bounceVY = 0, bounceAY = 0
+        if (g.elapsed >= 8) {
+          const t = g.elapsed - 8
+          const amp = Math.min(120, 2 + t * 10)
+          const ampGrowth = amp < 120 ? 10 : 0
+          const freq = 3.5 + t * 0.15
+          const phase = t * freq
+          g.bounceY = amp * Math.sin(phase)
+          bounceVY  = ampGrowth * Math.sin(phase) + amp * freq * Math.cos(phase)
+          bounceAY  = -(amp * freq * freq) * Math.sin(phase)
+        }
 
-        if (Math.abs(g.ballPos) > PLANK_LEN / 2 + BALL_R) {
-          endGame()
+        // ── Ball physics ───────────────────────────────────────────────
+        let alive = true
+
+        if (g.ballOnPlank) {
+          g.ballVel += ROLL * GRAVITY * Math.sin(g.angle) * dt
+          g.ballPos += g.ballVel * dt
+
+          if (Math.abs(g.ballPos) > PLANK_LEN / 2 + BALL_R) {
+            endGame(); alive = false
+          } else if (g.elapsed >= 8 && bounceAY <= -GRAVITY && bounceVY < 0) {
+            // Plank launches ball: normal force → 0
+            g.ballOnPlank  = false
+            const cy = PLANK_CY + g.bounceY
+            g.ballWorldX   = PLANK_CX + g.ballPos * cosA + (PLANK_H / 2 + BALL_R) * sinA
+            g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
+            g.ballWorldVX  = g.ballVel * cosA
+            g.ballWorldVY  = bounceVY + g.ballVel * sinA
+          }
         } else {
+          // ── Airborne ball ────────────────────────────────────────────
+          g.ballWorldVY += GRAVITY * dt
+          g.ballWorldX  += g.ballWorldVX * dt
+          g.ballWorldY  += g.ballWorldVY * dt
+
+          // Landing on plank
+          const dx2 = g.ballWorldX - PLANK_CX
+          const dy2 = g.ballWorldY - (PLANK_CY + g.bounceY)
+          const s2    = dx2 * cosA + dy2 * sinA
+          const perp2 = dx2 * sinA - dy2 * cosA
+
+          if (Math.abs(s2) <= PLANK_LEN / 2 && perp2 <= PLANK_H / 2 + BALL_R && g.ballWorldVY > 0) {
+            g.ballOnPlank = true
+            g.ballPos     = s2
+            g.ballVel     = g.ballWorldVX * cosA + g.ballWorldVY * sinA
+          } else if (g.ballWorldY > CH + BALL_R) {
+            endGame(); alive = false
+          }
+        }
+
+        if (alive) {
           // ── Object spawning (accelerates every 5s) ───────────────────
           g.spawnTimer -= dt
           const active = g.objects.filter(o => !o.gone).length
@@ -285,13 +341,6 @@ export default function BalanceGame() {
             g.objects.push(spawnObj(g.angle))
             const speedup = Math.max(0.35, 1 - Math.floor(g.elapsed / 5) * 0.08)
             g.spawnTimer = (1.67 + Math.random() * 1.33) * speedup
-          }
-
-          // ── Platform bounce (starts at 15s) ─────────────────────────
-          if (g.elapsed >= 15) {
-            const t = g.elapsed - 15
-            const amp = Math.min(40, 4 + t * 1.5)
-            g.bounceY = amp * Math.sin(t * 3.2)
           }
 
           // ── Object physics ───────────────────────────────────────────
@@ -305,12 +354,9 @@ export default function BalanceGame() {
               const dx = o.x - PLANK_CX, dy = o.y - (PLANK_CY + g.bounceY)
               const s    =  dx * cosA + dy * sinA
               const perp =  dx * sinA - dy * cosA
-              const contact = PLANK_H / 2 + o.radius
 
-              if (Math.abs(s) <= PLANK_LEN / 2 && perp <= contact) {
-                o.landed   = true
-                o.plankPos = s
-                o.plankVel = 0
+              if (Math.abs(s) <= PLANK_LEN / 2 && perp <= PLANK_H / 2 + o.radius) {
+                o.landed = true; o.plankPos = s; o.plankVel = 0
               }
 
               if (o.y > CH + o.radius) o.gone = true
@@ -328,11 +374,11 @@ export default function BalanceGame() {
         }
       }
 
-      drawScene(ctx, phaseRef.current, g.angle, g.ballPos, g.elapsed, g.objects, g.bounceY)
+      drawScene(ctx, phaseRef.current, g.angle, g.ballPos, g.ballOnPlank, g.ballWorldX, g.ballWorldY, g.elapsed, g.objects, g.bounceY)
       rafRef.current = requestAnimationFrame(loop)
     }
 
-    drawScene(ctx, 'idle', 0, 0, 0, [], 0)
+    drawScene(ctx, 'idle', 0, 0, true, 0, 0, 0, [], 0)
     rafRef.current = requestAnimationFrame(loop)
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -346,6 +392,7 @@ export default function BalanceGame() {
     g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
     g.startMs = Date.now(); g.elapsed = 0
     g.objects = []; g.spawnTimer = 2; g.bounceY = 0
+    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0
     lastMsRef.current = undefined
     phaseRef.current = 'playing'
     setPhase('playing'); setElapsed(0)
@@ -391,6 +438,7 @@ export default function BalanceGame() {
     const g = gameRef.current
     g.angle = 0; g.omega = 0; g.ballPos = 0; g.ballVel = 0
     g.elapsed = 0; g.objects = []; g.spawnTimer = 3; g.bounceY = 0
+    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0
     lastMsRef.current = undefined
     setPhase('idle'); setElapsed(0); setCopied(false)
   }
