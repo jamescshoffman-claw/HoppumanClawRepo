@@ -306,9 +306,8 @@ export default function BalanceGame() {
               const s    =  dx * cosA + dy * sinA
               const perp =  dx * sinA - dy * cosA
               const contact = PLANK_H / 2 + o.radius
-              const perpNext = perp - o.vy * cosA * dt
 
-              if (Math.abs(s) <= PLANK_LEN / 2 && perp >= contact && perpNext <= contact) {
+              if (Math.abs(s) <= PLANK_LEN / 2 && perp <= contact) {
                 o.landed   = true
                 o.plankPos = s
                 o.plankVel = 0
