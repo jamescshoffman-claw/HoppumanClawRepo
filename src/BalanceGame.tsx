@@ -194,6 +194,7 @@ export default function BalanceGame() {
     ballWorldY: 0,
     ballWorldVX: 0,
     ballWorldVY: 0,
+    ballAirTime: 0,
   })
   const rafRef       = useRef<number>()
   const lastMsRef    = useRef<number>()
@@ -306,6 +307,7 @@ export default function BalanceGame() {
           } else if (g.elapsed >= 8 && bounceAY <= -GRAVITY && bounceVY < 0) {
             // Plank launches ball: normal force → 0
             g.ballOnPlank  = false
+            g.ballAirTime  = 0
             const cy = PLANK_CY + g.bounceY
             g.ballWorldX   = PLANK_CX + g.ballPos * cosA + (PLANK_H / 2 + BALL_R) * sinA
             g.ballWorldY   = cy + g.ballPos * sinA - (PLANK_H / 2 + BALL_R) * cosA
@@ -314,17 +316,18 @@ export default function BalanceGame() {
           }
         } else {
           // ── Airborne ball ────────────────────────────────────────────
+          g.ballAirTime += dt
           g.ballWorldVY += GRAVITY * dt
           g.ballWorldX  += g.ballWorldVX * dt
           g.ballWorldY  += g.ballWorldVY * dt
 
-          // Landing on plank
+          // Landing on plank — min 0.06s airtime prevents immediate re-land
           const dx2 = g.ballWorldX - PLANK_CX
           const dy2 = g.ballWorldY - (PLANK_CY + g.bounceY)
           const s2    = dx2 * cosA + dy2 * sinA
           const perp2 = dx2 * sinA - dy2 * cosA
 
-          if (Math.abs(s2) <= PLANK_LEN / 2 && perp2 <= PLANK_H / 2 + BALL_R && g.ballWorldVY > 0) {
+          if (g.ballAirTime > 0.06 && Math.abs(s2) <= PLANK_LEN / 2 && perp2 <= PLANK_H / 2 + BALL_R) {
             g.ballOnPlank = true
             g.ballPos     = s2
             g.ballVel     = g.ballWorldVX * cosA + g.ballWorldVY * sinA
@@ -392,7 +395,7 @@ export default function BalanceGame() {
     g.ballPos = 0; g.ballVel = (Math.random() - 0.5) * 40
     g.startMs = Date.now(); g.elapsed = 0
     g.objects = []; g.spawnTimer = 2; g.bounceY = 0
-    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0
+    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0; g.ballAirTime = 0
     lastMsRef.current = undefined
     phaseRef.current = 'playing'
     setPhase('playing'); setElapsed(0)
@@ -438,7 +441,7 @@ export default function BalanceGame() {
     const g = gameRef.current
     g.angle = 0; g.omega = 0; g.ballPos = 0; g.ballVel = 0
     g.elapsed = 0; g.objects = []; g.spawnTimer = 3; g.bounceY = 0
-    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0
+    g.ballOnPlank = true; g.ballWorldX = 0; g.ballWorldY = 0; g.ballWorldVX = 0; g.ballWorldVY = 0; g.ballAirTime = 0
     lastMsRef.current = undefined
     setPhase('idle'); setElapsed(0); setCopied(false)
   }
