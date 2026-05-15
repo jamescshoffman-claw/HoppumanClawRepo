@@ -116,13 +116,19 @@ function drawScene(
     drawBall(ctx, o.x, o.y, o.radius, o.light, o.mid, o.dark)
   }
 
-  // Pivot stand
+  // Pivot stand — apex at plank underside, triangle extends downward
   ctx.save()
   ctx.translate(cx, cy + PLANK_H / 2)
   ctx.fillStyle = '#3a2d1e'; ctx.strokeStyle = '#5a4428'; ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(-10, 0); ctx.lineTo(10, 0); ctx.lineTo(0, -16); ctx.closePath()
+  ctx.moveTo(0, 0)       // apex touching bottom of plank
+  ctx.lineTo(-18, 26)    // bottom-left
+  ctx.lineTo(18, 26)     // bottom-right
+  ctx.closePath()
   ctx.fill(); ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(-22, 26); ctx.lineTo(22, 26)
+  ctx.lineWidth = 2.5; ctx.stroke()
   ctx.restore()
 
   // Plank
@@ -374,6 +380,33 @@ export default function BalanceGame() {
 
         } else if (g.ballWorldY > CH + BALL_R) {
           endGame(); alive = false
+        }
+
+        // End-face / corner collision: closest point on plank end to ball center.
+        // Handles ball falling onto the tip or corner of the plank.
+        if (alive && Math.abs(bs) > PLANK_LEN / 2) {
+          const sign      = bs > 0 ? 1 : -1
+          const edgeBs    = sign * PLANK_LEN / 2
+          const edgeBperp = Math.max(-PLANK_H / 2, Math.min(PLANK_H / 2, bperp))
+          const dcBs      = bs    - edgeBs
+          const dcBperp   = bperp - edgeBperp
+          const dist2     = dcBs * dcBs + dcBperp * dcBperp
+          if (dist2 > 0 && dist2 < BALL_R * BALL_R) {
+            const dist   = Math.sqrt(dist2)
+            const pen    = BALL_R - dist
+            const nBs    = dcBs    / dist
+            const nBperp = dcBperp / dist
+            // plank-space normal → world space (bs axis = (cosA,sinA), bperp axis = (sinA,-cosA))
+            const nx = nBs * cosA + nBperp * sinA
+            const ny = nBs * sinA - nBperp * cosA
+            g.ballWorldX += nx * pen
+            g.ballWorldY += ny * pen
+            const vn = g.ballWorldVX * nx + g.ballWorldVY * ny
+            if (vn < 0) {
+              g.ballWorldVX -= vn * nx
+              g.ballWorldVY -= vn * ny
+            }
+          }
         }
 
         if (alive) {
