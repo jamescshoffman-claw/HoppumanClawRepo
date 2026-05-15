@@ -523,7 +523,7 @@ function Quiz({ config, onRestart }: QuizProps) {
 // ── Page wrapper (owns tab state) ──────────────────────────────────────────
 
 export default function CountriesQuiz() {
-  const [tab, setTab] = useState<RegionKey>('europe')
+  const [tab, setTab] = useState<RegionKey>('world')
   const [resetCount, setResetCount] = useState(0)
 
   useEffect(() => {

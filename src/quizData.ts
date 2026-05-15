@@ -41,7 +41,7 @@ export interface QuizConfig {
   inset?: InsetDef
 }
 
-export type RegionKey = 'europe' | 'africa' | 'northamerica' | 'southamerica' | 'asia' | 'oceania'
+export type RegionKey = 'world' | 'europe' | 'africa' | 'northamerica' | 'southamerica' | 'asia' | 'oceania'
 
 // ── Europe ────────────────────────────────────────────────────────────────────
 
@@ -312,9 +312,96 @@ const OCEANIA_SMALL: SmallDef[] = [
   { id: 798, lon: 179.2,  lat:  -8.5, dx:  40, dy:  20 }, // Tuvalu
 ]
 
+// ── World ─────────────────────────────────────────────────────────────────────
+
+const WORLD: Country[] = [
+  ...EUROPE,
+  ...AFRICA,
+  ...NORTH_AMERICA,
+  ...SOUTH_AMERICA,
+  ...ASIA.filter(c => c.id !== 792), // Turkey already in EUROPE
+  ...OCEANIA,
+]
+
+const WORLD_SMALL: SmallDef[] = [
+  // European microstates
+  { id: 20,  lon:  1.58, lat: 42.55, dx: -50, dy: -15 }, // Andorra
+  { id: -99, lon: 20.90, lat: 42.58, dx:  50, dy:   5 }, // Kosovo
+  { id: 438, lon:  9.55, lat: 47.17, dx: -45, dy: -30 }, // Liechtenstein
+  { id: 470, lon: 14.37, lat: 35.90, dx:  45, dy:  30 }, // Malta
+  { id: 492, lon:  7.40, lat: 43.74, dx:  30, dy: -35 }, // Monaco
+  { id: 674, lon: 12.46, lat: 43.93, dx:  45, dy: -15 }, // San Marino
+  { id: 336, lon: 12.45, lat: 41.90, dx:  45, dy:  15 }, // Vatican City
+  // Caribbean (all too small to read at world scale)
+  { id: 44,  lon: -77.40, lat: 24.70, dx: -45, dy: -20 }, // Bahamas
+  { id: 192, lon: -79.50, lat: 21.50, dx: -50, dy:  22 }, // Cuba
+  { id: 214, lon: -70.20, lat: 18.90, dx:  50, dy: -20 }, // Dominican Republic
+  { id: 332, lon: -73.10, lat: 18.90, dx: -50, dy: -20 }, // Haiti
+  { id: 388, lon: -77.30, lat: 18.10, dx:  45, dy:  15 }, // Jamaica
+  { id: 28,  lon: -61.80, lat: 17.10, dx:  50, dy: -20 }, // Antigua and Barbuda
+  { id: 52,  lon: -59.60, lat: 13.20, dx:  50, dy:  10 }, // Barbados
+  { id: 212, lon: -61.40, lat: 15.40, dx: -50, dy:  -5 }, // Dominica
+  { id: 308, lon: -61.70, lat: 12.10, dx: -45, dy:  25 }, // Grenada
+  { id: 659, lon: -62.70, lat: 17.30, dx: -50, dy: -20 }, // Saint Kitts and Nevis
+  { id: 662, lon: -60.90, lat: 13.90, dx:  50, dy:  -5 }, // Saint Lucia
+  { id: 670, lon: -61.20, lat: 13.20, dx: -50, dy:  10 }, // Saint Vincent and the Grenadines
+  { id: 780, lon: -61.20, lat: 10.50, dx:  45, dy:  25 }, // Trinidad and Tobago
+  // African islands
+  { id: 132, lon: -24.00, lat: 16.00, dx: -40, dy: -20 }, // Cabo Verde
+  { id: 174, lon:  43.30, lat: -11.6, dx:  40, dy: -20 }, // Comoros
+  { id: 480, lon:  57.50, lat: -20.3, dx:  40, dy:  15 }, // Mauritius
+  { id: 678, lon:   6.70, lat:   0.2, dx: -40, dy:  25 }, // São Tomé and Príncipe
+  { id: 690, lon:  55.50, lat:  -4.6, dx:  40, dy: -25 }, // Seychelles
+  // Middle East / Gulf small states
+  { id: 48,  lon:  50.55, lat: 26.00, dx:  40, dy: -22 }, // Bahrain
+  { id: 414, lon:  47.70, lat: 29.30, dx: -40, dy: -22 }, // Kuwait
+  { id: 422, lon:  35.90, lat: 34.00, dx: -40, dy: -22 }, // Lebanon
+  { id: 634, lon:  51.20, lat: 25.30, dx:  40, dy:  25 }, // Qatar
+  // Asian small states
+  { id: 96,  lon: 114.83, lat:  4.94, dx:  40, dy: -25 }, // Brunei
+  { id: 462, lon:  73.50, lat:  4.00, dx: -40, dy:  15 }, // Maldives
+  { id: 702, lon: 103.82, lat:  1.35, dx:  40, dy: -22 }, // Singapore
+  { id: 626, lon: 125.70, lat: -8.80, dx:  40, dy: -22 }, // Timor-Leste
+  // Pacific island nations
+  { id: 296, lon: 173.00, lat:  1.30, dx:  35, dy: -25 }, // Kiribati
+  { id: 584, lon: 168.00, lat:  7.10, dx:  35, dy: -20 }, // Marshall Islands
+  { id: 583, lon: 158.20, lat:  6.90, dx: -35, dy: -25 }, // Micronesia
+  { id: 520, lon: 166.90, lat: -0.50, dx:  35, dy:  15 }, // Nauru
+  { id: 585, lon: 134.50, lat:  7.50, dx: -35, dy: -20 }, // Palau
+  { id: 882, lon:-172.10, lat:-13.80, dx:  35, dy: -20 }, // Samoa
+  { id: 776, lon:-175.20, lat:-21.20, dx:  35, dy:  20 }, // Tonga
+  { id: 798, lon: 179.20, lat: -8.50, dx:  35, dy:  20 }, // Tuvalu
+]
+
 // ── Configs ───────────────────────────────────────────────────────────────────
 
 export const CONFIGS: Record<RegionKey, QuizConfig> = {
+  world: {
+    label: 'World',
+    countries: WORLD,
+    smallDef: WORLD_SMALL,
+    total: 196,
+    projCenter: [10, 15],
+    projScale: 150,
+    regionLabel: 'recognized',
+    winMsg: '🎉 You named all 196 countries of the world!',
+    inset: {
+      label: 'Eastern Caribbean',
+      projCenter: [-61.2, 13.8],
+      projScale: 4000,
+      ids: [28, 52, 212, 308, 659, 662, 670, 780],
+      callouts: [
+        { id: 659, lon: -62.7, lat: 17.3, dx: -70, dy: -12, label: 'St. Kitts & Nevis' },
+        { id: 28,  lon: -61.8, lat: 17.1, dx:  70, dy: -12, label: 'Antigua & Barbuda' },
+        { id: 212, lon: -61.4, lat: 15.4, dx: -70, dy:   0, label: 'Dominica' },
+        { id: 662, lon: -60.9, lat: 13.9, dx:  70, dy:   0, label: 'Saint Lucia' },
+        { id: 670, lon: -61.2, lat: 13.2, dx: -70, dy:  12, label: 'St. Vincent' },
+        { id: 52,  lon: -59.6, lat: 13.2, dx:  70, dy:  12, label: 'Barbados' },
+        { id: 308, lon: -61.7, lat: 12.1, dx: -70, dy:  24, label: 'Grenada' },
+        { id: 780, lon: -61.2, lat: 10.5, dx:  70, dy:  24, label: 'Trinidad & Tobago' },
+      ],
+    },
+  },
   europe: {
     label: 'Europe',
     countries: EUROPE,
