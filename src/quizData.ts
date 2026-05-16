@@ -385,22 +385,6 @@ export const CONFIGS: Record<RegionKey, QuizConfig> = {
     projScale: 150,
     regionLabel: 'recognized',
     winMsg: '🎉 You named all 196 countries of the world!',
-    inset: {
-      label: 'Eastern Caribbean',
-      projCenter: [-61.2, 13.8],
-      projScale: 4000,
-      ids: [28, 52, 212, 308, 659, 662, 670, 780],
-      callouts: [
-        { id: 659, lon: -62.7, lat: 17.3, dx: -70, dy: -12, label: 'St. Kitts & Nevis' },
-        { id: 28,  lon: -61.8, lat: 17.1, dx:  70, dy: -12, label: 'Antigua & Barbuda' },
-        { id: 212, lon: -61.4, lat: 15.4, dx: -70, dy:   0, label: 'Dominica' },
-        { id: 662, lon: -60.9, lat: 13.9, dx:  70, dy:   0, label: 'Saint Lucia' },
-        { id: 670, lon: -61.2, lat: 13.2, dx: -70, dy:  12, label: 'St. Vincent' },
-        { id: 52,  lon: -59.6, lat: 13.2, dx:  70, dy:  12, label: 'Barbados' },
-        { id: 308, lon: -61.7, lat: 12.1, dx: -70, dy:  24, label: 'Grenada' },
-        { id: 780, lon: -61.2, lat: 10.5, dx:  70, dy:  24, label: 'Trinidad & Tobago' },
-      ],
-    },
   },
   europe: {
     label: 'Europe',
