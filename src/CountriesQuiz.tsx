@@ -184,7 +184,7 @@ function Quiz({ config, onRestart }: QuizProps) {
           .attr('x2', px + ic.dx).attr('y2', py + ic.dy)
           .attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
         g.append('circle')
-          .attr('cx', px).attr('cy', py).attr('r', 3).attr('fill', '#8ba7c2')
+          .attr('cx', px).attr('cy', py).attr('r', 2).attr('fill', '#8ba7c2')
       })
 
       const insetZoom = d3.zoom<SVGSVGElement, unknown>()
@@ -207,7 +207,7 @@ function Quiz({ config, onRestart }: QuizProps) {
         .attr('x2', px + sc.dx).attr('y2', py + sc.dy)
         .attr('stroke', '#8ba7c2').attr('stroke-width', 1.5)
       g.append('circle')
-        .attr('cx', px).attr('cy', py).attr('r', 2.5).attr('fill', '#8ba7c2')
+        .attr('cx', px).attr('cy', py).attr('r', 1.8).attr('fill', '#8ba7c2')
     })
 
     // ── Helpers ───────────────────────────────────────────────────────────
