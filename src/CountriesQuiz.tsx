@@ -451,10 +451,12 @@ function Quiz({ config, onRestart }: QuizProps) {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             disabled={gameOver}
-            autoComplete="off"
+            autoComplete="new-password"
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck={false}
+            data-form-type="other"
+            data-lpignore="true"
           />
           {!gameOver && (
             <button className="quiz-btn quiz-btn-giveup" onClick={() => giveUpRef.current()}>
