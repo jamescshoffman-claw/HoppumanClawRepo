@@ -7,8 +7,8 @@ import { CONFIGS, type QuizConfig, type Country, type RegionKey } from './quizDa
 // Loader is in index.html. Replace the slot IDs below with the ones AdSense
 // gives you when you create the two ad units in the dashboard.
 const AD_CLIENT = 'ca-pub-7665194311315691'
-const AD_SLOT_LEFT  = 'REPLACE_WITH_LEFT_SLOT_ID'
-const AD_SLOT_RIGHT = 'REPLACE_WITH_RIGHT_SLOT_ID'
+const AD_SLOT_LEFT  = '4001990616'
+const AD_SLOT_RIGHT = '7541094612'
 
 function AdSlot({ slot, className }: { slot: string; className?: string }) {
   const pushed = useRef(false)
