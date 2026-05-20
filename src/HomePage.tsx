@@ -18,9 +18,8 @@ const PROJECTS = [
     blurb: 'Name all the countries of Europe, Asia, and South America on an interactive map.',
     year: '2025',
     tags: ['geography', 'learning'],
-    link: '/countrystudy',
+    link: 'https://geostudy.org',
     image: '/images/world-map.svg',
-    internal: true,
   },
   {
     id: 'p8',
