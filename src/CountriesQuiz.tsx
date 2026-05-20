@@ -3,6 +3,33 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson-client'
 import { CONFIGS, type QuizConfig, type Country, type RegionKey } from './quizData'
 
+// ── AdSense ───────────────────────────────────────────────────────────────
+// Loader is in index.html. Replace the slot IDs below with the ones AdSense
+// gives you when you create the two ad units in the dashboard.
+const AD_CLIENT = 'ca-pub-7665194311315691'
+const AD_SLOT_LEFT  = 'REPLACE_WITH_LEFT_SLOT_ID'
+const AD_SLOT_RIGHT = 'REPLACE_WITH_RIGHT_SLOT_ID'
+
+function AdSlot({ slot, className }: { slot: string; className?: string }) {
+  const pushed = useRef(false)
+  useEffect(() => {
+    if (pushed.current) return
+    pushed.current = true
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({})
+    } catch { /* adsbygoogle not ready */ }
+  }, [])
+  return (
+    <ins
+      className={`adsbygoogle ${className ?? ''}`}
+      style={{ display: 'block', width: '160px', height: '600px' }}
+      data-ad-client={AD_CLIENT}
+      data-ad-slot={slot}
+    />
+  )
+}
+
 const W = 960
 const H = 600
 // Inset SVG uses a narrower viewBox so text/paths render at higher apparent size
@@ -543,6 +570,13 @@ export default function CountriesQuiz() {
   }
 
   return (
+    <>
+      <aside className="quiz-ad-rail quiz-ad-rail--left" aria-hidden="true">
+        <AdSlot slot={AD_SLOT_LEFT} />
+      </aside>
+      <aside className="quiz-ad-rail quiz-ad-rail--right" aria-hidden="true">
+        <AdSlot slot={AD_SLOT_RIGHT} />
+      </aside>
     <div className="quiz-page">
       <div className="quiz-header">
         <h1 className="quiz-title">Countries Quiz</h1>
@@ -566,5 +600,6 @@ export default function CountriesQuiz() {
         onRestart={() => setResetCount(c => c + 1)}
       />
     </div>
+    </>
   )
 }
