@@ -16,7 +16,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/countrystudy" element={<GeoStudyRedirect />} />
+        <Route path="/geostudy" element={<GeoStudyRedirect />} />
         <Route path="/animals" element={<AnimalGame />} />
         <Route path="/balance" element={<BalanceGame />} />
       </Routes>
