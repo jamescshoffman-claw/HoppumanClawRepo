@@ -1,0 +1,19 @@
+[
+    {
+        "name":  "BeginnerKoreanPodcas",
+        "sentence_count":  50
+    },
+    {
+        "name":  "DidisKoreanCulturePo",
+        "sentence_count":  100,
+        "difficulty":  "hard"
+    },
+    {
+        "name":  "KoreanListeningWhyit",
+        "sentence_count":  50
+    },
+    {
+        "name":  "TalkingAboutDailyRou",
+        "sentence_count":  50
+    }
+]
