@@ -21,6 +21,7 @@ const state = {
   roundResumable: false,  // true only for prefix rounds we persist (not retry rounds)
   selectedCount: 0,       // how many sentences the current resumable round covers
   progressBySet: {},      // set_name -> saved progress row, for resume badges
+  setLabels: {},          // set id (name) -> display label, e.g. "Level 1"
 };
 
 // ─── Cloud sync (Supabase auth + per-set resume) ─────────────────────────────
@@ -500,7 +501,7 @@ function showConfigure(name, sentences) {
   state.allSentences = sentences;
   state.videoId = name;
 
-  el('configure-set-name').textContent = name;
+  el('configure-set-name').textContent = state.setLabels[name] || name;
   const total = sentences.length;
   const counts = [10, 25, 50].filter(n => n < total);
   counts.push(total);
@@ -696,10 +697,13 @@ async function fetchLocalSets() {
     const sets = await res.json();
     if (!sets?.length) return;
 
+    // `name` stays the stable id (folder path + progress key); `label` is shown.
+    sets.forEach(s => { state.setLabels[s.name] = s.label || s.name; });
+
     const list = el('local-sets-list');
     list.innerHTML = sets.map(s => `
       <button class="local-set-btn" data-name="${escHtml(s.name)}">
-        <span class="local-set-name">${escHtml(s.name)}</span>
+        <span class="local-set-name">${escHtml(s.label || s.name)}</span>
         <span class="local-set-right">
           ${s.difficulty ? `<span class="difficulty-badge difficulty-${escHtml(s.difficulty)}">${escHtml(s.difficulty)}</span>` : ''}
           <span class="local-set-count">${s.sentence_count} sentences</span>

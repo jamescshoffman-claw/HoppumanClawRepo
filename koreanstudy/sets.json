@@ -1,19 +1,23 @@
 [
     {
         "name":  "BeginnerKoreanPodcas",
+        "label":  "Level 1",
         "sentence_count":  50
     },
     {
-        "name":  "DidisKoreanCulturePo",
-        "sentence_count":  100,
-        "difficulty":  "hard"
-    },
-    {
         "name":  "KoreanListeningWhyit",
+        "label":  "Level 2",
         "sentence_count":  50
     },
     {
         "name":  "TalkingAboutDailyRou",
+        "label":  "Level 3",
         "sentence_count":  50
+    },
+    {
+        "name":  "DidisKoreanCulturePo",
+        "label":  "Level 4",
+        "sentence_count":  100,
+        "difficulty":  "hard"
     }
 ]
