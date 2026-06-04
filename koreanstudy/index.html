@@ -75,6 +75,7 @@
         <button id="replay-btn" class="btn-ghost btn-large" disabled title="Replay">↩</button>
       </div>
       <span class="play-hint">Listen to the sentence</span>
+      <button id="audio-status" class="audio-status hidden"></button>
     </div>
 
     <!-- Input area -->
@@ -131,6 +132,16 @@
   <p style="color:var(--text-muted);">Practicing from <strong id="configure-set-name"></strong></p>
   <div id="count-options" class="count-options"></div>
   <button id="configure-back-btn" class="btn-ghost" style="font-size:0.85rem;">← Back</button>
+</div>
+
+<!-- ═══ Loading Audio Screen (offline prefetch) ══════════════════════════════ -->
+<div id="loading-audio-screen" class="screen hidden" style="justify-content:center;align-items:center;text-align:center;gap:1.25rem;">
+  <h2 style="font-size:1.5rem;font-weight:700;">Downloading audio…</h2>
+  <p style="color:var(--text-muted);max-width:32ch;">Saving every clip so you can keep practicing even if you lose service.</p>
+  <div id="loading-audio-track" style="width:100%;max-width:320px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;">
+    <div id="loading-audio-fill" style="width:0%;height:100%;background:var(--blue);border-radius:3px;transition:width 0.2s ease;"></div>
+  </div>
+  <span id="loading-audio-text" style="font-size:0.85rem;color:var(--text-muted);"></span>
 </div>
 
 <!-- ═══ Round Complete Screen ════════════════════════════════════════════════ -->

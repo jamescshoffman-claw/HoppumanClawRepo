@@ -24,21 +24,66 @@ function setPlayBtn(playing) {
   el('play-btn').textContent = playing ? '⏸' : '▶';
 }
 
-function playSegment() {
+// Fetch and cache one clip on demand. Returns true once a playable blob exists.
+async function ensureAudio(s) {
+  if (s.audio_blob) return true;
+  if (!s.audio_url) return false;
+  try {
+    const res = await fetch(s.audio_url);
+    if (res.ok) { s.audio_blob = URL.createObjectURL(await res.blob()); return true; }
+  } catch (_) { /* still offline */ }
+  return false;
+}
+
+// Reflect a clip's offline availability on the card. If it isn't cached (e.g. it
+// failed to download during prefetch), try to load it now — landing on the card,
+// or returning to it after a skip, retries the fetch.
+async function updateAudioStatus(s) {
+  const status = el('audio-status');
+  if (s.audio_blob) { hide('audio-status'); return; }
+
+  status.textContent = '⏳ Loading audio…';
+  status.className = 'audio-status loading';
+  show('audio-status');
+
+  const ok = await ensureAudio(s);
+  if (state.sentences[state.idx] !== s) return; // user moved on while fetching
+
+  if (ok) {
+    hide('audio-status');
+  } else {
+    status.textContent = '⚠ Audio not saved — tap to retry when online';
+    status.className = 'audio-status';
+  }
+}
+
+async function playSegment() {
   const audio = el('audio-player');
   if (!audio.paused) { audio.pause(); return; }
   const s = state.sentences[state.idx];
+  if (!s.audio_blob) {
+    const ok = await ensureAudio(s);
+    if (state.sentences[state.idx] !== s) return;
+    updateAudioStatus(s);
+    if (!ok) return;
+  }
   if (audio.dataset.sentenceId !== String(s.id)) {
-    audio.src = s.audio_url;
+    audio.src = s.audio_blob || s.audio_url;
     audio.dataset.sentenceId = s.id;
   }
   audio.play();
 }
 
-function replaySegment() {
+async function replaySegment() {
   const s = state.sentences[state.idx];
+  if (!s.audio_blob) {
+    const ok = await ensureAudio(s);
+    if (state.sentences[state.idx] !== s) return;
+    updateAudioStatus(s);
+    if (!ok) return;
+  }
   const audio = el('audio-player');
-  audio.src = s.audio_url;
+  audio.src = s.audio_blob || s.audio_url;
   audio.dataset.sentenceId = s.id;
   audio.currentTime = 0;
   audio.play();
@@ -219,8 +264,40 @@ function updateScoreCounter() {
   el('score-text').textContent = `✓ ${state.roundCorrect} / ${state.sentences.length}`;
 }
 
+// ─── Offline audio prefetch ─────────────────────────────────────────────────
+// Audio clips are normally fetched lazily when ▶ is pressed, so they fail once
+// service drops. Before a round starts we download every selected clip into an
+// in-memory blob URL so the whole round plays offline (e.g. on the subway).
+async function prefetchAudio(sentences, onProgress) {
+  const pending = sentences.filter(s => s.audio_url && !s.audio_blob);
+  let done = 0;
+  onProgress(0, pending.length);
+  await Promise.all(pending.map(async s => {
+    try {
+      const res = await fetch(s.audio_url);
+      if (res.ok) s.audio_blob = URL.createObjectURL(await res.blob());
+    } catch (_) { /* leaves audio_url as a (network) fallback */ }
+    onProgress(++done, pending.length);
+  }));
+  return pending.filter(s => !s.audio_blob).length; // clips that failed to cache
+}
+
 // ─── Round management ─────────────────────────────────────────────────────────
-function startRound(sentences) {
+async function startRound(sentences) {
+  // Download all clips up front so losing service mid-round doesn't break playback.
+  if (sentences.some(s => s.audio_url && !s.audio_blob)) {
+    hide('load-screen', 'configure-screen', 'round-complete-screen', 'practice-screen');
+    show('loading-audio-screen');
+    const failed = await prefetchAudio(sentences, (done, total) => {
+      el('loading-audio-fill').style.width = total ? `${(done / total) * 100}%` : '100%';
+      el('loading-audio-text').textContent = `${done} / ${total} clips saved`;
+    });
+    hide('loading-audio-screen');
+    if (failed) {
+      console.warn(`${failed} audio clip(s) could not be cached; they may not play offline.`);
+    }
+  }
+
   state.sentences = sentences;
   state.idx = 0;
   state.roundCorrect = 0;
@@ -300,6 +377,8 @@ function renderCard() {
 
   const s     = state.sentences[state.idx];
   const total = state.sentences.length;
+
+  updateAudioStatus(s); // show offline state / retry the fetch on landing
 
   el('progress-fill').style.width  = `${(state.idx / total) * 100}%`;
   el('progress-text').textContent  = `${state.idx + 1} / ${total}`;
@@ -456,6 +535,8 @@ async function fetchLocalSets() {
 
 async function loadLocalSet(name) {
   hide('load-error');
+  // Release any blobs cached for the previously loaded set.
+  state.allSentences.forEach(s => { if (s.audio_blob) URL.revokeObjectURL(s.audio_blob); });
   try {
     const res  = await fetch(`${BASE}/sets/${encodeURIComponent(name)}/sentences.json`);
     if (!res.ok) { showLoadError('Failed to load this set.'); return; }
@@ -485,6 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudioListeners();
   el('play-btn').addEventListener('click',   playSegment);
   el('replay-btn').addEventListener('click', replaySegment);
+  el('audio-status').addEventListener('click', () => updateAudioStatus(state.sentences[state.idx]));
 
   el('check-btn').addEventListener('click', checkAnswer);
   el('skip-btn').addEventListener('click',  checkAnswer);
