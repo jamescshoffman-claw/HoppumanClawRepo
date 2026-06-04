@@ -17,7 +17,151 @@ const state = {
   englishCorrect: null,
   resultRecorded: false,
   roundCorrect: 0,
+  // Cloud sync
+  roundResumable: false,  // true only for prefix rounds we persist (not retry rounds)
+  selectedCount: 0,       // how many sentences the current resumable round covers
+  progressBySet: {},      // set_name -> saved progress row, for resume badges
 };
+
+// ─── Cloud sync (Supabase auth + per-set resume) ─────────────────────────────
+// Reuses the same Supabase project as geostudy, so signing in here is the same
+// Google account. Public client-side keys — safe to ship in the static bundle.
+const SUPABASE_URL = 'https://sofrzvspjrvtovksjdvi.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Zh07DXhCr6jAcy1ZDAiviQ_XPFjings';
+const sb = (window.supabase && window.supabase.createClient)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+  : null;
+let currentUser = null; // Supabase user when signed in, else null
+
+const GOOGLE_SVG = `
+  <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true">
+    <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/>
+    <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/>
+    <path fill="#FBBC05" d="M3.97 10.72a5.41 5.41 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/>
+    <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>
+  </svg>`;
+
+async function signIn() {
+  if (!sb) return;
+  // Land back on this exact page (strip any hash/query) after the Google round-trip.
+  const redirectTo = window.location.href.split('#')[0].split('?')[0];
+  await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
+}
+
+async function signOut() {
+  if (sb) await sb.auth.signOut();
+}
+
+function renderAuthWidget() {
+  const w = el('auth-widget');
+  if (!sb) { w.classList.add('hidden'); return; }
+  w.classList.remove('hidden');
+
+  if (!currentUser) {
+    w.className = 'auth-widget';
+    w.innerHTML = `<button class="auth-google-btn" id="auth-signin-btn">${GOOGLE_SVG}<span>Sign in with Google</span></button>`;
+    el('auth-signin-btn').addEventListener('click', signIn);
+    return;
+  }
+
+  const meta   = currentUser.user_metadata || {};
+  const name   = meta.full_name || meta.name || currentUser.email || 'Account';
+  const avatar = meta.avatar_url;
+  w.className = 'auth-widget auth-widget--signedin';
+  w.innerHTML = `
+    ${avatar
+      ? `<img class="auth-avatar" src="${escHtml(avatar)}" alt="" referrerpolicy="no-referrer">`
+      : `<span class="auth-avatar auth-avatar-fallback">${escHtml(name.charAt(0).toUpperCase())}</span>`}
+    <span class="auth-user-name" title="${escHtml(name)}">${escHtml(name)}</span>
+    <button class="auth-signout-btn" id="auth-signout-btn">Sign out</button>`;
+  el('auth-signout-btn').addEventListener('click', signOut);
+}
+
+// A saved row is "resumable" when it's mid-round (past the first card, not finished).
+function isResumable(row) {
+  return row && row.current_index > 0 && row.current_index < row.selected_count;
+}
+
+async function loadAllProgress() {
+  state.progressBySet = {};
+  if (!sb || !currentUser) return;
+  const { data, error } = await sb
+    .from('korean_progress')
+    .select('set_name, selected_count, current_index, scores')
+    .eq('user_id', currentUser.id);
+  if (error) { console.warn('Progress load failed:', error.message); return; }
+  (data || []).forEach(r => { state.progressBySet[r.set_name] = r; });
+}
+
+async function saveProgress() {
+  if (!sb || !currentUser || !state.roundResumable) return;
+  const row = {
+    set_name: state.videoId,
+    selected_count: state.selectedCount,
+    current_index: state.idx,
+    scores: state.scores,
+  };
+  state.progressBySet[state.videoId] = row;
+  const { error } = await sb
+    .from('korean_progress')
+    .upsert(
+      { ...row, user_id: currentUser.id, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,set_name' }
+    );
+  if (error) console.warn('Progress save failed:', error.message);
+}
+
+async function clearProgress(setName) {
+  delete state.progressBySet[setName];
+  refreshSetListBadges();
+  if (!sb || !currentUser) return;
+  const { error } = await sb
+    .from('korean_progress')
+    .delete()
+    .eq('user_id', currentUser.id)
+    .eq('set_name', setName);
+  if (error) console.warn('Progress clear failed:', error.message);
+}
+
+// Add/update/remove a "Resume" badge on each set button in the load screen.
+function refreshSetListBadges() {
+  document.querySelectorAll('.local-set-btn').forEach(btn => {
+    const right = btn.querySelector('.local-set-right');
+    if (!right) return;
+    let badge = right.querySelector('.resume-badge');
+    if (isResumable(state.progressBySet[btn.dataset.name])) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'resume-badge';
+        right.prepend(badge);
+      }
+      badge.textContent = 'Resume';
+    } else if (badge) {
+      badge.remove();
+    }
+  });
+}
+
+function initAuth() {
+  if (!sb) { el('auth-widget').classList.add('hidden'); return; }
+
+  // Initial session (also resolves the OAuth redirect when returning from Google).
+  sb.auth.getSession().then(async ({ data }) => {
+    currentUser = data.session?.user || null;
+    renderAuthWidget();
+    if (currentUser) await loadAllProgress();
+    refreshSetListBadges();
+  });
+
+  // React to sign-in / sign-out.
+  sb.auth.onAuthStateChange(async (_event, session) => {
+    currentUser = session?.user || null;
+    renderAuthWidget();
+    if (currentUser) await loadAllProgress();
+    else state.progressBySet = {};
+    refreshSetListBadges();
+  });
+}
 
 // ─── Audio player ─────────────────────────────────────────────────────────────
 function setPlayBtn(playing) {
@@ -258,6 +402,7 @@ function recordResult() {
   state.scores[s.id] = correct;
   if (correct) state.roundCorrect++;
   updateScoreCounter();
+  saveProgress();
 }
 
 function updateScoreCounter() {
@@ -283,7 +428,9 @@ async function prefetchAudio(sentences, onProgress) {
 }
 
 // ─── Round management ─────────────────────────────────────────────────────────
-async function startRound(sentences) {
+// opts: { resumable, startIdx, savedScores } — resumable rounds (the prefix rounds
+// picked from the configure screen) persist progress to the user's account.
+async function startRound(sentences, opts = {}) {
   // Download all clips up front so losing service mid-round doesn't break playback.
   if (sentences.some(s => s.audio_url && !s.audio_blob)) {
     hide('load-screen', 'configure-screen', 'round-complete-screen', 'practice-screen');
@@ -299,10 +446,21 @@ async function startRound(sentences) {
   }
 
   state.sentences = sentences;
-  state.idx = 0;
-  state.roundCorrect = 0;
   state.scores = {};
   sentences.forEach(s => { state.scores[s.id] = null; });
+
+  // Restore saved per-sentence results when resuming.
+  if (opts.savedScores) {
+    sentences.forEach(s => {
+      if (opts.savedScores[s.id] !== undefined && opts.savedScores[s.id] !== null) {
+        state.scores[s.id] = opts.savedScores[s.id];
+      }
+    });
+  }
+  state.idx = Math.min(opts.startIdx || 0, sentences.length - 1);
+  state.roundCorrect = sentences.filter(s => state.scores[s.id] === true).length;
+  state.roundResumable = !!opts.resumable;
+  state.selectedCount  = sentences.length;
 
   hide('load-screen', 'configure-screen', 'round-complete-screen');
   show('practice-screen');
@@ -314,6 +472,10 @@ async function startRound(sentences) {
 
 function finishRound() {
   hide('practice-screen');
+
+  // Round complete — drop the saved resume point for this set.
+  if (state.roundResumable) clearProgress(state.videoId);
+  state.roundResumable = false;
 
   const wrongSentences = state.sentences.filter(s => state.scores[s.id] === false);
   el('round-result-text').textContent =
@@ -343,18 +505,36 @@ function showConfigure(name, sentences) {
   const counts = [10, 25, 50].filter(n => n < total);
   counts.push(total);
 
+  const saved = state.progressBySet[name];
+  const resumeHtml = isResumable(saved)
+    ? `<button class="count-option-btn resume-btn" id="resume-btn">
+         ▶ Resume — sentence ${saved.current_index + 1} / ${saved.selected_count}
+       </button>`
+    : '';
+
   const container = el('count-options');
-  container.innerHTML = counts.map(n =>
+  container.innerHTML = resumeHtml + counts.map(n =>
     `<button class="count-option-btn" data-count="${n}">
        ${n === total ? `All (${n})` : n}
      </button>`
   ).join('');
 
-  container.querySelectorAll('.count-option-btn').forEach(btn => {
+  // Picking a count starts a fresh resumable round (overwrites any saved point).
+  container.querySelectorAll('.count-option-btn[data-count]').forEach(btn => {
     btn.addEventListener('click', () =>
-      startRound(state.allSentences.slice(0, parseInt(btn.dataset.count)))
+      startRound(state.allSentences.slice(0, parseInt(btn.dataset.count)), { resumable: true })
     );
   });
+
+  if (isResumable(saved)) {
+    el('resume-btn').addEventListener('click', () =>
+      startRound(state.allSentences.slice(0, saved.selected_count), {
+        resumable: true,
+        startIdx: saved.current_index,
+        savedScores: saved.scores,
+      })
+    );
+  }
 
   hide('load-screen', 'practice-screen', 'round-complete-screen');
   show('configure-screen');
@@ -407,6 +587,8 @@ function renderCard() {
 
   if (state.settings.writeKorean) el('korean-input').focus();
   else if (state.settings.translateEnglish) el('english-input').focus();
+
+  saveProgress(); // persist current position whenever a card is shown
 }
 
 function checkAnswer() {
@@ -530,6 +712,7 @@ async function fetchLocalSets() {
     });
 
     show('local-sets-area');
+    refreshSetListBadges();
   } catch (_) {}
 }
 
@@ -562,6 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   applySettingsToUI();
   fetchLocalSets();
+  initAuth();
 
   initAudioListeners();
   el('play-btn').addEventListener('click',   playSegment);
