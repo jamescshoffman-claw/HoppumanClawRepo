@@ -127,12 +127,26 @@ header .subtitle {
   border-radius: 999px;
   padding: 0.1rem 0.5rem;
 }
+/* Resume is a wide, short pill on its own row — not a square number tile. */
 .count-option-btn.resume-btn {
+  flex: 1 0 100%;
+  width: 100%;
+  height: auto;
+  min-height: 54px;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
   background: var(--blue);
   color: #fff;
   border-color: var(--blue);
-  font-weight: 600;
 }
+
+.local-set-correct {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green);
+}
+.local-set-correct.none { color: var(--text-muted); font-weight: 500; }
 
 @media (max-width: 540px) {
   .auth-google-btn span { display: none; }

@@ -20,8 +20,11 @@ const state = {
   // Cloud sync
   roundResumable: false,  // true only for prefix rounds we persist (not retry rounds)
   selectedCount: 0,       // how many sentences the current resumable round covers
-  progressBySet: {},      // set_name -> saved progress row, for resume badges
+  progressBySet: {},      // set_name -> saved progress row (resume + mastery)
   setLabels: {},          // set id (name) -> display label, e.g. "Level 1"
+  setTotals: {},          // set id (name) -> total sentence count
+  seen: {},               // sentence id -> true, for the active set (ever practiced)
+  correct: {},            // sentence id -> true, for the active set (ever correct)
 };
 
 // ─── Cloud sync (Supabase auth + per-set resume) ─────────────────────────────
@@ -78,9 +81,15 @@ function renderAuthWidget() {
   el('auth-signout-btn').addEventListener('click', signOut);
 }
 
-// A saved row is "resumable" when it's mid-round (past the first card, not finished).
+// Number of sentences ever answered correctly in a set's saved row.
+function correctCount(row) {
+  return row?.correct ? Object.values(row.correct).filter(Boolean).length : 0;
+}
+
+// A saved row is "resumable" when it has an active round paused mid-way.
 function isResumable(row) {
-  return row && row.current_index > 0 && row.current_index < row.selected_count;
+  const n = row?.round_ids?.length || 0;
+  return n > 0 && row.current_index > 0 && row.current_index < n;
 }
 
 async function loadAllProgress() {
@@ -88,43 +97,41 @@ async function loadAllProgress() {
   if (!sb || !currentUser) return;
   const { data, error } = await sb
     .from('korean_progress')
-    .select('set_name, selected_count, current_index, scores')
+    .select('set_name, round_ids, current_index, scores, seen, correct')
     .eq('user_id', currentUser.id);
   if (error) { console.warn('Progress load failed:', error.message); return; }
   (data || []).forEach(r => { state.progressBySet[r.set_name] = r; });
 }
 
-async function saveProgress() {
-  if (!sb || !currentUser || !state.roundResumable) return;
+// Persist the active set: the in-progress round (for resume) plus the cumulative
+// seen/correct maps (which survive finishing a round and drive the menu counts).
+async function persistSet() {
+  if (!state.videoId) return;
   const row = {
     set_name: state.videoId,
-    selected_count: state.selectedCount,
-    current_index: state.idx,
-    scores: state.scores,
+    round_ids:     state.roundResumable ? state.sentences.map(s => s.id) : [],
+    current_index: state.roundResumable ? state.idx : 0,
+    scores:        state.roundResumable ? state.scores : {},
+    seen:    state.seen,
+    correct: state.correct,
   };
   state.progressBySet[state.videoId] = row;
+  refreshSetList();
+
+  if (!sb || !currentUser) return;
   const { error } = await sb
     .from('korean_progress')
     .upsert(
-      { ...row, user_id: currentUser.id, updated_at: new Date().toISOString() },
+      { ...row, selected_count: row.round_ids.length, user_id: currentUser.id,
+        updated_at: new Date().toISOString() },
       { onConflict: 'user_id,set_name' }
     );
   if (error) console.warn('Progress save failed:', error.message);
 }
 
-async function clearProgress(setName) {
-  delete state.progressBySet[setName];
-  refreshSetListBadges();
-  if (!sb || !currentUser) return;
-  const { error } = await sb
-    .from('korean_progress')
-    .delete()
-    .eq('user_id', currentUser.id)
-    .eq('set_name', setName);
-  if (error) console.warn('Progress clear failed:', error.message);
-}
+// Refresh both the resume badge and the ✓ count on every set button.
+function refreshSetList() { refreshSetListBadges(); renderSetCounts(); }
 
-// Add/update/remove a "Resume" badge on each set button in the load screen.
 function refreshSetListBadges() {
   document.querySelectorAll('.local-set-btn').forEach(btn => {
     const right = btn.querySelector('.local-set-right');
@@ -143,6 +150,18 @@ function refreshSetListBadges() {
   });
 }
 
+function renderSetCounts() {
+  document.querySelectorAll('.local-set-btn').forEach(btn => {
+    const span = btn.querySelector('.local-set-correct');
+    if (!span) return;
+    const name  = btn.dataset.name;
+    const total = state.setTotals[name] || 0;
+    const n     = correctCount(state.progressBySet[name]);
+    span.textContent = `✓ ${n}/${total}`;
+    span.classList.toggle('none', n === 0);
+  });
+}
+
 function initAuth() {
   if (!sb) { el('auth-widget').classList.add('hidden'); return; }
 
@@ -151,7 +170,7 @@ function initAuth() {
     currentUser = data.session?.user || null;
     renderAuthWidget();
     if (currentUser) await loadAllProgress();
-    refreshSetListBadges();
+    refreshSetList();
   });
 
   // React to sign-in / sign-out.
@@ -160,7 +179,7 @@ function initAuth() {
     renderAuthWidget();
     if (currentUser) await loadAllProgress();
     else state.progressBySet = {};
-    refreshSetListBadges();
+    refreshSetList();
   });
 }
 
@@ -401,9 +420,11 @@ function recordResult() {
 
   const s = state.sentences[state.idx];
   state.scores[s.id] = correct;
+  state.seen[s.id] = true;            // cumulative: practiced this sentence
+  if (correct) state.correct[s.id] = true; // cumulative: mastered it (sticky)
   if (correct) state.roundCorrect++;
   updateScoreCounter();
-  saveProgress();
+  persistSet();
 }
 
 function updateScoreCounter() {
@@ -474,9 +495,9 @@ async function startRound(sentences, opts = {}) {
 function finishRound() {
   hide('practice-screen');
 
-  // Round complete — drop the saved resume point for this set.
-  if (state.roundResumable) clearProgress(state.videoId);
+  // Round complete — clear the resume point but keep cumulative mastery.
   state.roundResumable = false;
+  persistSet();
 
   const wrongSentences = state.sentences.filter(s => state.scores[s.id] === false);
   el('round-result-text').textContent =
@@ -496,20 +517,32 @@ function finishRound() {
   show('round-complete-screen');
 }
 
+// Pick `count` sentences, preferring ones never practiced before, then filling
+// with already-seen ones (original order preserved within each group).
+function pickRoundSentences(all, count) {
+  const unseen = all.filter(s => !state.seen[s.id]);
+  const seen   = all.filter(s =>  state.seen[s.id]);
+  return unseen.concat(seen).slice(0, count);
+}
+
 // ─── Configure screen ─────────────────────────────────────────────────────────
 function showConfigure(name, sentences) {
   state.allSentences = sentences;
   state.videoId = name;
+
+  // Load this set's cumulative mastery so seen/correct accrue across rounds.
+  const saved = state.progressBySet[name];
+  state.seen    = { ...(saved?.seen || {}) };
+  state.correct = { ...(saved?.correct || {}) };
 
   el('configure-set-name').textContent = state.setLabels[name] || name;
   const total = sentences.length;
   const counts = [10, 25, 50].filter(n => n < total);
   counts.push(total);
 
-  const saved = state.progressBySet[name];
   const resumeHtml = isResumable(saved)
     ? `<button class="count-option-btn resume-btn" id="resume-btn">
-         ▶ Resume — sentence ${saved.current_index + 1} / ${saved.selected_count}
+         ▶ Resume — sentence ${saved.current_index + 1} / ${saved.round_ids.length}
        </button>`
     : '';
 
@@ -520,21 +553,24 @@ function showConfigure(name, sentences) {
      </button>`
   ).join('');
 
-  // Picking a count starts a fresh resumable round (overwrites any saved point).
+  // Picking a count starts a fresh round of mostly-unseen sentences.
   container.querySelectorAll('.count-option-btn[data-count]').forEach(btn => {
     btn.addEventListener('click', () =>
-      startRound(state.allSentences.slice(0, parseInt(btn.dataset.count)), { resumable: true })
+      startRound(pickRoundSentences(state.allSentences, parseInt(btn.dataset.count)), { resumable: true })
     );
   });
 
   if (isResumable(saved)) {
-    el('resume-btn').addEventListener('click', () =>
-      startRound(state.allSentences.slice(0, saved.selected_count), {
+    el('resume-btn').addEventListener('click', () => {
+      // Rebuild the paused round from its saved sentence ids, in order.
+      const byId = new Map(state.allSentences.map(s => [s.id, s]));
+      const roundSentences = saved.round_ids.map(id => byId.get(id)).filter(Boolean);
+      startRound(roundSentences, {
         resumable: true,
         startIdx: saved.current_index,
         savedScores: saved.scores,
-      })
-    );
+      });
+    });
   }
 
   hide('load-screen', 'practice-screen', 'round-complete-screen');
@@ -589,7 +625,7 @@ function renderCard() {
   if (state.settings.writeKorean) el('korean-input').focus();
   else if (state.settings.translateEnglish) el('english-input').focus();
 
-  saveProgress(); // persist current position whenever a card is shown
+  persistSet(); // persist current position whenever a card is shown
 }
 
 function checkAnswer() {
@@ -698,7 +734,10 @@ async function fetchLocalSets() {
     if (!sets?.length) return;
 
     // `name` stays the stable id (folder path + progress key); `label` is shown.
-    sets.forEach(s => { state.setLabels[s.name] = s.label || s.name; });
+    sets.forEach(s => {
+      state.setLabels[s.name] = s.label || s.name;
+      state.setTotals[s.name] = s.sentence_count;
+    });
 
     const list = el('local-sets-list');
     list.innerHTML = sets.map(s => `
@@ -706,6 +745,7 @@ async function fetchLocalSets() {
         <span class="local-set-name">${escHtml(s.label || s.name)}</span>
         <span class="local-set-right">
           ${s.difficulty ? `<span class="difficulty-badge difficulty-${escHtml(s.difficulty)}">${escHtml(s.difficulty)}</span>` : ''}
+          <span class="local-set-correct none"></span>
           <span class="local-set-count">${s.sentence_count} sentences</span>
         </span>
       </button>
@@ -716,7 +756,7 @@ async function fetchLocalSets() {
     });
 
     show('local-sets-area');
-    refreshSetListBadges();
+    refreshSetList();
   } catch (_) {}
 }
 
