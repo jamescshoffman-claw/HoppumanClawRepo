@@ -3,17 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0c1f35" />
-    <title>Type Race — What Is James Doing?</title>
-    <meta name="description" content="A type racing game. Challenge your group chat: who has the fastest fingers?" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌨️</text></svg>" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/typebattle/assets/index-BjPyt_R2.js"></script>
-    <link rel="stylesheet" crossorigin href="/typebattle/assets/index-CL8zyqFn.css">
+    <title>Type Race has moved to typebattle.fun</title>
+    <meta name="robots" content="noindex" />
+    <!-- Type Race now lives at its own domain. Redirect there, preserving the
+         hash (and query) so old share links like /typebattle/#/race/<id> land
+         in the right race. -->
+    <link rel="canonical" href="https://typebattle.fun/" />
+    <meta http-equiv="refresh" content="0; url=https://typebattle.fun/" />
+    <script>
+      location.replace('https://typebattle.fun/' + location.search + location.hash);
+    </script>
+    <style>
+      html, body { height: 100%; margin: 0; }
+      body {
+        display: flex; align-items: center; justify-content: center;
+        background: #0c1f35; color: #e8eef5;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        text-align: center; padding: 24px;
+      }
+      a { color: #39c2c9; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <p>
+      ⌨️ Type Race has moved to
+      <a href="https://typebattle.fun/">typebattle.fun</a>.<br />
+      Redirecting you now…
+    </p>
   </body>
 </html>

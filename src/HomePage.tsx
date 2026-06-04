@@ -47,9 +47,8 @@ const PROJECTS = [
     blurb: 'A type racing game. Challenge your group chat: who has the fastest fingers?',
     year: '2026',
     tags: ['game', 'multiplayer'],
-    link: '/typebattle/',
+    link: 'https://typebattle.fun',
     image: '/images/typebattle.svg',
-    internal: true,
   },
   {
     id: 'p3',
