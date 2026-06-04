@@ -42,6 +42,16 @@ const PROJECTS = [
     internal: true,
   },
   {
+    id: 'p9',
+    title: 'Type Race',
+    blurb: 'A type racing game. Challenge your group chat: who has the fastest fingers?',
+    year: '2026',
+    tags: ['game', 'multiplayer'],
+    link: '/typebattle/',
+    image: '/images/typebattle.svg',
+    internal: true,
+  },
+  {
     id: 'p3',
     title: 'HoppuHabit',
     blurb: 'A habit-tracking app I built — available on the App Store.',
@@ -137,7 +147,7 @@ type Item = (typeof PROJECTS)[number] | (typeof HOBBIES)[number]
 // ── Thumbnail ─────────────────────────────────────────────────────────────
 
 function Thumb({ item }: { item: Item }) {
-  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune|balance-game/.test(item.image)
+  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune|balance-game|typebattle/.test(item.image)
   return (
     <img
       src={item.image}

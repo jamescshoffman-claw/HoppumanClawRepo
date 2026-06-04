@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="tbbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#13314f"/>
+      <stop offset="100%" stop-color="#0a1828"/>
+    </linearGradient>
+    <linearGradient id="tbkey" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2f5a86"/>
+      <stop offset="100%" stop-color="#1d3c5c"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#tbbg)"/>
+
+  <!-- Speed streaks behind the keyboard -->
+  <g stroke="#39c2c9" stroke-linecap="round" opacity="0.5">
+    <line x1="20" y1="120" x2="120" y2="120" stroke-width="6"/>
+    <line x1="40" y1="150" x2="160" y2="150" stroke-width="4" opacity="0.6"/>
+    <line x1="20" y1="180" x2="100" y2="180" stroke-width="5" opacity="0.8"/>
+  </g>
+
+  <!-- Keyboard body -->
+  <g transform="translate(200,235) rotate(-6)">
+    <rect x="-150" y="-55" width="300" height="120" rx="16" fill="#0e2237" stroke="#39c2c9" stroke-width="2.5"/>
+    <!-- key rows -->
+    <g fill="url(#tbkey)" stroke="#0a1828" stroke-width="2">
+      <!-- row 1 -->
+      <rect x="-132" y="-42" width="30" height="30" rx="5"/>
+      <rect x="-96" y="-42" width="30" height="30" rx="5"/>
+      <rect x="-60" y="-42" width="30" height="30" rx="5"/>
+      <rect x="-24" y="-42" width="30" height="30" rx="5"/>
+      <rect x="12" y="-42" width="30" height="30" rx="5"/>
+      <rect x="48" y="-42" width="30" height="30" rx="5"/>
+      <rect x="84" y="-42" width="30" height="30" rx="5"/>
+      <!-- row 2 -->
+      <rect x="-120" y="-6" width="30" height="30" rx="5"/>
+      <rect x="-84" y="-6" width="30" height="30" rx="5"/>
+      <rect x="-48" y="-6" width="30" height="30" rx="5" fill="#ff9d4d" stroke="#7a3d10"/>
+      <rect x="-12" y="-6" width="30" height="30" rx="5"/>
+      <rect x="24" y="-6" width="30" height="30" rx="5"/>
+      <rect x="60" y="-6" width="30" height="30" rx="5"/>
+      <rect x="96" y="-6" width="30" height="30" rx="5"/>
+      <!-- spacebar -->
+      <rect x="-90" y="30" width="180" height="26" rx="6"/>
+    </g>
+  </g>
+</svg>
