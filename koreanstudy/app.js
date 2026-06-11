@@ -685,6 +685,7 @@ function checkAnswer() {
 
   el('answer-reveal').innerHTML = revealHTML;
   show('answer-reveal');
+  el('answer-reveal').scrollTop = 0;
 
   if (needSelfAssess) {
     show('self-assess-row');
