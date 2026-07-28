@@ -138,8 +138,8 @@
     },
     {
       "id": 16,
-      "korean": "일단 첫 번째 이유는 언어 장벽, 랭그이지 베리얼, 언어 장벽이 있겠는데요.",
-      "english": "First of all, the first reason is language barrier, language barrier, language barrier.",
+      "korean": "일단 첫 번째 이유는 언어 장벽, 랭귀지 배리어, 언어 장벽이 있겠는데요.",
+      "english": "First of all, the first reason would be the language barrier — 'language barrier' in English — the language barrier.",
       "audio_file": "sentence_16.m4a",
       "start": 73.6,
       "end": 80.92,
@@ -148,7 +148,7 @@
     {
       "id": 17,
       "korean": "한국에서는 영어로 이야기하는 거에 대해서 아직 부담을 많이 느끼는 것 같아요.",
-      "english": "I think I still feel a lot of pressure about speaking in English in Korea.",
+      "english": "In Korea, people still seem to feel a lot of pressure about speaking in English.",
       "audio_file": "sentence_17.m4a",
       "start": 81.48,
       "end": 89.26,
@@ -193,7 +193,7 @@
     {
       "id": 22,
       "korean": "그리고 영어를 잘 하고 싶다는 마음도 있어요.",
-      "english": "I also want to become good at English.",
+      "english": "They also have the desire to be good at English.",
       "audio_file": "sentence_22.m4a",
       "start": 120.7,
       "end": 124.58,
@@ -202,7 +202,7 @@
     {
       "id": 23,
       "korean": "그래서 누군가 영어로 대화를 시작하면 시험을 보는 것 같은 기분을 느끼곤 해요.",
-      "english": "So when someone starts a conversation in English, I often feel like I'm taking a test.",
+      "english": "So when someone starts a conversation in English, they often feel like they're taking a test.",
       "audio_file": "sentence_23.m4a",
       "start": 125.34,
       "end": 133.44,
@@ -319,7 +319,7 @@
     {
       "id": 36,
       "korean": "그런데 한국어를 전혀 못 해요.",
-      "english": "But I don’t speak Korean at all.",
+      "english": "But this friend can't speak Korean at all.",
       "audio_file": "sentence_36.m4a",
       "start": 201.92,
       "end": 204.88,
@@ -327,8 +327,8 @@
     },
     {
       "id": 37,
-      "korean": "예를 들어서 이 친구는 독이로만 하는 친구예요.",
-      "english": "For example, this friend is a friend who only talks about poison.",
+      "korean": "예를 들어서 이 친구는 독일어로만 하는 친구예요.",
+      "english": "For example, this friend speaks only German.",
       "audio_file": "sentence_37.m4a",
       "start": 205.14,
       "end": 208.52,
@@ -355,7 +355,7 @@
     {
       "id": 40,
       "korean": "외국인 같아요.",
-      "english": "I feel like a foreigner.",
+      "english": "They look like a foreigner.",
       "audio_file": "sentence_40.m4a",
       "start": 215.4,
       "end": 216.34,
@@ -427,7 +427,7 @@
     {
       "id": 48,
       "korean": "소개팅 앱 있잖아요.",
-      "english": "There is a blind date app.",
+      "english": "You know dating apps, right?",
       "audio_file": "sentence_48.m4a",
       "start": 258.82,
       "end": 260.0,
@@ -436,7 +436,7 @@
     {
       "id": 49,
       "korean": "틴더 같은 소개팅 앱.",
-      "english": "A blind date app like Tinder.",
+      "english": "A dating app like Tinder.",
       "audio_file": "sentence_49.m4a",
       "start": 260.42,
       "end": 262.3,
@@ -445,7 +445,7 @@
     {
       "id": 50,
       "korean": "아직 한국에서는 소개팅 앱을 많이 사용하지 않는 것 같아요.",
-      "english": "I don't think blind date apps are used much in Korea yet.",
+      "english": "I don't think dating apps are used much in Korea yet.",
       "audio_file": "sentence_50.m4a",
       "start": 262.92,
       "end": 268.36,

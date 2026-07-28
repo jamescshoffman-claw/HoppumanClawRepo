@@ -148,7 +148,7 @@
     {
       "id": 17,
       "korean": "그리고 학부 옷이 있었어요.",
-      "english": "And there were undergraduate clothes.",
+      "english": "And there was department clothing.",
       "audio_file": "sentence_17.m4a",
       "start": 88.24,
       "end": 91.2,
@@ -156,7 +156,7 @@
     },
     {
       "id": 18,
-      "korean": "야구, 재킷인데 다 같이 그 재킷을 입었어요.",
+      "korean": "야구 재킷인데 다 같이 그 재킷을 입었어요.",
       "english": "It was a baseball jacket, and we all wore those jackets together.",
       "audio_file": "sentence_18.m4a",
       "start": 92.06,
@@ -201,8 +201,8 @@
     },
     {
       "id": 23,
-      "korean": "4년째 대학교는 1학년부터 4학년까지 있어요.",
-      "english": "This is my 4th year at university, with grades ranging from 1st to 4th years.",
+      "korean": "4년제 대학교는 1학년부터 4학년까지 있어요.",
+      "english": "A four-year university has years ranging from 1st to 4th.",
       "audio_file": "sentence_23.m4a",
       "start": 119.6,
       "end": 124.36,
@@ -228,7 +228,7 @@
     },
     {
       "id": 26,
-      "korean": "제가 선배를 땐 후배를 잘 챙겨줘야 했어요.",
+      "korean": "제가 선배일 땐 후배를 잘 챙겨줘야 했어요.",
       "english": "When I was a senior, I had to take good care of my juniors.",
       "audio_file": "sentence_26.m4a",
       "start": 136.64,
@@ -282,8 +282,8 @@
     },
     {
       "id": 32,
-      "korean": "학교 바뀌지만 학교와 가까웠어요.",
-      "english": "Although the school changed, it was close to the school.",
+      "korean": "학교 밖이지만 학교와 가까웠어요.",
+      "english": "It was outside of school, but it was close to the school.",
       "audio_file": "sentence_32.m4a",
       "start": 168.36,
       "end": 172.02,
@@ -301,7 +301,7 @@
     {
       "id": 34,
       "korean": "매일 똑같은 시간에 자주 왔어요.",
-      "english": "I often came at the same time every day.",
+      "english": "It came frequently, at the same times every day.",
       "audio_file": "sentence_34.m4a",
       "start": 178.18,
       "end": 181.16,
@@ -372,7 +372,7 @@
     },
     {
       "id": 42,
-      "korean": "학교에 주차장에는 선생님들의 차 밖에 없었어요.",
+      "korean": "학교 주차장에는 선생님들의 차 밖에 없었어요.",
       "english": "There were only teachers' cars in the school parking lot.",
       "audio_file": "sentence_42.m4a",
       "start": 218.86,
@@ -409,7 +409,7 @@
     {
       "id": 46,
       "korean": "학교 도서관이 밤 12시까지 열었어요.",
-      "english": "The school library is open until midnight.",
+      "english": "The school library was open until midnight.",
       "audio_file": "sentence_46.m4a",
       "start": 243.26,
       "end": 247.2,

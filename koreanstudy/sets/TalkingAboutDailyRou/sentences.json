@@ -12,8 +12,8 @@
     },
     {
       "id": 2,
-      "korean": "저의 팟 게스트에 돌아와 주셔서 감사합니다.",
-      "english": "Thank you for coming back to my pod guest.",
+      "korean": "저의 팟캐스트에 돌아와 주셔서 감사합니다.",
+      "english": "Thank you for coming back to my podcast.",
       "audio_file": "sentence_02.m4a",
       "start": 3.48,
       "end": 6.5,
@@ -31,7 +31,7 @@
     {
       "id": 4,
       "korean": "제가 한국인 선생님으로서 몇시에 일어나고 언제 수업을 하고 하루를 어떻게 보내는지 알려드리면서 여러분들이 일상적인 단어들, 표현들 배우면 좋을 것 같아서요.",
-      "english": "As a Korean teacher, I thought it would be good for you to learn everyday words and expressions by telling me what time I wake up, when I teach, and how I spend my day.",
+      "english": "As a Korean teacher, I thought it would be good for you to learn everyday words and expressions as I tell you what time I wake up, when I teach, and how I spend my day.",
       "audio_file": "sentence_04.m4a",
       "start": 16.7,
       "end": 34.0,
@@ -85,7 +85,7 @@
     {
       "id": 10,
       "korean": "저는 보통 그래서 아침 5시 5시에 일어나요.",
-      "english": "That's why I usually wake up at 5:05 in the morning.",
+      "english": "That's why I usually wake up at 5 — 5 o'clock — in the morning.",
       "audio_file": "sentence_10.m4a",
       "start": 54.76,
       "end": 59.78,
@@ -183,8 +183,8 @@
     },
     {
       "id": 21,
-      "korean": "제가 헬리니?",
-      "english": "Am I Hellenic?",
+      "korean": "제가 헬린이?",
+      "english": "Me, a gym newbie?",
       "audio_file": "sentence_21.m4a",
       "start": 125.01,
       "end": 126.5,
@@ -192,8 +192,8 @@
     },
     {
       "id": 22,
-      "korean": "헬리니라서 밤에 헬스장에 가면 사람이 너무 많아서 부끄러워요.",
-      "english": "Because it's Hellini, I feel embarrassed when I go to the gym at night because there are so many people.",
+      "korean": "헬린이라서 밤에 헬스장에 가면 사람이 너무 많아서 부끄러워요.",
+      "english": "Because I'm a gym newbie, when I go to the gym at night there are so many people that I feel embarrassed.",
       "audio_file": "sentence_22.m4a",
       "start": 126.72,
       "end": 133.14,
@@ -201,8 +201,8 @@
     },
     {
       "id": 23,
-      "korean": "그래서 헬리니 저는 아침에 아침에 헬스장에 갑니다.",
-      "english": "So Hellini, I go to the gym in the morning.",
+      "korean": "그래서 헬린이인 저는 아침에 아침에 헬스장에 갑니다.",
+      "english": "So, as a gym newbie, I go to the gym in the morning.",
       "audio_file": "sentence_23.m4a",
       "start": 133.66,
       "end": 138.64,
@@ -274,7 +274,7 @@
     {
       "id": 31,
       "korean": "운동을 하고 집에 오면 보통 9시 반?",
-      "english": "When you come home after exercising, it's usually around 9:30?",
+      "english": "When I come home after exercising, it's usually around 9:30?",
       "audio_file": "sentence_31.m4a",
       "start": 192.4,
       "end": 195.52,
@@ -346,7 +346,7 @@
     {
       "id": 39,
       "korean": "따뜻한 물에 가만히 서서 30분을 멍하니 있어요.",
-      "english": "Stand still in the warm water and zone out for 30 minutes.",
+      "english": "I stand still in the warm water and zone out for 30 minutes.",
       "audio_file": "sentence_39.m4a",
       "start": 223.22,
       "end": 228.94,
@@ -363,8 +363,8 @@
     },
     {
       "id": 41,
-      "korean": "노래 들으면서 약간 저의 힐링 타인인 것 같아요.",
-      "english": "While listening to the song, I feel like it's a bit of my healing other person.",
+      "korean": "노래 들으면서 약간 저의 힐링 타임인 것 같아요.",
+      "english": "Listening to music while showering feels like a bit of my healing time.",
       "audio_file": "sentence_41.m4a",
       "start": 230.95,
       "end": 235.48,
@@ -373,7 +373,7 @@
     {
       "id": 42,
       "korean": "힐링하는 시간, 따뜻한 물, 샤워하면서 그렇게 조금 멍도 때리고, 샤워하고 나와서 이제 머리 말리고, 머리 말리고, 로션 바르고.",
-      "english": "Healing time, warm water, taking a shower, getting a little bruised, coming out of the shower, drying my hair, drying my hair, applying lotion.",
+      "english": "Healing time — warm water, zoning out a little in the shower, then getting out, drying my hair, drying my hair, applying lotion.",
       "audio_file": "sentence_42.m4a",
       "start": 235.68,
       "end": 249.5,
@@ -409,7 +409,7 @@
     {
       "id": 46,
       "korean": "로션을 많이 많이 바르고, 머리 말리고, 샤워 끝.",
-      "english": "Apply a lot of lotion, dry your hair, and finish showering.",
+      "english": "I apply lots and lots of lotion, dry my hair, and the shower routine is done.",
       "audio_file": "sentence_46.m4a",
       "start": 259.12,
       "end": 264.9,
@@ -427,7 +427,7 @@
     {
       "id": 48,
       "korean": "아침은 제가 운동을 했기 때문에",
-      "english": "Because I exercised in the morning",
+      "english": "For breakfast, because I exercised,",
       "audio_file": "sentence_48.m4a",
       "start": 269.56,
       "end": 273.32,

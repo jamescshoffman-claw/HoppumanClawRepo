@@ -616,7 +616,7 @@ function renderCard() {
     el('english-input').disabled = false;
   }
 
-  hide('answer-reveal', 'self-assess-row', 'next-btn');
+  hide('answer-reveal', 'self-assess-row', 'next-btn', 'retry-sentence-btn');
   show('check-btn', 'skip-btn');
 
   const listenOnly = !state.settings.writeKorean && !state.settings.translateEnglish;
@@ -684,7 +684,7 @@ function checkAnswer() {
   }
 
   el('answer-reveal').innerHTML = revealHTML;
-  show('answer-reveal');
+  show('answer-reveal', 'retry-sentence-btn');
   el('answer-reveal').scrollTop = 0;
 
   if (needSelfAssess) {
@@ -700,6 +700,18 @@ function selfAssess(correct) {
   recordResult();
   hide('self-assess-row');
   show('next-btn');
+}
+
+// Redo the current sentence: un-record its round result (score and counter) so
+// the fresh attempt counts instead. Cumulative seen/correct mastery stays.
+function retrySentence() {
+  const s = state.sentences[state.idx];
+  if (state.resultRecorded) {
+    if (state.scores[s.id] === true) state.roundCorrect--;
+    state.scores[s.id] = null;
+  }
+  updateScoreCounter();
+  renderCard();
 }
 
 function nextCard() {
@@ -804,6 +816,7 @@ document.addEventListener('DOMContentLoaded', () => {
   el('missed-btn').addEventListener('click', () => selfAssess(false));
 
   el('next-btn').addEventListener('click', nextCard);
+  el('retry-sentence-btn').addEventListener('click', retrySentence);
 
   el('setting-write-korean').addEventListener('change', onSettingChange);
   el('setting-translate').addEventListener('change',    onSettingChange);

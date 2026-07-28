@@ -573,6 +573,7 @@ input#korean-input {
 #next-row {
   display: flex;
   justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 #next-btn {

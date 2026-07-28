@@ -3,8 +3,8 @@
   "sentences": [
     {
       "id": 1,
-      "korean": "안녕하세요 한국어로 다양한 한국 문화에 대해 이야기하는 디디의 한국문화 파케스트에 오신 여러분 반갑습니다 여러분 저번 한주도 다들 잘 지내셨나요?",
-      "english": "Hello everyone, welcome to Didi's Korean Culture Packet where we talk about various Korean cultures in Korean. How was everyone last week?",
+      "korean": "안녕하세요 한국어로 다양한 한국 문화에 대해 이야기하는 디디의 한국문화 팟캐스트에 오신 여러분 반갑습니다 여러분 저번 한주도 다들 잘 지내셨나요?",
+      "english": "Hello everyone, welcome to Didi's Korean Culture Podcast, where we talk about various aspects of Korean culture in Korean. Did everyone have a good week?",
       "audio_file": "sentence_01.m4a",
       "start": 0.0,
       "end": 8.02,
@@ -30,8 +30,8 @@
     },
     {
       "id": 4,
-      "korean": "저는 요즘 저번 파케스트에서도 말했듯이 운동을 좀 힘을 내서 하고 있기 때문에 오늘 아침에도 수영을 다녀왔습니다 수영 뭐 1시간 정도 자전거 타고 가요 수영장까지 그래서 한 10분 정도 자전거 타고 가서 수영은 한 30분 40분 정도 한 다음에 씻고 또 10분 정도 다시 자전거를 타고 돌아왔어요 근데 내일이 그러니까 이 파케스트가 올라가는 5월 8일이 한국에서는 어보이 날입니다 어보이 날 어떤 날인지 아시나요?",
-      "english": "These days, as I said in the last parkest, I've been exercising a bit more vigorously, so I went swimming this morning. Swimming. I rode my bike for about an hour to the pool. So I rode my bike for about 10 minutes and went swimming for about 30 to 40 minutes, then washed up and rode my bike again for about 10 minutes. But tomorrow is May 8th, when this parkest goes up, and it's Aboy Day in Korea. Do you know what day Aboy Day is?",
+      "korean": "저는 요즘 저번 팟캐스트에서도 말했듯이 운동을 좀 힘을 내서 하고 있기 때문에 오늘 아침에도 수영을 다녀왔습니다 수영 뭐 1시간 정도 자전거 타고 가요 수영장까지 그래서 한 10분 정도 자전거 타고 가서 수영은 한 30분 40분 정도 한 다음에 씻고 또 10분 정도 다시 자전거를 타고 돌아왔어요 근데 내일이 그러니까 이 팟캐스트가 올라가는 5월 8일이 한국에서는 어버이날입니다 어버이날 어떤 날인지 아시나요?",
+      "english": "These days, as I said in the last podcast, I've been putting more energy into exercising, so I went swimming again this morning. Swimming takes about an hour — I bike to the pool, about 10 minutes, swim for about 30 or 40 minutes, wash up, and bike another 10 minutes back home. By the way, tomorrow — May 8th, when this podcast goes up — is Parents' Day in Korea. Do you know what kind of day Parents' Day is?",
       "audio_file": "sentence_04.m4a",
       "start": 15.6,
       "end": 49.56,
@@ -39,8 +39,8 @@
     },
     {
       "id": 5,
-      "korean": "어보이 날은 어머니랑 아버지의 날이에요 그러니까 부모님의 날이죠",
-      "english": "Aboy Day is Mother and Father's Day, so it's Parents' Day.",
+      "korean": "어버이날은 어머니랑 아버지의 날이에요 그러니까 부모님의 날이죠",
+      "english": "Parents' Day is a day for mothers and fathers — so, a day for your parents.",
       "audio_file": "sentence_05.m4a",
       "start": 49.94,
       "end": 55.42,
@@ -48,8 +48,8 @@
     },
     {
       "id": 6,
-      "korean": "그래서 저도 어보이 날을 축하하고자 부모님께 감사 표현하고자 카네이션을 돌아오는 길에 샀습니다 꽃바구니 카네이션이고 빨간색 카네이션이랑 핑크색 카네이션 둘 다 예뻐서 뭐하지?",
-      "english": "So, to celebrate Aboy Day and to express my gratitude to my parents, I bought carnations on the way back. It's a flower basket with carnations, and both red and pink carnations are pretty, so what should I do?",
+      "korean": "그래서 저도 어버이날을 축하하고자 부모님께 감사 표현하고자 카네이션을 돌아오는 길에 샀습니다 꽃바구니 카네이션이고 빨간색 카네이션이랑 핑크색 카네이션 둘 다 예뻐서 뭐하지?",
+      "english": "So, to celebrate Parents' Day and express my gratitude to my parents, I bought carnations on the way back. It's a flower basket of carnations, and both the red and pink carnations were pretty, so — what should I do?",
       "audio_file": "sentence_06.m4a",
       "start": 56.02,
       "end": 72.14,
@@ -66,8 +66,8 @@
     },
     {
       "id": 8,
-      "korean": "그러네요 보통 외국에서는 어머니의 날 아버지의 날 이렇게 두 개 따로 챙기는데 한국에서는 합쳐서 챙기다 보니까 음 좋은 것 같아요 뭐가 좋냐면 다 같이 모일 수가 있잖아요 어머니 따로 만나거나 아버지 따로 만나거나 하지 않고 다 같이 만날 수 있어서 저는 좋았습니다 말아보면서 생각해보니까 어머니만 있는 분이나 아버지만 있는 분도 그 날에 슬퍼하지 않아도 되잖아요 아버지의 날에 나는 아버지가 없군 이렇게 슬퍼하지 않고 어보이 날 같이 그냥 어머니 축하해드리고 아버지가 있으면 아버지 축하해드릴 수 있으니까 뭐 좋은 것 같습니다 아무튼 5월에는 이렇게 다양한 데이들이 있어요 다양한 날들이 있는데 제가 작년에 한번 정리를 해드린 적이 있었어요 어보이의 날, 어린이 날, 스승의 날 여러 가지 많은 5월 어떤 날들이 있는지 한번 정리했던 에피소드가 있으니까 여러분들 궁금하시면 이번 에피소드 끝나고 그것도 한번 들어보시면 좋을 것 같습니다 오늘의 주제는 무엇이냐 하면요 헬스장입니다 여러분 헬스장 많이 갔나요?",
-      "english": "Well, usually in foreign countries, we celebrate Mother's Day and Father's Day separately, but in Korea, we celebrate them together, so I think it's good. What's good is that we can all get together. I liked it because we could all meet together instead of seeing our mothers separately or our fathers separately. When I look back and think about it, people who only have a mother or a father don't have to be sad on that day. On Father's Day, I don't have a father. Instead of being sad like this, I just congratulate my mother and if my father is there, I congratulate my father. I think it's good because we can celebrate it. Anyway, there are so many different days in May. There are so many different days, and I summarized them once last year. There is an episode where I summarized the various days of May, including Aboy's Day, Children's Day, and Teacher's Day. If you are curious, it would be good to listen to that after this episode. What is today's topic? It's the gym. Have you been to the gym a lot?",
+      "korean": "그러네요 보통 외국에서는 어머니의 날 아버지의 날 이렇게 두 개 따로 챙기는데 한국에서는 합쳐서 챙기다 보니까 음 좋은 것 같아요 뭐가 좋냐면 다 같이 모일 수가 있잖아요 어머니 따로 만나거나 아버지 따로 만나거나 하지 않고 다 같이 만날 수 있어서 저는 좋았습니다 말아보면서 생각해보니까 어머니만 있는 분이나 아버지만 있는 분도 그 날에 슬퍼하지 않아도 되잖아요 아버지의 날에 나는 아버지가 없군 이렇게 슬퍼하지 않고 어버이날 같이 그냥 어머니 축하해드리고 아버지가 있으면 아버지 축하해드릴 수 있으니까 뭐 좋은 것 같습니다 아무튼 5월에는 이렇게 다양한 데이들이 있어요 다양한 날들이 있는데 제가 작년에 한번 정리를 해드린 적이 있었어요 어버이날, 어린이 날, 스승의 날 여러 가지 많은 5월 어떤 날들이 있는지 한번 정리했던 에피소드가 있으니까 여러분들 궁금하시면 이번 에피소드 끝나고 그것도 한번 들어보시면 좋을 것 같습니다 오늘의 주제는 무엇이냐 하면요 헬스장입니다 여러분 헬스장 많이 갔나요?",
+      "english": "Right — usually in other countries, Mother's Day and Father's Day are celebrated separately, but in Korea they're celebrated together, and I think that's nice. What's nice is that everyone can gather together — instead of seeing your mother separately and your father separately, you can all meet at once, which I liked. And thinking about it, people who only have a mother or only have a father don't have to feel sad on that day. Instead of being sad on Father's Day thinking 'I don't have a father,' on Parents' Day you can simply celebrate your mother, and if you have a father, celebrate him too — so I think it's nice. Anyway, May has all these various days. There are many different days, and I actually did a rundown of them once last year — Parents' Day, Children's Day, Teachers' Day, and so on. There's an episode where I went through all the days of May, so if you're curious, it'd be great to listen to that after this episode. So what is today's topic? It's the gym. Have you all been to the gym much?",
       "audio_file": "sentence_08.m4a",
       "start": 84.24,
       "end": 155.26,
@@ -75,8 +75,8 @@
     },
     {
       "id": 9,
-      "korean": "영어로는 쥐임이죠 한국에서는 헬스하러 간다 헬스장 간다 이렇게 이야기를 하고 운동하는 기구들이 막 있는 그 센터를 한국에서는 뭐 헬스장 헬스하러 간다 이렇게 이야기를 합니다 저는 지금 헬스장을 다니지 않는데 언제였지?",
-      "english": "In English, it's called Jwiim. In Korea, people say, \"I'm going to the gym.\" In Korea, they say, \"I'm going to the gym.\" In Korea, they say, \"I'm going to the gym.\" I'm going to the gym. When was the last time I went to the gym?",
+      "korean": "영어로는 짐이죠 한국에서는 헬스하러 간다 헬스장 간다 이렇게 이야기를 하고 운동하는 기구들이 막 있는 그 센터를 한국에서는 뭐 헬스장 헬스하러 간다 이렇게 이야기를 합니다 저는 지금 헬스장을 다니지 않는데 언제였지?",
+      "english": "In English it's 'gym.' In Korea, people say '헬스하러 간다' (going to work out) or '헬스장 간다' (going to the gym) — that center full of exercise machines is called a 헬스장 in Korea, and people say they're going to do 헬스. I don't go to a gym right now — when was it again?",
       "audio_file": "sentence_09.m4a",
       "start": 155.5,
       "end": 175.32,
@@ -193,7 +193,7 @@
     {
       "id": 22,
       "korean": "한국 헬스장은 어떤 곳인지 그리고 보통 비용은 어느 정도 생각하면 되는지 옷 같은 건 어떤 거 입는지 지켜야 할 애티켓 같은 건 있는지 그런 거 또 얘기를 해보려고 하고요 그리고 여러분들이 헬스장을 직접 등록할 때 조심하면 좋은 점 그런 것들도 한번 이야기 해보려고 해요 한국에서는 호구잡힌다 라는 말이 있어요 이게 좋은 말은 아니고 조금 조심해서 써야 되는 말인데",
-      "english": "I'm going to talk about what Korean gyms are like, how much they usually cost, what kind of clothes to wear, and whether there's any etiquette to follow. I'm also going to talk about the good things about being careful when registering for a gym. In Korea, there's a saying that says you'll get caught for being a hottie. This isn't a good word, but it should be used with a bit of caution.",
+      "english": "I'm going to talk about what Korean gyms are like, how much they usually cost, what kind of clothes to wear, and whether there's any etiquette to follow. I'm also going to talk about some things to watch out for when you register at a gym yourself. In Korea, there's an expression, '호구 잡힌다' (getting played for a sucker). It's not a nice expression, so you have to use it with a bit of caution.",
       "audio_file": "sentence_22.m4a",
       "start": 351.88,
       "end": 379.82,
@@ -202,7 +202,7 @@
     {
       "id": 23,
       "korean": "사기당한다랑 조금 비슷해요 내가 원래 이 정도",
-      "english": "It's a bit similar to being scammed. I'm usually like this.",
+      "english": "It's a bit similar to getting scammed. Say I originally —",
       "audio_file": "sentence_23.m4a",
       "start": 380.72,
       "end": 384.16,
@@ -211,7 +211,7 @@
     {
       "id": 24,
       "korean": "만 원 짜리 물건을 사려고 했는데 내가 뭔가를 잘 모르고 그래 보이니까 그거 뭐 15,000원이에요 이렇게 속여서 팔아도 그런가요?",
-      "english": "I tried to buy something worth 10,000 won, but it seemed like I didn't know anything, so it was 15,000 won. Is it okay to sell it by deceiving it like this?",
+      "english": "— meant to buy a 10,000-won item, but because I look like I don't know any better, they lie and say 'that's 15,000 won' and sell it to me like that, you know?",
       "audio_file": "sentence_24.m4a",
       "start": 385.41,
       "end": 395.92,
@@ -220,7 +220,7 @@
     {
       "id": 25,
       "korean": "네 알겠습니다 사버리면 그런 사람을",
-      "english": "Yes, I understand. If you buy it, you will find someone like that.",
+      "english": "And if I say 'okay, sure' and just buy it, then a person like that —",
       "audio_file": "sentence_25.m4a",
       "start": 396.28,
       "end": 399.8,
@@ -229,7 +229,7 @@
     {
       "id": 26,
       "korean": "너 호구 됐다 호구다 이렇게 얘기를 한답니다 그래서 친구는 만 원에 산 물건을 나는 15,000원에 샀어 그러면 친구가 너 호구 잡혔네 너 호구 됐네 약간 장난겸 진단 반으로 좀 놀리는 그런 단어인데요 여러분들 호구잡히면 안 되잖아요 이렇게 새로운 도전할 때 그러니까 여러분들이 이렇게 큰 문제 격지 않고 아주 자연스럽고 그리고 두려움 없이 헬스장 등록하실 수 있게 등록할 때 알아두면 좋은 팁까지 말씀드려보도록 하겠습니다 준비되셨나요?",
-      "english": "You are a brat. You say this. So, what my friend bought for 10,000 won, I bought for 15,000 won. Then my friend says, \"You are a brat. You have become a brat.\" It is a word that is half joking and half teasing. You can't be a brat. When you take on a new challenge like this, I will tell you some good tips to know when registering so that you can register at the gym very naturally and without fear without this big problem. Are you ready?",
+      "english": "— gets told, 'You got played — you're a 호구 (sucker).' So say a friend bought something for 10,000 won that I bought for 15,000 won — my friend would say, 'You got ripped off, you're such a sucker.' It's a word used half-jokingly, half-seriously to tease someone. But you shouldn't get ripped off when taking on a new challenge like this, so I'll also share some good tips to know when registering, so you can sign up for a gym naturally and without fear, without any big problems. Are you ready?",
       "audio_file": "sentence_26.m4a",
       "start": 400.06,
       "end": 438.72,
@@ -301,7 +301,7 @@
     {
       "id": 34,
       "korean": "음...괜찮은 중간 정도의 헬스장 다닐 수 있는 것 같고 한 달보다 더 많이 계약을 할수록 헬스를 끊는다라고 표현을 하는데 3개월, 6개월 12개월 이렇게 끊을수록",
-      "english": "Hmm... I think I can go to a decent mid-level gym, and they say that the more you sign up for more than a month, the more you stop going to the gym. The more you stop going for 3 months, 6 months, 12 months, etc.",
+      "english": "Hmm... for that you can go to a decent mid-range gym. And the longer the contract — buying a membership is expressed as '헬스를 끊는다' in Korean — the more you sign up for, 3 months, 6 months, 12 months,",
       "audio_file": "sentence_34.m4a",
       "start": 563.96,
       "end": 576.92,
@@ -310,7 +310,7 @@
     {
       "id": 35,
       "korean": "가격은 점점점점 싸져요 그런게 있는데 이제 그거는 이벤트 가격이라고 해서 많이 끊을수록 할인해주는 이벤트 가격이다 라고 해서 중간에 취소를 해버리면",
-      "english": "The price is getting cheaper and cheaper, but now they say it's an event price, so the more you buy, the more you get a discount, so if you cancel in the middle, it's an event price.",
+      "english": "the cheaper and cheaper the price gets. But they call that an 'event price' — a promotional discount for signing up longer — so if you cancel in the middle,",
       "audio_file": "sentence_35.m4a",
       "start": 577.6,
       "end": 590.7,
@@ -319,7 +319,7 @@
     {
       "id": 36,
       "korean": "환불 과정이 되게 까다로워요 그 돈을 많이 못 돌려봤거든요 그래서 그런 것까지 잘 계산해서 꼭 필요한 만큼 헬스를 등록하는 것도",
-      "english": "The refund process is very complicated. I haven't been able to get much of that money back, so I calculated those things carefully and registered for the gym as much as absolutely necessary.",
+      "english": "the refund process is very complicated. I wasn't able to get much of that money back. So calculating all that carefully and only signing up for as long as you really need",
       "audio_file": "sentence_36.m4a",
       "start": 591.32,
       "end": 600.7,
@@ -328,7 +328,7 @@
     {
       "id": 37,
       "korean": "좀 중요한 것 같습니다 그렇지 않으면 헬스장에 그냥 기부하게 되요 1년 싸네, 그럼 1년 등록해야겠다 하고",
-      "english": "I think it's kind of important, otherwise I'd just donate to the gym. It's cheap for a year, so I thought I'd sign up for a year.",
+      "english": "is pretty important, I think. Otherwise you just end up donating to the gym. You think, 'a year is cheap, I should register for a year,'",
       "audio_file": "sentence_37.m4a",
       "start": 601.32,
       "end": 610.7,
@@ -337,7 +337,7 @@
     {
       "id": 38,
       "korean": "등록해뒀다가 한 달 여행을 가버린다든지 하면 그동안 헬스장이 그냥 기부하는게 되기 때문에 저는 앞으로 헬스 끊을 때는 제일 작은 기간 제일 짧은 기간으로 등록을 하긴 해요 그래서 저번에도 3개월 끊었었던 거고요",
-      "english": "If you sign up and go on a trip for a month, the gym will just donate the time, so from now on, when I quit the gym, I sign up for the shortest period possible. That's why I quit for 3 months last time too.",
+      "english": "but if you sign up and then go on a trip for a month, you're just donating to the gym for that whole time. So from now on, when I buy a membership, I register for the smallest, shortest period. That's why I signed up for 3 months last time too.",
       "audio_file": "sentence_38.m4a",
       "start": 612.44,
       "end": 629.78,
@@ -345,8 +345,8 @@
     },
     {
       "id": 39,
-      "korean": "그런데 그 헬스장의 어떤 곳인지 직접 체험해보고 싶다 하면 1일건도 구매할 수 있는 헬스장이 많거든요 그런 곳은 하루 하나인데 15,000원 정도 하는 것 같습니다 이거는 서울이랑 경기도 기준이고요",
-      "english": "However, if you want to experience for yourself what the gym is like, there are many gyms where you can purchase a one-day gym. One day at such places costs about 15,000 won. This is based on Seoul and Gyeonggi-do.",
+      "korean": "그런데 그 헬스장의 어떤 곳인지 직접 체험해보고 싶다 하면 1일권도 구매할 수 있는 헬스장이 많거든요 그런 곳은 하루 하나인데 15,000원 정도 하는 것 같습니다 이거는 서울이랑 경기도 기준이고요",
+      "english": "But if you want to experience for yourself what a gym is like, many gyms sell one-day passes. At places like that, a day pass costs about 15,000 won. This is based on Seoul and Gyeonggi-do.",
       "audio_file": "sentence_39.m4a",
       "start": 630.44,
       "end": 646.18,
@@ -355,7 +355,7 @@
     {
       "id": 40,
       "korean": "지방은 어떤지 모르겠어요 비슷하거나 아니면 조금 더 쌀 것 같아요",
-      "english": "I don't know what the fat is. I think it will be similar or a little cheaper.",
+      "english": "I'm not sure about other regions. It's probably similar, or maybe a little cheaper.",
       "audio_file": "sentence_40.m4a",
       "start": 647.0,
       "end": 651.62,
@@ -391,7 +391,7 @@
     {
       "id": 44,
       "korean": "personal training을 받는 거에요 그러니까",
-      "english": "I'm receiving personal training, so",
+      "english": "It means getting personal training. In other words,",
       "audio_file": "sentence_44.m4a",
       "start": 677.18,
       "end": 679.96,
@@ -400,7 +400,7 @@
     {
       "id": 45,
       "korean": "선생님이랑 같이 1대1로 보통 1대1로 많이 해요 1대1로 운동을 배워 가면서",
-      "english": "I usually do a lot of one-on-one training with the teacher while learning the exercises one-on-one.",
+      "english": "with a trainer, one-on-one — it's usually done one-on-one — learning exercises as you go,",
       "audio_file": "sentence_45.m4a",
       "start": 681.18,
       "end": 687.14,
@@ -409,7 +409,7 @@
     {
       "id": 46,
       "korean": "배우는 그런 유형도 있어요 그래서 저는 둘 다 해봤는데 뭐 그룹 트레이닝 같은 거 하는 곳도 있는데 저는 PT, 딱 그 personal training만 했습니다",
-      "english": "There are types of learners, so I tried both, and there are places that do group training, but I only did PT and personal training.",
+      "english": "that's the type where you learn. I've tried both. There are also places that do things like group training, but I only did PT — just that personal training.",
       "audio_file": "sentence_46.m4a",
       "start": 688.52,
       "end": 701.96,
@@ -436,7 +436,7 @@
     {
       "id": 49,
       "korean": "기억이 나요 그러니까 아까 그냥 자유운동",
-      "english": "I remember, it was just the freedom movement earlier.",
+      "english": "I remember that. So, the regular free-workout option from earlier —",
       "audio_file": "sentence_49.m4a",
       "start": 725.5,
       "end": 728.86,
@@ -463,7 +463,7 @@
     {
       "id": 52,
       "korean": "운동을 처음 해보는 입장에서 이런 PT를",
-      "english": "As someone who is trying exercise for the first time, I tried this PT.",
+      "english": "For someone trying exercise for the first time, this kind of PT —",
       "audio_file": "sentence_52.m4a",
       "start": 739.5,
       "end": 742.8,
@@ -472,7 +472,7 @@
     {
       "id": 53,
       "korean": "결제를 하는 거는 상당히 좀 큰 금액처럼 느껴집니다 그런데 그렇기 때문에 더 열심히 운동을 하게 되는 것도 있어요",
-      "english": "Paying it feels like a rather large amount, but that also makes me exercise harder.",
+      "english": "paying for it feels like quite a large amount. But because of that, it also makes you exercise harder.",
       "audio_file": "sentence_53.m4a",
       "start": 743.5,
       "end": 752.08,
@@ -490,7 +490,7 @@
     {
       "id": 55,
       "korean": "비싼 가격으로 선생님과 함께 1주일에 한 번 아니면 2번 정도 PT를 받으면 나머지 기간 동안 내가 자유 운동을 가는 거는 뭐 무료다 이렇게 해주는 곳이 많습니다 그리고 이걸 이야기 안 했는데 한국 헬스장은 보통 샤워장",
-      "english": "If you get PT with a teacher once or twice a week for an expensive price, you can go to free exercise for free during the rest of the week. There are many places that do this. And I didn't mention this, but Korean gyms usually have shower facilities.",
+      "english": "If you pay the higher price for PT with a trainer once or twice a week, many places let you use the gym for free workouts at no extra cost the rest of the time. And I didn't mention this, but Korean gyms usually have shower facilities.",
       "audio_file": "sentence_55.m4a",
       "start": 760.1,
       "end": 777.2,
@@ -499,7 +499,7 @@
     {
       "id": 56,
       "korean": "타더롬?",
-      "english": "Taderom?",
+      "english": "A shower room?",
       "audio_file": "sentence_56.m4a",
       "start": 778.46,
       "end": 779.24,
@@ -517,7 +517,7 @@
     {
       "id": 58,
       "korean": "스킨케어, 머리 말리고 그런 시설은 다 되어 있어요 화장실이나 이런 거 당연히 다 있고 물 마시는 것도 있고 그리고 헬스 복 있잖아요 헬스 할 때 입는 옷 또 주는 곳들이 있어요 그러니까 주는 게 아니라 빌려 주는 거죠 그래서 한 달에 3개월 이렇게 끊으면 헬스 복이랑 운동복이랑",
-      "english": "There are facilities for skin care, hair drying, etc. Of course, there are restrooms and things like that, there are drinking water, and there are gym clothes. There are also places that provide clothes to wear when working out. So, it is not given, but rented. So, if you pay like this for three months a month, you can get gym clothes and exercise clothes.",
+      "english": "There are facilities for skincare, drying your hair, all of that. Of course there are restrooms and drinking water too. And you know gym clothes — the clothes you wear when working out — there are places that provide those as well. Well, not give them — they lend them. So if you sign up for, say, a month or three months, the gym clothes and workout clothes —",
       "audio_file": "sentence_58.m4a",
       "start": 782.3,
       "end": 805.9,
@@ -526,7 +526,7 @@
     {
       "id": 59,
       "korean": "수건 이거는 공짜로 갈 때마다 사용할 수 있게 해주는 헬스장도 있고 아니면",
-      "english": "There are gyms that let you use towels for free every time you go, or",
+      "english": "and towels — some gyms let you use them for free every time you go, or",
       "audio_file": "sentence_59.m4a",
       "start": 806.5,
       "end": 812.58,
@@ -535,7 +535,7 @@
     {
       "id": 60,
       "korean": "만원 정도 추가하면 한 달에 이런 헬스 복이랑 수건 사용할 수 있게 해줍니다 그리고 또 추가로 발생할 수 있는 돈은 락카",
-      "english": "If you add about 10,000 won, you can use these gym clothes and towels per month. And the additional money that can be incurred is a locker.",
+      "english": "if you add about 10,000 won a month, they let you use the gym clothes and towels. And another extra cost that can come up is a locker —",
       "audio_file": "sentence_60.m4a",
       "start": 813.9,
       "end": 823.06,
@@ -544,7 +544,7 @@
     {
       "id": 61,
       "korean": "락카비 내가 집이 좀 멀어 그래서 운동",
-      "english": "Rockabi I live a little far away so I exercise",
+      "english": "the locker fee. Say your home is a bit far away, so your workout",
       "audio_file": "sentence_61.m4a",
       "start": 823.9,
       "end": 828.84,
@@ -553,7 +553,7 @@
     {
       "id": 62,
       "korean": "운동복이나 아니면 샴푸 이런 것들을 좀 보관해놓고 쓰고 싶다 하면 락카 결제하고 한 달에 그것도 5천원 이렇게 결제하고 사용할 수도 있어요 내 자리를 이렇게",
-      "english": "If you want to store and use things like sportswear or shampoo, you can pay for a locker and use it by paying 5,000 won a month. My place is like this.",
+      "english": "clothes or shampoo and things like that — if you want to keep them there, you can pay for a locker, about 5,000 won a month, and use it. Your own spot,",
       "audio_file": "sentence_62.m4a",
       "start": 830.66,
       "end": 844.06,
@@ -562,7 +562,7 @@
     {
       "id": 63,
       "korean": "준비를 해주시는 건데 저는 락카는 거의 쓴 적이 없습니다",
-      "english": "They prepare it for you, but I've hardly ever used a locker.",
+      "english": "they set one up for you. But I've hardly ever used a locker.",
       "audio_file": "sentence_63.m4a",
       "start": 845.06,
       "end": 848.5,
@@ -580,7 +580,7 @@
     {
       "id": 65,
       "korean": "락카랑 체육복도 맨날 빨고",
-      "english": "I wash my locker and gym clothes every day.",
+      "english": "Renting a locker and gym clothes — if washing your own every day",
       "audio_file": "sentence_65.m4a",
       "start": 862.34,
       "end": 864.84,
@@ -589,7 +589,7 @@
     {
       "id": 66,
       "korean": "귀찮으시면 하면 되는데 저는 그냥 제가 좋아하는 체육복이 있고 운동복이 있고 하는 게 좋아서 체육복",
-      "english": "If you don't want to bother, you can do it, but I just have gym clothes that I like and I like to have gym clothes so I wear gym clothes.",
+      "english": "feels like a hassle, you can do that. But I just like having my own favorite gym clothes and workout clothes, so",
       "audio_file": "sentence_66.m4a",
       "start": 866.34,
       "end": 873.5,
@@ -625,7 +625,7 @@
     {
       "id": 70,
       "korean": "운동을 하거나 서로 알려주거나 이런 분위기인 곳들이 많을까요?",
-      "english": "Are there many places with an atmosphere like this where you can exercise or educate each other?",
+      "english": "Are there many gyms with that kind of atmosphere, where friends work out together or show each other how?",
       "audio_file": "sentence_70.m4a",
       "start": 893.44,
       "end": 898.76,
@@ -643,7 +643,7 @@
     {
       "id": 72,
       "korean": "후후후 같은 그런 숨소리만 들리고 여러 명에서 우르르 와서 좀 시끄럽게 사용하고 그런거는 거의 본 적이 없어요 그래서 대부분 대체로 좀 조용하다 이렇게 생각해 주시면 될 것 같아요 그리고 헬스장 갈 때 뭐 입냐 이것도 좀 고민이 되실 것 같은데 한국 헬스장에서는 뭘 입어도 상관없어요 근데 대부분 운동복을 입기는 합니다 그러니까 사복 운동복이 아니라 평소에 입는 옷을 사복이라고 하는데 사복을 입고 있는 사람 거의 없어요 청바지나 블라우스 같은 거 입고 오시는 분들은 없고",
-      "english": "You can only hear breathing sounds like huhuhu, and I've rarely seen people rush in and use it a little loudly. So I think you can think of it as mostly quiet. Also, you may be worried about what to wear when going to the gym. In Korean gyms, it doesn't matter what you wear. But most people wear sportswear.",
+      "english": "You only hear breathing sounds, like 'hoo hoo hoo,' and I've rarely seen a big group come in and use it loudly. So you can think of it as mostly quiet. Also, you might be wondering what to wear to the gym. In Korean gyms it doesn't matter what you wear, but most people do wear workout clothes. Regular everyday clothes are called 사복, and almost nobody is in 사복 — you don't see people coming in jeans or a blouse.",
       "audio_file": "sentence_72.m4a",
       "start": 933.56,
       "end": 970.92,
@@ -732,7 +732,7 @@
     },
     {
       "id": 82,
-      "korean": "청소해야 되니까 항상 헬스장용 운동화를 가져가서 운동화 가라 신고 운동한다는 거 정도만 알면 딱히 헬스장 애티켓이라 할 게 없어요 그냥 운동화랑 운동복 잘 챙겨있고 하는 거",
+      "korean": "청소해야 되니까 항상 헬스장용 운동화를 가져가서 운동화 갈아 신고 운동한다는 거 정도만 알면 딱히 헬스장 애티켓이라 할 게 없어요 그냥 운동화랑 운동복 잘 챙겨있고 하는 거",
       "english": "Since you have to clean it, you always have to bring gym sneakers. As long as you know that you're going to exercise in those sneakers, there's nothing to say about gym etiquette. All you have to do is take care of your sneakers and exercise clothes.",
       "audio_file": "sentence_82.m4a",
       "start": 1048.58,
@@ -877,7 +877,7 @@
     {
       "id": 98,
       "korean": "그게 왜 그러냐면 헬스장이 워낙",
-      "english": "That's why the gym is so great",
+      "english": "The reason for that is that gyms just run so many",
       "audio_file": "sentence_98.m4a",
       "start": 1240.26,
       "end": 1242.68,
@@ -886,7 +886,7 @@
     {
       "id": 99,
       "korean": "이벤트를 많이 해요 여름방학 이벤트로 헬스권을 좀 싸게 판다거나 아니면 새해 이벤트 이런 걸로 또 싸게 할 수도 있고 이런 이벤트를 많이 해서 써놓기가 어려운가 봐요 그래서",
-      "english": "We hold a lot of events. We may sell gym tickets at a cheaper price as a summer vacation event, or we may make them cheaper as a New Year's event. I think it is difficult to write about these events because they are held so many times.",
+      "english": "promotions. They might sell memberships cheaper as a summer vacation event, or discount them again for a New Year's event. They run so many promotions that I guess it's hard to post fixed prices. So",
       "audio_file": "sentence_99.m4a",
       "start": 1243.42,
       "end": 1258.2,
@@ -895,7 +895,7 @@
     {
       "id": 100,
       "korean": "전화해서",
-      "english": "By calling",
+      "english": "you call and —",
       "audio_file": "sentence_100.m4a",
       "start": 1259.88,
       "end": 1260.2,
