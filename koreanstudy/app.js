@@ -270,6 +270,19 @@ function normalize(text) {
   return (text || '').normalize('NFC').trim().replace(/\s+/g, ' ');
 }
 
+// Punctuation never counts toward right/wrong: strip Western and full-width
+// marks (and quotes/brackets) before comparing, then re-collapse whitespace.
+function stripPunct(text) {
+  return normalize((text || '').replace(/[.,!?;:·…~〜'"''""()\[\]{}。、，！？]/g, ' '));
+}
+
+// Textareas grow with their content so long sentences wrap instead of
+// scrolling off-screen (the reason the old single-line inputs lost your place).
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = `${ta.scrollHeight}px`;
+}
+
 function escHtml(str) {
   return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
@@ -604,6 +617,8 @@ function renderCard() {
   el('english-input').value    = '';
   el('korean-input').className  = '';
   el('english-input').className = '';
+  autoResize(el('korean-input'));
+  autoResize(el('english-input'));
 
   state.settings.writeKorean      ? show('korean-group')  : hide('korean-group');
   state.settings.translateEnglish ? show('english-group') : hide('english-group');
@@ -639,8 +654,8 @@ function checkAnswer() {
   let needSelfAssess = false;
 
   if (state.settings.writeKorean) {
-    const input    = normalize(el('korean-input').value);
-    const expected = normalize(s.korean);
+    const input    = stripPunct(el('korean-input').value);
+    const expected = stripPunct(s.korean);
     state.koreanCorrect = input === expected;
     el('korean-input').className = state.koreanCorrect ? 'correct' : 'incorrect';
 
@@ -821,6 +836,18 @@ document.addEventListener('DOMContentLoaded', () => {
   el('setting-write-korean').addEventListener('change', onSettingChange);
   el('setting-translate').addEventListener('change',    onSettingChange);
 
+  // Answer textareas: grow to fit, and Enter submits instead of adding a line.
+  ['korean-input', 'english-input'].forEach(id => {
+    el(id).addEventListener('input', e => autoResize(e.target));
+    el(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!state.revealed) checkAnswer();
+        else if (!el('next-btn').classList.contains('hidden')) nextCard();
+      }
+    });
+  });
+
   el('main-menu-btn').addEventListener('click',    goToLoadScreen);
   el('change-video-btn').addEventListener('click',  goToLoadScreen);
   el('restart-btn').addEventListener('click', () => showConfigure(state.videoId, state.allSentences));
@@ -834,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.code === 'Space') { e.preventDefault(); playSegment(); }
     if (e.code === 'Enter') {
       if (!state.revealed) checkAnswer();
