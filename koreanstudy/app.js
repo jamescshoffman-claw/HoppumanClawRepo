@@ -530,12 +530,14 @@ function finishRound() {
   show('round-complete-screen');
 }
 
-// Pick `count` sentences, preferring ones never practiced before, then filling
-// with already-seen ones (original order preserved within each group).
+// Pick `count` sentences: never-practiced first, then practiced-but-missed.
+// Already-correct sentences are only used to fill out the round when nothing
+// else is left (original order preserved within each group).
 function pickRoundSentences(all, count) {
-  const unseen = all.filter(s => !state.seen[s.id]);
-  const seen   = all.filter(s =>  state.seen[s.id]);
-  return unseen.concat(seen).slice(0, count);
+  const unseen   = all.filter(s => !state.seen[s.id]);
+  const missed   = all.filter(s =>  state.seen[s.id] && !state.correct[s.id]);
+  const mastered = all.filter(s =>  state.correct[s.id]);
+  return unseen.concat(missed, mastered).slice(0, count);
 }
 
 // ─── Configure screen ─────────────────────────────────────────────────────────
