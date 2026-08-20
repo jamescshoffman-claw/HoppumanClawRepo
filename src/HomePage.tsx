@@ -42,6 +42,16 @@ const PROJECTS = [
     internal: true,
   },
   {
+    id: 'p10',
+    title: 'Jeopardy Board',
+    blurb: 'A playable Jeopardy board with two rounds, four teams, and live scorekeeping.',
+    year: '2026',
+    tags: ['game', 'trivia', 'party'],
+    link: '/game/',
+    image: '/images/jeopardy.svg',
+    internal: true,
+  },
+  {
     id: 'p9',
     title: 'Type Race',
     blurb: 'A type racing game. Challenge your group chat: who has the fastest fingers?',
@@ -146,7 +156,7 @@ type Item = (typeof PROJECTS)[number] | (typeof HOBBIES)[number]
 // ── Thumbnail ─────────────────────────────────────────────────────────────
 
 function Thumb({ item }: { item: Item }) {
-  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune|balance-game|typebattle/.test(item.image)
+  const isSvgIcon = /\.(svg)$/.test(item.image) && !/world-map|tiger-or-bear|openclaw|dune|balance-game|typebattle|jeopardy/.test(item.image)
   return (
     <img
       src={item.image}
