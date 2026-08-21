@@ -261,6 +261,20 @@ function openModal(boardIdx, catIdx, clueIdx) {
     }
     dom.modalQuestion.innerHTML = '';
     dom.modalQuestion.appendChild(img);
+  } else if (q.startsWith('zoom:')) {
+    // Format: zoom:path|originX,originY,scale — zoomed way in until the answer is revealed
+    const [src, params] = q.slice('zoom:'.length).split('|');
+    const [ox = 50, oy = 50, zoom = 6] = (params || '').split(',').map(Number);
+    const frame = document.createElement('div');
+    frame.className = 'zoom-frame';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'Zoomed-in clue image';
+    img.style.transformOrigin = `${ox}% ${oy}%`;
+    img.style.transform = `scale(${zoom})`;
+    frame.appendChild(img);
+    dom.modalQuestion.innerHTML = '';
+    dom.modalQuestion.appendChild(frame);
   } else if (q.startsWith('emoji:')) {
     dom.modalQuestion.innerHTML = '';
     const div = document.createElement('div');
@@ -289,6 +303,10 @@ function revealAnswer() {
   state.answerRevealed = true;
   dom.modalAnswerSec.classList.add('visible');
   dom.revealBtn.style.display = 'none';
+
+  // Zoomed clue images ease back out to the full picture
+  const zoomImg = dom.modalQuestion.querySelector('.zoom-frame img');
+  if (zoomImg) zoomImg.style.transform = 'scale(1)';
 }
 
 function updateScoreBtns() {
