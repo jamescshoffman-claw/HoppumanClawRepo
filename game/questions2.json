@@ -228,8 +228,8 @@
             },
             {
               "value": 400,
-              "question": "\"I'm Lovin' It\"",
-              "answer": "McDonald's"
+              "question": "\"Eat Fresh\"",
+              "answer": "Subway"
             },
             {
               "value": 600,
@@ -243,8 +243,8 @@
             },
             {
               "value": 1000,
-              "question": "\"What can Brown do for you?\"",
-              "answer": "UPS"
+              "question": "\"The Quicker Picker Upper\"",
+              "answer": "Bounty"
             }
           ]
         },
