@@ -2,8 +2,8 @@
 
 Zoomed In Animals photos, via Wikimedia Commons:
 
-- zoom_zebra.jpg — "Plains zebra standing close up", DPLA/Smithsonian (public domain)
-- zoom_giraffe.jpg — "Giraffe standing in grass", DPLA/Smithsonian (public domain)
-- zoom_peacock.jpg — "Indian peafowl with its vibrant tail feathers fully displayed" (CC BY-SA)
+- zoom_clownfish.jpg — "Amphiprion ocellaris (Clown anemonefish)" by Nick Hobgood (CC BY-SA)
+- zoom_elephant.jpg — "African Bush Elephant" by Muhammad Mahdi Karim (GFDL)
+- zoom_crocodile.jpg — "Nile Crocodile (Crocodylus niloticus), big male basking" (CC BY-SA)
 - zoom_chameleon.jpg — "Furcifer pardalis (head)" (CC BY-SA)
-- zoom_pangolin.jpg — "Philippine Pangolins" by Gregg Yan (CC BY-SA)
+- zoom_owl.jpg — "Tyto alba portrait in tropical setting" (CC BY-SA)

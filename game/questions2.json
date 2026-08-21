@@ -163,18 +163,18 @@
           "clues": [
             {
               "value": 200,
-              "question": "zoom:jeopardyImages/zoom_zebra.jpg|58,45,6",
-              "answer": "Zebra"
+              "question": "zoom:jeopardyImages/zoom_clownfish.jpg|55,60,6",
+              "answer": "Clownfish"
             },
             {
               "value": 400,
-              "question": "zoom:jeopardyImages/zoom_giraffe.jpg|50,50,6",
-              "answer": "Giraffe"
+              "question": "zoom:jeopardyImages/zoom_elephant.jpg|41,55,6",
+              "answer": "Elephant"
             },
             {
               "value": 600,
-              "question": "zoom:jeopardyImages/zoom_peacock.jpg|30,35,6",
-              "answer": "Peacock"
+              "question": "zoom:jeopardyImages/zoom_crocodile.jpg|40,28,6",
+              "answer": "Crocodile"
             },
             {
               "value": 800,
@@ -183,38 +183,38 @@
             },
             {
               "value": 1000,
-              "question": "zoom:jeopardyImages/zoom_pangolin.jpg|38,42,7",
-              "answer": "Pangolin"
+              "question": "zoom:jeopardyImages/zoom_owl.jpg|58,58,6",
+              "answer": "Owl"
             }
           ]
         },
         {
-          "name": "Flag Emoji",
+          "name": "Connections",
           "clues": [
             {
               "value": 200,
-              "question": "emoji:🇨🇦",
-              "answer": "Canada"
+              "question": "A zebra, a piano, and an Oreo.",
+              "answer": "They're black and white"
             },
             {
               "value": 400,
-              "question": "emoji:🇧🇷",
-              "answer": "Brazil"
+              "question": "A hurricane, a needle, and a Cyclops.",
+              "answer": "They all have an eye"
             },
             {
               "value": 600,
-              "question": "emoji:🇰🇷",
-              "answer": "South Korea"
+              "question": "A bottle, a guitar, and a giraffe.",
+              "answer": "They all have a neck"
             },
             {
               "value": 800,
-              "question": "emoji:🇦🇷",
-              "answer": "Argentina"
+              "question": "A promise, a world record, and a heart.",
+              "answer": "They can all be broken"
             },
             {
               "value": 1000,
-              "question": "emoji:🇮🇩",
-              "answer": "Indonesia"
+              "question": "A phone, a boxer, and Saturn.",
+              "answer": "They all have rings"
             }
           ]
         },
