@@ -18,7 +18,7 @@
             },
             {
               "value": 600,
-              "question": "A negligent father loses his son in a workplace accident and has to be escorted home by a woman with a memory condition.",
+              "question": "A negligent father loses his son and has to be escorted home by a woman with a memory condition.",
               "answer": "Finding Nemo"
             },
             {
@@ -108,7 +108,7 @@
             },
             {
               "value": 600,
-              "question": "emoji:🐀 👨‍🍳 🇫🇷 🍲",
+              "question": "emoji:🐀 👨‍🍳 🍲",
               "answer": "Ratatouille"
             },
             {
@@ -168,8 +168,8 @@
             },
             {
               "value": 400,
-              "question": "zoom:jeopardyImages/zoom_elephant.jpg|41,55,6",
-              "answer": "Elephant"
+              "question": "zoom:jeopardyImages/zoom_seal.jpg|43,48,6",
+              "answer": "Seal"
             },
             {
               "value": 600,
