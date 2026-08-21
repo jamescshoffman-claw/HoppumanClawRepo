@@ -279,32 +279,32 @@
           ]
         },
         {
-          "name": "Guess the Year",
+          "name": "How Many",
           "clues": [
             {
               "value": 200,
-              "question": "The first iPhone is released.",
-              "answer": "2007"
+              "question": "Sides on a stop sign.",
+              "answer": "8"
             },
             {
               "value": 400,
-              "question": "Neil Armstrong walks on the moon.",
-              "answer": "1969"
+              "question": "Stripes on the American flag.",
+              "answer": "13"
             },
             {
               "value": 600,
-              "question": "The Titanic sinks.",
-              "answer": "1912"
+              "question": "Strings on a guitar.",
+              "answer": "6"
             },
             {
               "value": 800,
-              "question": "The Berlin Wall falls.",
-              "answer": "1989"
+              "question": "Keys on a piano.",
+              "answer": "88"
             },
             {
               "value": 1000,
-              "question": "The first modern Olympic Games are held in Athens.",
-              "answer": "1896"
+              "question": "Colored stickers on a Rubik's Cube.",
+              "answer": "54"
             }
           ]
         }
