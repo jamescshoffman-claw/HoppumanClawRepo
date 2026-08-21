@@ -249,32 +249,32 @@
           ]
         },
         {
-          "name": "Rhyme Time",
+          "name": "A Chinese Time",
           "clues": [
             {
               "value": 200,
-              "question": "An overweight feline. (Both words rhyme.)",
-              "answer": "Fat Cat"
+              "question": "China loans these animals to foreign zoos as a form of diplomacy — they're never given away, only rented, and any cubs born abroad belong to China.",
+              "answer": "Giant pandas"
             },
             {
               "value": 400,
-              "question": "A humorous rabbit.",
-              "answer": "Funny Bunny"
+              "question": "Of the twelve animals in the Chinese zodiac, eleven are real. Which one isn't?",
+              "answer": "The dragon"
             },
             {
               "value": 600,
-              "question": "A soaked puppy.",
-              "answer": "Soggy Doggy"
+              "question": "China is roughly as wide as the continental United States, which has four time zones. How many does China officially use?",
+              "answer": "One — everything runs on Beijing time, so the sun rises around 10am in the far west"
             },
             {
               "value": 800,
-              "question": "A fake horse.",
-              "answer": "Phony Pony"
+              "question": "China's flag is red with stars. How many?",
+              "answer": "5"
             },
             {
               "value": 1000,
-              "question": "A celebration that starts way behind schedule.",
-              "answer": "Tardy Party"
+              "question": "Papermaking, printing, and the compass are three of China's \"Four Great Inventions.\" What's the fourth?",
+              "answer": "Gunpowder"
             }
           ]
         },
