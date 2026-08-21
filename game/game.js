@@ -1,5 +1,16 @@
 'use strict';
 
+// ─── Game Sets ──────────────────────────────────────────────────────────────
+// Which game are we playing? /game/play.html?set=1 (default) or ?set=2
+const SETS = {
+  1: { title: 'James Jeopardy 1', file: 'questions.json'  },
+  2: { title: 'James Jeopardy 2', file: 'questions2.json' },
+};
+
+const SET_ID = new URLSearchParams(window.location.search).get('set') === '2' ? 2 : 1;
+const SET = SETS[SET_ID];
+const STORAGE_KEY = `jeopardy_state_set${SET_ID}`;
+
 // ─── State ──────────────────────────────────────────────────────────────────
 const state = {
   data: null,
@@ -28,13 +39,14 @@ let dom = {};
 // ─── Init ────────────────────────────────────────────────────────────────────
 async function init() {
   cacheDOM();
+  applySetBranding();
 
   try {
-    const res = await fetch('questions.json');
+    const res = await fetch(SET.file);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state.data = await res.json();
   } catch (e) {
-    showError(`Could not load questions.json.<br><br><code>${e.message}</code><br><br>Make sure you open index.html from the jeopardy folder (not a different location).`);
+    showError(`Could not load ${SET.file}.<br><br><code>${e.message}</code><br><br>Make sure you launched the game from the game picker page.`);
     return;
   }
 
@@ -52,6 +64,12 @@ async function init() {
   renderBoard();
   renderFinalScores();
   attachGlobalListeners();
+}
+
+function applySetBranding() {
+  document.title = `${SET.title}!`;
+  const titleEl = $('title');
+  if (titleEl) titleEl.textContent = SET.title;
 }
 
 function cacheDOM() {
@@ -97,6 +115,8 @@ function showError(msg) {
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 function buildTabs() {
   dom.boardTabs.innerHTML = '';
+  dom.boardTabs.style.display = state.data.boards.length > 1 ? 'flex' : 'none';
+  if (state.data.boards.length < 2) return;
   state.data.boards.forEach((board, i) => {
     const btn = document.createElement('button');
     btn.className = 'board-tab' + (i === state.currentBoard ? ' active' : '');
@@ -241,6 +261,12 @@ function openModal(boardIdx, catIdx, clueIdx) {
     }
     dom.modalQuestion.innerHTML = '';
     dom.modalQuestion.appendChild(img);
+  } else if (q.startsWith('emoji:')) {
+    dom.modalQuestion.innerHTML = '';
+    const div = document.createElement('div');
+    div.className = 'emoji-clue';
+    div.textContent = q.slice('emoji:'.length);
+    dom.modalQuestion.appendChild(div);
   } else {
     dom.modalQuestion.textContent = q;
   }
@@ -454,13 +480,13 @@ function saveState() {
       currentBoard: state.currentBoard,
       usedCells: state.usedCells,
     };
-    localStorage.setItem('jeopardy_state', JSON.stringify(payload));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch (e) { /* localStorage may be unavailable */ }
 }
 
 function loadSavedState() {
   try {
-    const raw = localStorage.getItem('jeopardy_state');
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     const saved = JSON.parse(raw);
 
@@ -495,7 +521,7 @@ function loadSavedState() {
 }
 
 function clearSavedState() {
-  try { localStorage.removeItem('jeopardy_state'); } catch (e) {}
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 }
 
 // ─── Edit Scores Modal ────────────────────────────────────────────────────────

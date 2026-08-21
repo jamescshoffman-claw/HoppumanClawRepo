@@ -3,107 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>Jeopardy!</title>
-  <link rel="stylesheet" href="style.css?v=2" />
+  <title>James Jeopardy — Pick a Game</title>
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
 
-  <!-- ── Header ─────────────────────────────────────────────────────────── -->
   <div id="header">
-    <div id="title">Jeopardy!</div>
-    <div id="subtitle">The Greatest Quiz Game on Earth</div>
-    <div id="board-tabs"></div>
+    <div id="title">James Jeopardy</div>
+    <div id="subtitle">Pick your game</div>
   </div>
 
-  <!-- ── Loading / Error ────────────────────────────────────────────────── -->
-  <div id="loading-screen">
-    <div class="spinner"></div>
-    <span>Loading questions&hellip;</span>
+  <div id="chooser">
+    <a class="game-card" href="play.html?set=1">
+      <div class="game-card__num">1</div>
+      <div class="game-card__name">James Jeopardy 1</div>
+      <div class="game-card__meta">2 boards · 10 categories</div>
+      <ul class="game-card__cats">
+        <li>Math</li>
+        <li>Border</li>
+        <li>Palindromes</li>
+        <li>Artist Full Name</li>
+        <li>Fish</li>
+        <li>Who's That Company?</li>
+        <li>Name a Woman</li>
+        <li>Acronyms</li>
+        <li>Silent Letter</li>
+      </ul>
+      <div class="game-card__go">Play Game 1 →</div>
+    </a>
+
+    <a class="game-card" href="play.html?set=2">
+      <div class="game-card__num">2</div>
+      <div class="game-card__name">James Jeopardy 2</div>
+      <div class="game-card__meta">1 board · 5 categories</div>
+      <ul class="game-card__cats">
+        <li>Badly Described Movies</li>
+        <li>Homonyms</li>
+        <li>Ball Knowledge</li>
+        <li>Emoji Movies</li>
+        <li>Math</li>
+      </ul>
+      <div class="game-card__go">Play Game 2 →</div>
+    </a>
   </div>
 
-  <div id="error-screen">
-    <h2>Failed to Load Game</h2>
-    <p id="error-msg"></p>
-    <p style="color:rgba(255,255,255,0.5);font-size:0.85rem;">
-      Tip: Some browsers block <code>fetch()</code> for local files.<br>
-      Try opening with VS Code Live Server, or run:<br>
-      <code>python3 -m http.server 8080</code> then visit <code>localhost:8080</code>
-    </p>
+  <div id="chooser-foot">
+    <a href="/">← Back to whatisjamesdoing.com</a>
   </div>
 
-  <!-- ── Game Area ───────────────────────────────────────────────────────── -->
-  <div id="game-area" style="display:none;">
-
-    <!-- Teams -->
-    <div id="teams-bar"></div>
-
-    <!-- Controls -->
-    <div id="controls-bar">
-      <button class="btn btn-danger" id="reset-btn">Reset Game</button>
-      <button class="btn btn-edit" id="edit-scores-btn">✏️ Edit Scores</button>
-    </div>
-
-    <!-- Board -->
-    <div id="board-wrapper">
-      <div id="board"></div>
-    </div>
-
-    <!-- Scores Footer -->
-    <div id="scores-footer">
-      <h3>Scoreboard</h3>
-      <div id="final-scores"></div>
-    </div>
-
-  </div>
-
-  <!-- ── Clue Modal ──────────────────────────────────────────────────────── -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-question">
-    <div id="modal">
-
-      <div id="modal-category"></div>
-      <div id="modal-value"></div>
-      <div id="modal-question"></div>
-
-      <!-- Answer (hidden until revealed) -->
-      <div id="modal-answer-section">
-        <div id="modal-answer-label">Answer</div>
-        <div id="modal-answer"></div>
-      </div>
-
-      <div id="modal-actions">
-        <!-- Reveal button -->
-        <button id="reveal-btn">Reveal Answer &nbsp;↵</button>
-
-        <!-- Award / Deduct buttons (one pair per team) -->
-        <div class="score-btns-row" id="score-btns-row"></div>
-
-        <!-- Close -->
-        <button id="close-modal-btn">Close (Esc)</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── Edit Scores Modal ──────────────────────────────────────────────── -->
-  <div id="edit-scores-overlay" role="dialog" aria-modal="true" aria-label="Edit Scores">
-    <div id="edit-scores-modal">
-      <div id="edit-scores-title">✏️ Edit Scores</div>
-      <p class="edit-scores-hint">Set any team's score manually</p>
-      <div id="edit-scores-form"></div>
-      <button id="edit-scores-close">Cancel</button>
-    </div>
-  </div>
-
-  <!-- ── Toast ───────────────────────────────────────────────────────────── -->
-  <div id="toast"></div>
-
-  <script>
-    // Clear any stale saved state — wipe if category count doesn't match 5
-    try { localStorage.removeItem('jeopardy_state'); } catch(e) {}
-  </script>
-  <script src="game.js?v=2"></script>
 </body>
 </html>

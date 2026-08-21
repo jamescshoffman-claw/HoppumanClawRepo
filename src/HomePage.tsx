@@ -43,8 +43,8 @@ const PROJECTS = [
   },
   {
     id: 'p10',
-    title: 'Jeopardy Board',
-    blurb: 'A playable Jeopardy board with two rounds, four teams, and live scorekeeping.',
+    title: 'James Jeopardy',
+    blurb: 'Two playable Jeopardy games — pick a set, then run it with four teams and live scorekeeping.',
     year: '2026',
     tags: ['game', 'trivia', 'party'],
     link: '/game/',

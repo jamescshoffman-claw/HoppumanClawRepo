@@ -1,0 +1,59 @@
+{
+  "boards": [
+    {
+      "name": "Board 1",
+      "categories": [
+        {
+          "name": "Badly Described Movies",
+          "clues": [
+            { "value": 200,  "question": "A woman survives a shipwreck by hoarding a door.", "answer": "Titanic" },
+            { "value": 400,  "question": "An orphan is bullied by his relatives until a man with a beard informs him he's rich and famous.", "answer": "Harry Potter and the Sorcerer's Stone" },
+            { "value": 600,  "question": "A negligent father loses his son in a workplace accident and has to be escorted home by a woman with a memory condition.", "answer": "Finding Nemo" },
+            { "value": 800,  "question": "A billionaire builds a theme park, skips the safety inspection, and blames the lawyers.", "answer": "Jurassic Park" },
+            { "value": 1000, "question": "A teenager is pursued romantically by a 104-year-old pale man.", "answer": "Twilight" }
+          ]
+        },
+        {
+          "name": "Homonyms",
+          "clues": [
+            { "value": 200,  "question": "The sound a dog makes, the outside of a tree, and a small sailing ship.", "answer": "Bark" },
+            { "value": 400,  "question": "A game between two teams, a stick that makes fire, and what two socks should do.", "answer": "Match" },
+            { "value": 600,  "question": "How high or low a note is, a sales presentation, and a British way to say soccer field.", "answer": "Pitch" },
+            { "value": 800,  "question": "A cold breeze, a beer from the tap, and a rough first version.", "answer": "Draft" },
+            { "value": 1000, "question": "A chunk of a tennis match, where a movie is filmed, and a group of dishes.", "answer": "Set" }
+          ]
+        },
+        {
+          "name": "Ball Knowledge",
+          "clues": [
+            { "value": 200,  "question": "In this sport, only one player per team is allowed to touch the ball with their hands during open play.", "answer": "Soccer" },
+            { "value": 400,  "question": "In this sport, you're penalized for standing in a painted rectangle for more than three seconds.", "answer": "Basketball" },
+            { "value": 600,  "question": "In this sport, teammates frantically sweep the floor in front of the \"ball\".", "answer": "Curling" },
+            { "value": 800,  "question": "In this sport, if the home team is winning, they don't take their final turn at all.", "answer": "Baseball (no bottom of the 9th)" },
+            { "value": 1000, "question": "In this sport, a single match can last five days, includes a scheduled break for tea, and can still end with no winner.", "answer": "Cricket" }
+          ]
+        },
+        {
+          "name": "Emoji Movies",
+          "clues": [
+            { "value": 200,  "question": "emoji:🧅 👹 🐈 🏰", "answer": "Shrek" },
+            { "value": 400,  "question": "emoji:🎈 🏠 👴", "answer": "Up" },
+            { "value": 600,  "question": "emoji:🐀 👨‍🍳 🇫🇷 🍲", "answer": "Ratatouille" },
+            { "value": 800,  "question": "emoji:🍫 🎩 🎟️", "answer": "Willy Wonka & the Chocolate Factory" },
+            { "value": 1000, "question": "emoji:🚗 ⏰ ⚡", "answer": "Back to the Future" }
+          ]
+        },
+        {
+          "name": "Math",
+          "clues": [
+            { "value": 200,  "question": "A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost?", "answer": "5 cents" },
+            { "value": 400,  "question": "Lily pads on a lake double in area every day. On day 48 they cover the whole lake perfectly. On what day was the lake half covered?", "answer": "Day 47" },
+            { "value": 600,  "question": "A snail is at the bottom of a 10-foot well. Each day it climbs 3 feet; each night it slides back 2. How many days until it gets out?", "answer": "8 days" },
+            { "value": 800,  "question": "123 + 789", "answer": "912" },
+            { "value": 1000, "question": "How many times does the digit 1 appear writing out 1 through 100?", "answer": "21" }
+          ]
+        }
+      ]
+    }
+  ]
+}
