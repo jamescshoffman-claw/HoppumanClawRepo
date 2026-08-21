@@ -288,6 +288,8 @@ function openModal(boardIdx, catIdx, clueIdx) {
   dom.modalAnswerSec.classList.remove('visible');
   dom.revealBtn.style.display = 'block';
 
+  // Scoring stays hidden until the answer is revealed
+  dom.scoreBtnsRow.style.display = 'none';
   updateScoreBtns();
 
   dom.modalOverlay.classList.add('visible');
@@ -303,6 +305,7 @@ function revealAnswer() {
   state.answerRevealed = true;
   dom.modalAnswerSec.classList.add('visible');
   dom.revealBtn.style.display = 'none';
+  dom.scoreBtnsRow.style.display = '';
 
   // Zoomed clue images ease back out to the full picture
   const zoomImg = dom.modalQuestion.querySelector('.zoom-frame img');
