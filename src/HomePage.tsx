@@ -4,6 +4,15 @@ const ACCENT = '#c5613f'
 
 const PROJECTS = [
   {
+    id: 'p11',
+    title: 'NameGame',
+    blurb: 'A daily word game — name things in a category before the clock runs out, and every answer climbs a squirrel higher up the tree.',
+    year: '2026',
+    tags: ['game', 'daily', 'words'],
+    link: 'https://namegame.fun',
+    image: '/images/namegame.png',
+  },
+  {
     id: 'p1',
     title: 'TikTok (600k followers)',
     blurb: 'Short videos and experiments on TikTok.',
