@@ -8,28 +8,28 @@
           "clues": [
             {
               "value": 200,
+              "question": "A teenager is pursued romantically by a 104-year-old pale man.",
+              "answer": "Twilight"
+            },
+            {
+              "value": 400,
               "question": "A woman survives a shipwreck by hoarding a door.",
               "answer": "Titanic"
             },
             {
-              "value": 400,
+              "value": 600,
               "question": "An orphan is bullied by his relatives until a man with a beard informs him he's rich and famous.",
               "answer": "Harry Potter and the Sorcerer's Stone"
             },
             {
-              "value": 600,
+              "value": 800,
               "question": "A negligent father loses his son and has to be escorted home by a woman with a memory condition.",
               "answer": "Finding Nemo"
             },
             {
-              "value": 800,
+              "value": 1000,
               "question": "Rich superstar goes to a small poor town and can't leave, but learns that winning isn't everything.",
               "answer": "Cars"
-            },
-            {
-              "value": 1000,
-              "question": "A teenager is pursued romantically by a 104-year-old pale man.",
-              "answer": "Twilight"
             }
           ]
         },
@@ -68,8 +68,8 @@
           "clues": [
             {
               "value": 200,
-              "question": "In this sport, only one player per team is allowed to touch the ball with their hands during open play.",
-              "answer": "Soccer"
+              "question": "In this sport, teammates frantically sweep the floor in front of the \"ball\".",
+              "answer": "Curling"
             },
             {
               "value": 400,
@@ -78,8 +78,8 @@
             },
             {
               "value": 600,
-              "question": "In this sport, teammates frantically sweep the floor in front of the \"ball\".",
-              "answer": "Curling"
+              "question": "In this sport, only one player per team is allowed to touch the ball with their hands during open play.",
+              "answer": "Soccer"
             },
             {
               "value": 800,
@@ -98,28 +98,28 @@
           "clues": [
             {
               "value": 200,
+              "question": "emoji:🐀 🧑‍🍳 🍜",
+              "answer": "Ratatouille"
+            },
+            {
+              "value": 400,
               "question": "emoji:🧅 👹 🐈 🏰",
               "answer": "Shrek"
             },
             {
-              "value": 400,
-              "question": "emoji:🎈 🏠 👴",
+              "value": 600,
+              "question": "emoji:👵 💀 🐶 🎈 🦚",
               "answer": "Up"
             },
             {
-              "value": 600,
-              "question": "emoji:🐀 👨‍🍳 🍲",
-              "answer": "Ratatouille"
-            },
-            {
               "value": 800,
-              "question": "emoji:🍫 🎩 🎟️",
-              "answer": "Willy Wonka & the Chocolate Factory"
+              "question": "emoji:🧱 ☹️ 🎧 🐱",
+              "answer": "Obsession"
             },
             {
               "value": 1000,
-              "question": "emoji:🚗 ⏰ ⚡",
-              "answer": "Back to the Future"
+              "question": "emoji:👽 🇬🇧 🚂 🦌",
+              "answer": "Harry Potter"
             }
           ]
         },
