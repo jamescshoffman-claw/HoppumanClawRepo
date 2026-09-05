@@ -173,13 +173,13 @@
             },
             {
               "value": 600,
-              "question": "zoom:jeopardyImages/zoom_crocodile.jpg|40,28,6",
-              "answer": "Crocodile"
+              "question": "zoom:jeopardyImages/zoom_chameleon.jpg|60,60,6",
+              "answer": "Chameleon"
             },
             {
               "value": 800,
-              "question": "zoom:jeopardyImages/zoom_chameleon.jpg|60,60,6",
-              "answer": "Chameleon"
+              "question": "zoom:jeopardyImages/zoom_pangolin.jpg|55,25,6",
+              "answer": "Pangolin"
             },
             {
               "value": 1000,
