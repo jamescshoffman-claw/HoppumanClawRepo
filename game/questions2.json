@@ -178,13 +178,13 @@
             },
             {
               "value": 800,
-              "question": "zoom:jeopardyImages/zoom_pangolin.jpg|55,25,6",
-              "answer": "Pangolin"
+              "question": "zoom:jeopardyImages/zoom_bat.jpg|26,38,6",
+              "answer": "Bat (a flying fox)"
             },
             {
               "value": 1000,
-              "question": "zoom:jeopardyImages/zoom_bat.jpg|26,38,6",
-              "answer": "Bat (a flying fox)"
+              "question": "zoom:jeopardyImages/zoom_pangolin.jpg|55,25,5",
+              "answer": "Pangolin"
             }
           ]
         },
